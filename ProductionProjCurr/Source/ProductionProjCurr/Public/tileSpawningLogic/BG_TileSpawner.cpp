@@ -75,7 +75,7 @@ void ABG_TileSpawner::spawnGrid(const float& randomNum)
 			float Ny = rows * 0.8660254f;
 
 			float		HeightNoise = Noise.GetNoise(Nx, Ny); // reuse same coords
-			float		Height = HeightNoise * 100.f;		  // tweak this in editor
+			float		Height = HeightNoise * ySpawnOffset;		  // tweak this in editor
 
 			FVector		spawnLocation = tileSpawnerLocation + FVector(
 				cols * hexWidth + xOffset,
@@ -170,15 +170,17 @@ EBiomeType ABG_TileSpawner::generateBiomeTypeBasedOnNoise(int32 rows, int32 cols
 
 	float Value = (_Noise.GetNoise(Nx, Ny) + 1.f) * 0.5f;
 
+
+
 	// UE_LOG(LogTemp, Display, TEXT("noise %f"), Value);
 
-	if (Value < 0.33f) return EBiomeType::Water;
-	if (Value < 0.38f) return EBiomeType::Sandy; // thinner beach
-	if (Value < 0.6f) return EBiomeType::Grassland;
-	if (Value < 0.65f) return EBiomeType::Forest;
-	if (Value < 0.75f) return EBiomeType::Stone;
-	if (Value < 0.8f) return EBiomeType::Hill;
-	return EBiomeType::Mountain;
+	if (Value < 0.45f) return EBiomeType::Water;
+	//if (Value < 0.38f) return EBiomeType::Sandy; // thinner beach
+	//if (Value < 0.6f) return EBiomeType::Grassland;
+	//if (Value < 0.65f) return EBiomeType::Forest;
+	//if (Value < 0.75f) return EBiomeType::Stone;
+	//if (Value < 0.8f) return EBiomeType::Hill;
+	return EBiomeType::Grassland;
 }
 
 ABG_Tile* ABG_TileSpawner::spawnTile(TSubclassOf<ABG_Tile> _ChosenTileClass, const FTransform& _instanceTransform)

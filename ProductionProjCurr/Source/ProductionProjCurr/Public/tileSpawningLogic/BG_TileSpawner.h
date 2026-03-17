@@ -54,6 +54,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hex | Setup")
 	float xSpawnOffset;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hex | Setup")
+	float ySpawnOffset;
 
 	// Noise Settings
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Setup")
