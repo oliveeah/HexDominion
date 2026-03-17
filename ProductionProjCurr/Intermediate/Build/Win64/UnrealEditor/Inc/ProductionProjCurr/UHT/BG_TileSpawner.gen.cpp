@@ -44,13 +44,8 @@ struct Z_Construct_UEnum_ProductionProjCurr_EBiomeType_Statics
 #if !UE_BUILD_SHIPPING
 		{ "Comment", "// Delegate declaration for when tiles are spawned\n" },
 #endif
-		{ "Forest.Name", "EBiomeType::Forest" },
 		{ "Grassland.Name", "EBiomeType::Grassland" },
-		{ "Hill.Name", "EBiomeType::Hill" },
 		{ "ModuleRelativePath", "Public/tileSpawningLogic/BG_TileSpawner.h" },
-		{ "Mountain.Name", "EBiomeType::Mountain" },
-		{ "Sandy.Name", "EBiomeType::Sandy" },
-		{ "Stone.Name", "EBiomeType::Stone" },
 #if !UE_BUILD_SHIPPING
 		{ "ToolTip", "Delegate declaration for when tiles are spawned" },
 #endif
@@ -59,12 +54,7 @@ struct Z_Construct_UEnum_ProductionProjCurr_EBiomeType_Statics
 #endif // WITH_METADATA
 	static constexpr UECodeGen_Private::FEnumeratorParam Enumerators[] = {
 		{ "EBiomeType::Water", (int64)EBiomeType::Water },
-		{ "EBiomeType::Sandy", (int64)EBiomeType::Sandy },
 		{ "EBiomeType::Grassland", (int64)EBiomeType::Grassland },
-		{ "EBiomeType::Forest", (int64)EBiomeType::Forest },
-		{ "EBiomeType::Stone", (int64)EBiomeType::Stone },
-		{ "EBiomeType::Hill", (int64)EBiomeType::Hill },
-		{ "EBiomeType::Mountain", (int64)EBiomeType::Mountain },
 	};
 	static const UECodeGen_Private::FEnumParams EnumParams;
 };
@@ -180,27 +170,7 @@ struct Z_Construct_UClass_ABG_TileSpawner_Statics
 		{ "Category", "Hex | Biomes" },
 		{ "ModuleRelativePath", "Public/tileSpawningLogic/BG_TileSpawner.h" },
 	};
-	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_SandyTile_MetaData[] = {
-		{ "Category", "Hex | Biomes" },
-		{ "ModuleRelativePath", "Public/tileSpawningLogic/BG_TileSpawner.h" },
-	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_MeadowTiles_MetaData[] = {
-		{ "Category", "Hex | Biomes" },
-		{ "ModuleRelativePath", "Public/tileSpawningLogic/BG_TileSpawner.h" },
-	};
-	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_ForestTiles_MetaData[] = {
-		{ "Category", "Hex | Biomes" },
-		{ "ModuleRelativePath", "Public/tileSpawningLogic/BG_TileSpawner.h" },
-	};
-	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_StoneTiles_MetaData[] = {
-		{ "Category", "Hex | Biomes" },
-		{ "ModuleRelativePath", "Public/tileSpawningLogic/BG_TileSpawner.h" },
-	};
-	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_RockHillTiles_MetaData[] = {
-		{ "Category", "Hex | Biomes" },
-		{ "ModuleRelativePath", "Public/tileSpawningLogic/BG_TileSpawner.h" },
-	};
-	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_MountainTile_MetaData[] = {
 		{ "Category", "Hex | Biomes" },
 		{ "ModuleRelativePath", "Public/tileSpawningLogic/BG_TileSpawner.h" },
 	};
@@ -217,16 +187,8 @@ struct Z_Construct_UClass_ABG_TileSpawner_Statics
 	static const UECodeGen_Private::FFloatPropertyParams NewProp_noiseFrequency;
 	static const UECodeGen_Private::FClassPropertyParams NewProp_TileClass;
 	static const UECodeGen_Private::FClassPropertyParams NewProp_WaterTile;
-	static const UECodeGen_Private::FClassPropertyParams NewProp_SandyTile;
 	static const UECodeGen_Private::FClassPropertyParams NewProp_MeadowTiles_Inner;
 	static const UECodeGen_Private::FArrayPropertyParams NewProp_MeadowTiles;
-	static const UECodeGen_Private::FClassPropertyParams NewProp_ForestTiles_Inner;
-	static const UECodeGen_Private::FArrayPropertyParams NewProp_ForestTiles;
-	static const UECodeGen_Private::FClassPropertyParams NewProp_StoneTiles_Inner;
-	static const UECodeGen_Private::FArrayPropertyParams NewProp_StoneTiles;
-	static const UECodeGen_Private::FClassPropertyParams NewProp_RockHillTiles_Inner;
-	static const UECodeGen_Private::FArrayPropertyParams NewProp_RockHillTiles;
-	static const UECodeGen_Private::FClassPropertyParams NewProp_MountainTile;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_TileManager;
 	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
 	static UObject* (*const DependentSingletons[])();
@@ -243,16 +205,8 @@ const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_ABG_TileSpawner
 const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_noiseFrequency = { "noiseFrequency", nullptr, (EPropertyFlags)0x0020080000000015, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_TileSpawner, noiseFrequency), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_noiseFrequency_MetaData), NewProp_noiseFrequency_MetaData) };
 const UECodeGen_Private::FClassPropertyParams Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_TileClass = { "TileClass", nullptr, (EPropertyFlags)0x0024080000010015, UECodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_TileSpawner, TileClass), Z_Construct_UClass_UClass, Z_Construct_UClass_ABG_Tile_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_TileClass_MetaData), NewProp_TileClass_MetaData) };
 const UECodeGen_Private::FClassPropertyParams Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_WaterTile = { "WaterTile", nullptr, (EPropertyFlags)0x0024080000000005, UECodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_TileSpawner, WaterTile), Z_Construct_UClass_UClass, Z_Construct_UClass_ABG_Tile_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_WaterTile_MetaData), NewProp_WaterTile_MetaData) };
-const UECodeGen_Private::FClassPropertyParams Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_SandyTile = { "SandyTile", nullptr, (EPropertyFlags)0x0024080000000005, UECodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_TileSpawner, SandyTile), Z_Construct_UClass_UClass, Z_Construct_UClass_ABG_Tile_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_SandyTile_MetaData), NewProp_SandyTile_MetaData) };
 const UECodeGen_Private::FClassPropertyParams Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_MeadowTiles_Inner = { "MeadowTiles", nullptr, (EPropertyFlags)0x0004000000000000, UECodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, 0, Z_Construct_UClass_UClass, Z_Construct_UClass_ABG_Tile_NoRegister, METADATA_PARAMS(0, nullptr) };
 const UECodeGen_Private::FArrayPropertyParams Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_MeadowTiles = { "MeadowTiles", nullptr, (EPropertyFlags)0x0024080000000005, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_TileSpawner, MeadowTiles), EArrayPropertyFlags::None, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_MeadowTiles_MetaData), NewProp_MeadowTiles_MetaData) };
-const UECodeGen_Private::FClassPropertyParams Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_ForestTiles_Inner = { "ForestTiles", nullptr, (EPropertyFlags)0x0004000000000000, UECodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, 0, Z_Construct_UClass_UClass, Z_Construct_UClass_ABG_Tile_NoRegister, METADATA_PARAMS(0, nullptr) };
-const UECodeGen_Private::FArrayPropertyParams Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_ForestTiles = { "ForestTiles", nullptr, (EPropertyFlags)0x0024080000000005, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_TileSpawner, ForestTiles), EArrayPropertyFlags::None, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_ForestTiles_MetaData), NewProp_ForestTiles_MetaData) };
-const UECodeGen_Private::FClassPropertyParams Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_StoneTiles_Inner = { "StoneTiles", nullptr, (EPropertyFlags)0x0004000000000000, UECodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, 0, Z_Construct_UClass_UClass, Z_Construct_UClass_ABG_Tile_NoRegister, METADATA_PARAMS(0, nullptr) };
-const UECodeGen_Private::FArrayPropertyParams Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_StoneTiles = { "StoneTiles", nullptr, (EPropertyFlags)0x0024080000000005, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_TileSpawner, StoneTiles), EArrayPropertyFlags::None, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_StoneTiles_MetaData), NewProp_StoneTiles_MetaData) };
-const UECodeGen_Private::FClassPropertyParams Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_RockHillTiles_Inner = { "RockHillTiles", nullptr, (EPropertyFlags)0x0004000000000000, UECodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, 0, Z_Construct_UClass_UClass, Z_Construct_UClass_ABG_Tile_NoRegister, METADATA_PARAMS(0, nullptr) };
-const UECodeGen_Private::FArrayPropertyParams Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_RockHillTiles = { "RockHillTiles", nullptr, (EPropertyFlags)0x0024080000000005, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_TileSpawner, RockHillTiles), EArrayPropertyFlags::None, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_RockHillTiles_MetaData), NewProp_RockHillTiles_MetaData) };
-const UECodeGen_Private::FClassPropertyParams Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_MountainTile = { "MountainTile", nullptr, (EPropertyFlags)0x0024080000000005, UECodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_TileSpawner, MountainTile), Z_Construct_UClass_UClass, Z_Construct_UClass_ABG_Tile_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_MountainTile_MetaData), NewProp_MountainTile_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_TileManager = { "TileManager", nullptr, (EPropertyFlags)0x0020080000000005, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_TileSpawner, TileManager), Z_Construct_UClass_ATileManager_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_TileManager_MetaData), NewProp_TileManager_MetaData) };
 const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_ABG_TileSpawner_Statics::PropPointers[] = {
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_tileWidth,
@@ -263,16 +217,8 @@ const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_ABG_TileS
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_noiseFrequency,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_TileClass,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_WaterTile,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_SandyTile,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_MeadowTiles_Inner,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_MeadowTiles,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_ForestTiles_Inner,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_ForestTiles,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_StoneTiles_Inner,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_StoneTiles,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_RockHillTiles_Inner,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_RockHillTiles,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_MountainTile,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_TileManager,
 };
 static_assert(UE_ARRAY_COUNT(Z_Construct_UClass_ABG_TileSpawner_Statics::PropPointers) < 2048);
@@ -312,13 +258,13 @@ ABG_TileSpawner::~ABG_TileSpawner() {}
 struct Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_TileSpawner_h__Script_ProductionProjCurr_Statics
 {
 	static constexpr FEnumRegisterCompiledInInfo EnumInfo[] = {
-		{ EBiomeType_StaticEnum, TEXT("EBiomeType"), &Z_Registration_Info_UEnum_EBiomeType, CONSTRUCT_RELOAD_VERSION_INFO(FEnumReloadVersionInfo, 3334049638U) },
+		{ EBiomeType_StaticEnum, TEXT("EBiomeType"), &Z_Registration_Info_UEnum_EBiomeType, CONSTRUCT_RELOAD_VERSION_INFO(FEnumReloadVersionInfo, 3692260305U) },
 	};
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_ABG_TileSpawner, ABG_TileSpawner::StaticClass, TEXT("ABG_TileSpawner"), &Z_Registration_Info_UClass_ABG_TileSpawner, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ABG_TileSpawner), 4173369377U) },
+		{ Z_Construct_UClass_ABG_TileSpawner, ABG_TileSpawner::StaticClass, TEXT("ABG_TileSpawner"), &Z_Registration_Info_UClass_ABG_TileSpawner, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ABG_TileSpawner), 406395364U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_TileSpawner_h__Script_ProductionProjCurr_3606476758(TEXT("/Script/ProductionProjCurr"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_TileSpawner_h__Script_ProductionProjCurr_2103064263(TEXT("/Script/ProductionProjCurr"),
 	Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_TileSpawner_h__Script_ProductionProjCurr_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_TileSpawner_h__Script_ProductionProjCurr_Statics::ClassInfo),
 	nullptr, 0,
 	Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_TileSpawner_h__Script_ProductionProjCurr_Statics::EnumInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_TileSpawner_h__Script_ProductionProjCurr_Statics::EnumInfo));

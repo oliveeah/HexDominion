@@ -5,7 +5,6 @@
 #include "TileManager.h"
 #include "Kismet/GameplayStatics.h"
 
-
 // Sets default values
 ABG_TileSpawner::ABG_TileSpawner()
 {
@@ -16,7 +15,6 @@ ABG_TileSpawner::ABG_TileSpawner()
 void ABG_TileSpawner::BeginPlay()
 {
 	Super::BeginPlay();
-
 
 	// Generate random number and seed with it
 	const float randomNum = FMath::Rand();
@@ -31,7 +29,7 @@ void ABG_TileSpawner::BeginPlay()
 
 void ABG_TileSpawner::clearGrid()
 {
-	for (TArray<ABG_Tile*>& Row : TileGrid) 
+	for (TArray<ABG_Tile*>& Row : TileGrid)
 	{
 		for (ABG_Tile* Tile : Row)
 		{
@@ -45,20 +43,19 @@ void ABG_TileSpawner::clearGrid()
 	TileGrid.Empty();
 }
 
-
 void ABG_TileSpawner::spawnGrid(const float& randomNum)
 {
-	if (!GetWorld()) return;
+	if (!GetWorld())
+		return;
 
-	const float hexWidth = tileWidth;
-	const float hexHeight = hexWidth * 0.866f; // hexHeight
+	const float	  hexWidth = tileWidth;
+	const float	  hexHeight = hexWidth * 0.866f; // hexHeight
 	const FVector tileSpawnerLocation = GetActorLocation();
-	
+
 	FastNoiseLite Noise;
 	Noise.SetSeed(randomNum);
 	Noise.SetNoiseType(FastNoiseLite::NoiseType_ValueCubic);
 	Noise.SetFrequency(noiseFrequency);
-
 
 	TileGrid.SetNum(numberOfRows);
 	TileManager->SetGridWidth(numberOfColumns);
@@ -71,46 +68,25 @@ void ABG_TileSpawner::spawnGrid(const float& randomNum)
 		{
 			// Offset every other row
 			const float xOffset = (rows % 2 == 0) ? 0.0f : (hexWidth * 0.5f);
-			float Nx = cols + (rows % 2) * 0.5f;
-			float Ny = rows * 0.8660254f;
+			float		Nx = cols + (rows % 2) * 0.5f;
+			float		Ny = rows * 0.8660254f;
 
-			float		HeightNoise = Noise.GetNoise(Nx, Ny); // reuse same coords
-			float		Height = HeightNoise * ySpawnOffset;		  // tweak this in editor
+			float HeightNoise = Noise.GetNoise(Nx, Ny); // reuse same coords
+			float Height = HeightNoise * ySpawnOffset;	// tweak this in editor
 
-			FVector		spawnLocation = tileSpawnerLocation + FVector(
-				cols * hexWidth + xOffset,
-				rows * hexHeight, Height);
+			FVector spawnLocation = tileSpawnerLocation + FVector(cols * hexWidth + xOffset, rows * hexHeight, Height);
 
 			const FTransform instanceTransform(FRotator::ZeroRotator, spawnLocation);
 
 			// Determine biome type based on noise
 			const EBiomeType biomeType = generateBiomeTypeBasedOnNoise(rows, cols, Noise);
-			
+
 			// Get tile class for biome
 			TSubclassOf<ABG_Tile> ChosenTileClass = GetTileClassForBiome(biomeType);
 
-			switch (biomeType)
+			if (biomeType == EBiomeType::Grassland)
 			{
-				case EBiomeType::Grassland:
-					ChosenTileClass = PickVariantFromNoise(MeadowTiles, Noise, cols, rows);
-					break;
-
-				case EBiomeType::Forest:
-					ChosenTileClass = PickVariantFromNoise(ForestTiles, Noise, cols, rows);
-					break;
-
-				case EBiomeType::Stone:
-					ChosenTileClass = PickVariantFromNoise(StoneTiles, Noise, cols, rows);
-					break;
-
-				case EBiomeType::Hill:
-					ChosenTileClass = PickVariantFromNoise(RockHillTiles, Noise, cols, rows);
-					break;
-
-				default:
-					// Fallback to your original method for others
-					ChosenTileClass = GetTileClassForBiome(biomeType);
-					break;
+				ChosenTileClass = PickVariantFromNoise(MeadowTiles, Noise, cols, rows);
 			}
 
 			// Safety fallback
@@ -123,12 +99,12 @@ void ABG_TileSpawner::spawnGrid(const float& randomNum)
 
 			if (NewTile)
 			{
-				TileGrid[rows][cols] = NewTile; 
+				TileGrid[rows][cols] = NewTile;
 				NewTile->gridCoordinates = FIntPoint(cols, rows);
 				if (TileManager)
 				{
 					NewTile->OnTileSelectedDelegate.AddDynamic(TileManager, &ATileManager::OnTileClicked);
-					TileManager->RegisterTile(FIntPoint(cols, rows), NewTile); 
+					TileManager->RegisterTile(FIntPoint(cols, rows), NewTile);
 				}
 				else
 				{
@@ -137,7 +113,6 @@ void ABG_TileSpawner::spawnGrid(const float& randomNum)
 			}
 		}
 	}
-
 }
 
 TSubclassOf<ABG_Tile> ABG_TileSpawner::GetTileClassForBiome(EBiomeType Biome) const
@@ -146,18 +121,8 @@ TSubclassOf<ABG_Tile> ABG_TileSpawner::GetTileClassForBiome(EBiomeType Biome) co
 	{
 		case EBiomeType::Water:
 			return WaterTile;
-		case EBiomeType::Sandy:
-			return SandyTile;
 		case EBiomeType::Grassland:
 			return MeadowTiles.Num() > 0 ? MeadowTiles[0] : TileClass;
-		case EBiomeType::Forest:
-			return ForestTiles.Num() > 0 ? ForestTiles[0] : TileClass;
-		case EBiomeType::Stone:
-			return StoneTiles.Num() > 0 ? StoneTiles[0] : TileClass;
-		case EBiomeType::Hill:
-			return RockHillTiles.Num() > 0 ? RockHillTiles[0] : TileClass;
-		case EBiomeType::Mountain:
-			return MountainTile;
 		default:
 			return TileClass; // Fallback to base tile
 	}
@@ -170,25 +135,19 @@ EBiomeType ABG_TileSpawner::generateBiomeTypeBasedOnNoise(int32 rows, int32 cols
 
 	float Value = (_Noise.GetNoise(Nx, Ny) + 1.f) * 0.5f;
 
-
-
-	// UE_LOG(LogTemp, Display, TEXT("noise %f"), Value);
-
-	if (Value < 0.45f) return EBiomeType::Water;
-	//if (Value < 0.38f) return EBiomeType::Sandy; // thinner beach
-	//if (Value < 0.6f) return EBiomeType::Grassland;
-	//if (Value < 0.65f) return EBiomeType::Forest;
-	//if (Value < 0.75f) return EBiomeType::Stone;
-	//if (Value < 0.8f) return EBiomeType::Hill;
+	if (Value < 0.45f)
+		return EBiomeType::Water;
 	return EBiomeType::Grassland;
 }
 
 ABG_Tile* ABG_TileSpawner::spawnTile(TSubclassOf<ABG_Tile> _ChosenTileClass, const FTransform& _instanceTransform)
 {
-	if (!_ChosenTileClass) return nullptr;
+	if (!_ChosenTileClass)
+		return nullptr;
 
 	UWorld* World = GetWorld();
-	if (!World) return nullptr;
+	if (!World)
+		return nullptr;
 
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = this;

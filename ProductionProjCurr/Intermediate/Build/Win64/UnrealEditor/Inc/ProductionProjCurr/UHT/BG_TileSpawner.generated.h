@@ -19,7 +19,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 // ********** Begin Class ABG_TileSpawner **********************************************************
 PRODUCTIONPROJCURR_API UClass* Z_Construct_UClass_ABG_TileSpawner_NoRegister();
 
-#define FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_TileSpawner_h_32_INCLASS_NO_PURE_DECLS \
+#define FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_TileSpawner_h_27_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesABG_TileSpawner(); \
 	friend struct Z_Construct_UClass_ABG_TileSpawner_Statics; \
@@ -30,7 +30,7 @@ public: \
 	DECLARE_SERIALIZER(ABG_TileSpawner)
 
 
-#define FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_TileSpawner_h_32_ENHANCED_CONSTRUCTORS \
+#define FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_TileSpawner_h_27_ENHANCED_CONSTRUCTORS \
 	/** Deleted move- and copy-constructors, should never be used */ \
 	ABG_TileSpawner(ABG_TileSpawner&&) = delete; \
 	ABG_TileSpawner(const ABG_TileSpawner&) = delete; \
@@ -40,12 +40,12 @@ public: \
 	NO_API virtual ~ABG_TileSpawner();
 
 
-#define FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_TileSpawner_h_28_PROLOG
-#define FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_TileSpawner_h_32_GENERATED_BODY \
+#define FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_TileSpawner_h_23_PROLOG
+#define FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_TileSpawner_h_27_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_TileSpawner_h_32_INCLASS_NO_PURE_DECLS \
-	FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_TileSpawner_h_32_ENHANCED_CONSTRUCTORS \
+	FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_TileSpawner_h_27_INCLASS_NO_PURE_DECLS \
+	FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_TileSpawner_h_27_ENHANCED_CONSTRUCTORS \
 public: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
@@ -60,12 +60,7 @@ class ABG_TileSpawner;
 // ********** Begin Enum EBiomeType ****************************************************************
 #define FOREACH_ENUM_EBIOMETYPE(op) \
 	op(EBiomeType::Water) \
-	op(EBiomeType::Sandy) \
-	op(EBiomeType::Grassland) \
-	op(EBiomeType::Forest) \
-	op(EBiomeType::Stone) \
-	op(EBiomeType::Hill) \
-	op(EBiomeType::Mountain) 
+	op(EBiomeType::Grassland) 
 
 enum class EBiomeType : uint8;
 template<> struct TIsUEnumClass<EBiomeType> { enum { Value = true }; };
