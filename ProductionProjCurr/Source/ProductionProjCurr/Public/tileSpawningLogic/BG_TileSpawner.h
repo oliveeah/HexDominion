@@ -96,7 +96,7 @@ protected:
 	void clearGrid();
 
 	TSubclassOf<ABG_Tile> GetTileClassForBiome(EBiomeType Biome) const;
-	EBiomeType generateBiomeTypeBasedOnNoise(int32 rows, int32 cols, FastNoiseLite& _Noise, FastNoiseLite& _DetailNoise);
+	EBiomeType generateBiomeTypeBasedOnNoise(int32 rows, int32 cols, FastNoiseLite _Noise);
 	ABG_Tile* spawnTile(TSubclassOf<ABG_Tile> _ChosenTileClass, const FTransform& _instanceTransform);
 	TSubclassOf<ABG_Tile> PickVariantFromNoise(
 		const TArray<TSubclassOf<ABG_Tile>>& Variants,
