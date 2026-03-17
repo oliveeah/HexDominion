@@ -57,7 +57,12 @@ void ABG_TileSpawner::spawnGrid(const float& randomNum)
 	FastNoiseLite Noise;
 	Noise.SetSeed(randomNum);
 	Noise.SetNoiseType(FastNoiseLite::NoiseType_ValueCubic);
-	Noise.SetFrequency(noiseFrequency);
+	Noise.SetFrequency(noiseFrequency); // e.g. 0.05
+
+	FastNoiseLite DetailNoise;
+	DetailNoise.SetSeed(randomNum + 1337);
+	DetailNoise.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
+	DetailNoise.SetFrequency(noiseFrequency * 3.f); // higher freq = finer detail
 
 
 	TileGrid.SetNum(numberOfRows);
@@ -75,7 +80,7 @@ void ABG_TileSpawner::spawnGrid(const float& randomNum)
 			float Ny = rows * 0.8660254f;
 
 			float		HeightNoise = Noise.GetNoise(Nx, Ny); // reuse same coords
-			float		Height = HeightNoise * 100.f;		  // tweak this in editor
+			float		Height = HeightNoise * 0.f;		  // tweak this in editor
 
 			FVector		spawnLocation = tileSpawnerLocation + FVector(
 				cols * hexWidth + xOffset,
@@ -163,21 +168,26 @@ TSubclassOf<ABG_Tile> ABG_TileSpawner::GetTileClassForBiome(EBiomeType Biome) co
 	}
 }
 
-EBiomeType ABG_TileSpawner::generateBiomeTypeBasedOnNoise(int32 rows, int32 cols, FastNoiseLite _Noise)
+EBiomeType ABG_TileSpawner::generateBiomeTypeBasedOnNoise(int32 rows, int32 cols, FastNoiseLite _Noise, FastNoiseLite _DetailNoise)
 {
 	float Nx = cols + (rows % 2) * 0.5f;
 	float Ny = rows * 0.8660254f;
-
 	float Value = (_Noise.GetNoise(Nx, Ny) + 1.f) * 0.5f;
+	float Detail = (_DetailNoise.GetNoise(Nx, Ny) + 1.f) * 0.5f;
+	float BlendedValue = Value * 0.7f + Detail * 0.3f; // 70/30 blend
 
-	// UE_LOG(LogTemp, Display, TEXT("noise %f"), Value);
-
-	if (Value < 0.33f) return EBiomeType::Water;
-	if (Value < 0.38f) return EBiomeType::Sandy; // thinner beach
-	if (Value < 0.6f) return EBiomeType::Grassland;
-	if (Value < 0.65f) return EBiomeType::Forest;
-	if (Value < 0.75f) return EBiomeType::Stone;
-	if (Value < 0.8f) return EBiomeType::Hill;
+	if (Value < 0.20f)
+		return EBiomeType::Water;
+	if (Value < 0.27f)
+		return EBiomeType::Sandy;
+	if (Value < 0.45f)
+		return EBiomeType::Grassland;
+	if (Value < 0.58f)
+		return EBiomeType::Forest;
+	if (Value < 0.70f)
+		return EBiomeType::Stone;
+	if (Value < 0.82f)
+		return EBiomeType::Hill;
 	return EBiomeType::Mountain;
 }
 
