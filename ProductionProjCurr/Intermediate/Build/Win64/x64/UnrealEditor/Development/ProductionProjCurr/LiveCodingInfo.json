@@ -36,7 +36,6 @@
 			"Occupant_Troop_BaseClass.cpp.obj",
 			"InteractionInterface.cpp.obj",
 			"MyPlayerState.cpp.obj",
-			"TileManager.cpp.obj",
 			"Troop.cpp.obj",
 			"UPlayerProfile.cpp.obj",
 			"ProductionProjCurr.cpp.obj",
@@ -46,8 +45,9 @@
 			"BG_PlayerPawn.cpp.obj",
 			"ProductionProjCurrCharacter.cpp.obj",
 			"BG_Tile.cpp.obj",
-			"BG_TileSpawner.cpp.obj",
-			"ProductionProjCurrPlayerController.cpp.obj"
+			"TileManager.cpp.obj",
+			"ProductionProjCurrPlayerController.cpp.obj",
+			"BG_TileSpawner.cpp.obj"
 		]
 	}
 }

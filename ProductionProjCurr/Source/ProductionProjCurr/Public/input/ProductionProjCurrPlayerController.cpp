@@ -159,8 +159,8 @@ void AProductionProjCurrPlayerController::ScrollCallback(const FInputActionValue
 	}
 
 	const float ZoomDir = Value.Get<float>();
-	float desiredOrtoWidth = _ControlledPawn->Camera->OrthoWidth + ZoomDir * _ControlledPawn->ZoomSpeed;
-	_ControlledPawn->AdjustCameraZoom(desiredOrtoWidth);
+	const float desiredArmLength = _ControlledPawn->springArm->TargetArmLength - ZoomDir * _ControlledPawn->ZoomSpeed;
+	_ControlledPawn->AdjustCameraZoom(desiredArmLength);
 }
 
 void AProductionProjCurrPlayerController::OpenDevMenuCallback(const FInputActionValue& Value)

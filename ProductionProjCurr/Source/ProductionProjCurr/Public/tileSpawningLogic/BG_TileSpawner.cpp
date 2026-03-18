@@ -66,17 +66,6 @@ void ABG_TileSpawner::spawnGrid(const float& randomNum)
 		TileGrid[rows].SetNum(numberOfColumns);
 		for (int32 cols = 0; cols < numberOfColumns; cols++)
 		{
-			// Offset every other row
-			const float xOffset = (rows % 2 == 0) ? 0.0f : (hexWidth * 0.5f);
-			float		Nx = cols + (rows % 2) * 0.5f;
-			float		Ny = rows * 0.8660254f;
-
-			float HeightNoise = Noise.GetNoise(Nx, Ny); // reuse same coords
-			float Height = HeightNoise * ySpawnOffset;	// tweak this in editor
-
-			FVector spawnLocation = tileSpawnerLocation + FVector(cols * hexWidth + xOffset, rows * hexHeight, Height);
-
-			const FTransform instanceTransform(FRotator::ZeroRotator, spawnLocation);
 
 			// Determine biome type based on noise
 			const EBiomeType biomeType = generateBiomeTypeBasedOnNoise(rows, cols, Noise);
@@ -88,6 +77,20 @@ void ABG_TileSpawner::spawnGrid(const float& randomNum)
 			{
 				ChosenTileClass = PickVariantFromNoise(MeadowTiles, Noise, cols, rows);
 			}
+
+			bool isWater = biomeType == EBiomeType::Water;
+
+			// Offset every other row
+			const float xOffset = (rows % 2 == 0) ? 0.0f : (hexWidth * 0.5f);
+			float		Nx = cols + (rows % 2) * 0.5f;
+			float		Ny = rows * 0.8660254f;
+
+			float	HeightNoise = Noise.GetNoise(Nx, Ny); // reuse same coords
+			float	Height = HeightNoise * (ySpawnOffset * (isWater ? 1.0f : 0.0f));  // tweak this in editor
+
+			FVector spawnLocation = tileSpawnerLocation + FVector(cols * hexWidth + xOffset, rows * hexHeight, Height);
+
+			const FTransform instanceTransform(FRotator::ZeroRotator, spawnLocation);
 
 			// Safety fallback
 			if (!ChosenTileClass)
@@ -113,6 +116,21 @@ void ABG_TileSpawner::spawnGrid(const float& randomNum)
 			}
 		}
 	}
+
+	bool pathFirstTileGenerated = false;
+
+	while (!pathFirstTileGenerated)
+	{
+		int32 randomCol = FMath::RandRange(0, numberOfColumns - 1);
+		int32 randomRow = FMath::RandRange(0, numberOfRows - 1);
+		ABG_Tile*   randomTile = TileGrid[randomRow][randomCol];
+		if (randomTile && IsEdgeTile(FIntPoint(randomCol, randomRow)))
+		{
+			pathFirstTileGenerated = true;
+			UE_LOG(LogTemp, Display, TEXT("First path tile generated at %s"), *FIntPoint(randomCol, randomRow).ToString());
+		}
+	}
+
 }
 
 TSubclassOf<ABG_Tile> ABG_TileSpawner::GetTileClassForBiome(EBiomeType Biome) const
@@ -169,4 +187,9 @@ TSubclassOf<ABG_Tile> ABG_TileSpawner::PickVariantFromNoise(
 	float VariantNoise = Noise.GetNoise(Col * 0.5f, Row * 0.5f);
 	int32 Index = FMath::Abs((int32)(VariantNoise * 1000)) % Variants.Num();
 	return Variants[Index];
+}
+
+bool ABG_TileSpawner::IsEdgeTile(const FIntPoint& Coords) const
+{
+	return Coords.X == 0 || Coords.Y == 0 || Coords.X == numberOfColumns - 1 || Coords.Y == numberOfRows - 1;
 }

@@ -84,4 +84,7 @@ protected:
 		FastNoiseLite&						 Noise,
 		int32								 Col,
 		int32								 Row);
+
+private:
+	bool IsEdgeTile(const FIntPoint& Coords) const;
 };
