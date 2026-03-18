@@ -57,7 +57,7 @@ void AProductionProjCurrPlayerController::SetupInputComponent()
 
 		if (lookAction)
 		{
-			EnhancedInputComponent->BindAction(lookAction, ETriggerEvent::Triggered, this, &AProductionProjCurrPlayerController::LookCallback);
+			//EnhancedInputComponent->BindAction(lookAction, ETriggerEvent::Triggered, this, &AProductionProjCurrPlayerController::LookCallback);
 		}
 
 		if (clickAction)
