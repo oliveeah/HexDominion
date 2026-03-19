@@ -180,6 +180,152 @@ bool ABG_TileSpawner::IsEdgeTile(const FIntPoint& Coords) const
 	return Coords.X == 0 || Coords.Y == 0 || Coords.X == numberOfColumns - 1 || Coords.Y == numberOfRows - 1;
 }
 
+bool ABG_TileSpawner::IsValidCoord(const FIntPoint& Coords) const
+{
+	return TileGrid.IsValidIndex(Coords.Y) && TileGrid[Coords.Y].IsValidIndex(Coords.X);
+}
+
+void ABG_TileSpawner::GetNeighborCoords(const FIntPoint& Coords, TArray<FIntPoint>& OutNeighbors) const
+{
+	OutNeighbors.Reset();
+
+	static const FIntPoint EvenRowDirs[6] = {
+		{ -1, 0 }, { 1, 0 },
+		{ -1, -1 }, { 0, -1 },
+		{ -1, 1 }, { 0, 1 }
+	};
+
+	static const FIntPoint OddRowDirs[6] = {
+		{ -1, 0 }, { 1, 0 },
+		{ 0, -1 }, { 1, -1 },
+		{ 0, 1 }, { 1, 1 }
+	};
+
+	const FIntPoint* Directions = (Coords.Y % 2 == 0) ? EvenRowDirs : OddRowDirs;
+
+	for (int32 i = 0; i < 6; ++i)
+	{
+		const FIntPoint Neighbor = Coords + Directions[i];
+		if (IsValidCoord(Neighbor))
+		{
+			OutNeighbors.Add(Neighbor);
+		}
+	}
+}
+
+int32 ABG_TileSpawner::GetEdgeMask(const FIntPoint& Coords) const
+{
+	int32 Mask = 0;
+	if (Coords.X == 0)					 Mask |= 1; // left
+	if (Coords.X == numberOfColumns - 1) Mask |= 2; // right
+	if (Coords.Y == 0)					 Mask |= 4; // top
+	if (Coords.Y == numberOfRows - 1)	 Mask |= 8; // bottom
+	return Mask;
+}
+
+bool ABG_TileSpawner::IsDifferentEdge(const FIntPoint& Start, const FIntPoint& Current) const
+{
+	const int32 StartMask = GetEdgeMask(Start);
+	const int32 CurrentMask = GetEdgeMask(Current);
+	return (CurrentMask & StartMask) == 0;
+}
+
+bool ABG_TileSpawner::TryBuildRandomPath(TArray<FIntPoint>& OutPath)
+{
+	OutPath.Reset();
+
+	const int32 MaxStartAttempts = numberOfRows * numberOfColumns * 2;
+	int32 StartAttempts = 0;
+	FIntPoint Start(-1, -1);
+
+	while (++StartAttempts < MaxStartAttempts)
+	{
+		const int32 RandomCol = randomStream.RandRange(0, numberOfColumns - 1);
+		const int32 RandomRow = randomStream.RandRange(0, numberOfRows - 1);
+		const FIntPoint Candidate(RandomCol, RandomRow);
+
+		if (IsEdgeTile(Candidate) && IsValidCoord(Candidate) && TileGrid[RandomRow][RandomCol])
+		{
+			Start = Candidate;
+			break;
+		}
+	}
+
+	if (!IsValidCoord(Start))
+		return false;
+
+	TSet<FIntPoint> Visited;
+	Visited.Add(Start);
+	OutPath.Add(Start);
+
+	FIntPoint Current = Start;
+	FIntPoint Previous = Start;
+	const int32 MaxSteps = numberOfRows * numberOfColumns * 2;
+
+	for (int32 Step = 0; Step < MaxSteps; ++Step)
+	{
+		const int32 DistanceFromStart = FMath::Abs(Current.X - Start.X) + FMath::Abs(Current.Y - Start.Y);
+		if (Step > 0 && IsEdgeTile(Current) && IsDifferentEdge(Start, Current) && DistanceFromStart >= minPathDistance)
+		{
+			return true;
+		}
+
+		TArray<FIntPoint> Neighbors;
+		GetNeighborCoords(Current, Neighbors);
+
+		TArray<FIntPoint> Unvisited;
+		for (const FIntPoint& N : Neighbors)
+		{
+			if (!Visited.Contains(N))
+			{
+				Unvisited.Add(N);
+			}
+		}
+
+		if (Unvisited.Num() == 0)
+		{
+			return false; // dead-end, no backtracking
+		}
+
+		// Prefer moves that increase distance from the start
+		TArray<FIntPoint> Outward;
+		for (const FIntPoint& N : Unvisited)
+		{
+			const int32 NextDistance = FMath::Abs(N.X - Start.X) + FMath::Abs(N.Y - Start.Y);
+			if (NextDistance >= DistanceFromStart)
+			{
+				Outward.Add(N);
+			}
+		}
+
+		TArray<FIntPoint> Choices = Outward.Num() > 0 ? Outward : Unvisited;
+
+		// Prefer to go straight, but sometimes turn for natural variation
+		FIntPoint Forward = Current + (Current - Previous);
+		int32 ForwardIndex = Choices.IndexOfByKey(Forward);
+
+		const bool bForceTurn = randomStream.FRand() < turnChance || ForwardIndex == INDEX_NONE;
+
+		FIntPoint Next = Forward;
+		if (bForceTurn)
+		{
+			Next = Choices[randomStream.RandRange(0, Choices.Num() - 1)];
+		}
+		else
+		{
+			Next = Choices[ForwardIndex];
+		}
+
+		Previous = Current;
+		Current = Next;
+
+		Visited.Add(Current);
+		OutPath.Add(Current);
+	}
+
+	return false;
+}
+
 void ABG_TileSpawner::SpawnPath()
 {
 	if (TileGrid.Num() == 0 || numberOfRows <= 0 || numberOfColumns <= 0)
@@ -194,73 +340,71 @@ void ABG_TileSpawner::SpawnPath()
 		return;
 	}
 
-	const int32 MaxAttempts = numberOfRows * numberOfColumns * 2;
-	int32		Attempts = 0;
-	FIntPoint	ChosenCoords(-1, -1);
-	ABG_Tile*	ChosenTile = nullptr;
+	const int32 PathsToGenerate = FMath::Max(1, numberOfPaths);
+	const int32 MaxPathAttempts = 10;
 
-	while (++Attempts < MaxAttempts && !ChosenTile)
+	for (int32 PathIndex = 0; PathIndex < PathsToGenerate; ++PathIndex)
 	{
-		const int32 RandomCol = randomStream.RandRange(0, numberOfColumns - 1);
-		const int32 RandomRow = randomStream.RandRange(0, numberOfRows - 1);
-		const FIntPoint TileCandidate(RandomCol, RandomRow);
+		TArray<FIntPoint> Path;
+		bool bBuilt = false;
 
-		if (!IsEdgeTile(TileCandidate))
-			continue;
-
-		if (!TileGrid.IsValidIndex(RandomRow) || !TileGrid[RandomRow].IsValidIndex(RandomCol))
-			continue;
-
-		if (ABG_Tile* RandomTile = TileGrid[RandomRow][RandomCol])
+		for (int32 Attempt = 0; Attempt < MaxPathAttempts; ++Attempt)
 		{
-			ChosenCoords = TileCandidate;
-			ChosenTile = RandomTile;
+			if (TryBuildRandomPath(Path))
+			{
+				bBuilt = true;
+				break;
+			}
 		}
+
+		if (!bBuilt)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("SpawnPath failed: could not reach another edge."));
+			continue;
+		}
+
+		for (const FIntPoint& Coords : Path)
+		{
+			if (!IsValidCoord(Coords))
+				continue;
+
+			ABG_Tile* OldTile = TileGrid[Coords.Y][Coords.X];
+			if (!OldTile)
+				continue;
+
+			const FVector  ActorScale = OldTile->GetActorScale3D();
+			const FVector  MeshScale = OldTile->tileMesh ? OldTile->tileMesh->GetRelativeScale3D() : FVector::OneVector;
+			const FVector  RootRelLoc = OldTile->GetRootComponent() ? OldTile->GetRootComponent()->GetRelativeLocation() : FVector::ZeroVector;
+			const FRotator RootRelRot = OldTile->GetRootComponent() ? OldTile->GetRootComponent()->GetRelativeRotation() : FRotator::ZeroRotator;
+			const FTransform TileTransform = OldTile->GetActorTransform();
+
+			OldTile->Destroy();
+
+			ABG_Tile* NewTile = spawnTile(PathTile, TileTransform);
+			if (!NewTile)
+				continue;
+
+			NewTile->SetActorScale3D(ActorScale);
+			if (NewTile->tileMesh)
+			{
+				NewTile->tileMesh->SetRelativeScale3D(MeshScale);
+			}
+			if (NewTile->GetRootComponent())
+			{
+				NewTile->GetRootComponent()->SetRelativeLocation(RootRelLoc);
+				NewTile->GetRootComponent()->SetRelativeRotation(RootRelRot);
+			}
+
+			NewTile->gridCoordinates = Coords;
+			TileGrid[Coords.Y][Coords.X] = NewTile;
+
+			if (TileManager)
+			{
+				NewTile->OnTileSelectedDelegate.AddDynamic(TileManager, &ATileManager::OnTileClicked);
+				TileManager->RegisterTile(Coords, NewTile);
+			}
+		}
+
+		UE_LOG(LogTemp, Display, TEXT("Path generated with %d tiles."), Path.Num());
 	}
-
-	if (!ChosenTile)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("SpawnPath failed: no valid edge tile found."));
-		return;
-	}
-
-	const FVector  ActorScale = ChosenTile->GetActorScale3D();
-	const FVector  MeshScale = ChosenTile->tileMesh ? ChosenTile->tileMesh->GetRelativeScale3D() : FVector::OneVector;
-	const FTransform TileTransform(ChosenTile->GetActorRotation(), ChosenTile->GetActorLocation(), ActorScale);
-
-	ChosenTile->Destroy();
-
-	ABG_Tile* NewTile = spawnTile(PathTile, TileTransform);
-	if (!NewTile)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("SpawnPath failed: could not spawn PathTile."));
-		return;
-	}
-
-	NewTile->SetActorScale3D(ActorScale);
-	if (NewTile->tileMesh)
-	{
-		NewTile->tileMesh->SetRelativeScale3D(MeshScale);
-	}
-
-	TileGrid[ChosenCoords.Y][ChosenCoords.X] = NewTile;
-	NewTile->gridCoordinates = ChosenCoords;
-
-	if (TileManager)
-	{
-		NewTile->OnTileSelectedDelegate.AddDynamic(TileManager, &ATileManager::OnTileClicked);
-		TileManager->RegisterTile(ChosenCoords, NewTile);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("TileManager not set in TileSpawner! Cannot bind delegate."));
-	}
-
-	if (NewTile->GetRootComponent() && ChosenTile->GetRootComponent())
-	{
-		NewTile->GetRootComponent()->SetRelativeLocation(ChosenTile->GetRootComponent()->GetRelativeLocation());
-		NewTile->GetRootComponent()->SetRelativeRotation(ChosenTile->GetRootComponent()->GetRelativeRotation());
-	}
-
-	UE_LOG(LogTemp, Display, TEXT("First path tile generated at %s"), *ChosenCoords.ToString());
 }

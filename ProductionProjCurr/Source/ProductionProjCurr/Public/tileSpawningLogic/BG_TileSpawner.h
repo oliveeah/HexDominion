@@ -91,4 +91,20 @@ private:
 	bool IsEdgeTile(const FIntPoint& Coords) const;
 
 	void SpawnPath();
+
+	bool TryBuildRandomPath(TArray<FIntPoint>& OutPath);
+	void GetNeighborCoords(const FIntPoint& Coords, TArray<FIntPoint>& OutNeighbors) const;
+	bool IsValidCoord(const FIntPoint& Coords) const;
+
+	int32 GetEdgeMask(const FIntPoint& Coords) const;
+	bool IsDifferentEdge(const FIntPoint& Start, const FIntPoint& Current) const;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Path", meta = (AllowPrivateAccess = "true"))
+	int32 numberOfPaths = 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Path", meta = (AllowPrivateAccess = "true"))
+	int32 minPathDistance = 10;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Path", meta = (AllowPrivateAccess = "true"))
+	float turnChance = 0.25f;
 };
