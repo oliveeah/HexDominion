@@ -6,7 +6,6 @@
 			"BG_CaptureActor.gen.cpp.obj",
 			"BG_PlayerPawn.gen.cpp.obj",
 			"BG_Tile.gen.cpp.obj",
-			"BG_TileSpawner.gen.cpp.obj",
 			"Building.gen.cpp.obj",
 			"DevMode_Widget.gen.cpp.obj",
 			"Enum_PlayerSide.gen.cpp.obj",
@@ -16,7 +15,6 @@
 			"Occupant_BaseClass.gen.cpp.obj",
 			"Occupant_Building_BaseClass.gen.cpp.obj",
 			"Occupant_Troop_BaseClass.gen.cpp.obj",
-			"ProductionProjCurr.init.gen.cpp.obj",
 			"ProductionProjCurrCharacter.gen.cpp.obj",
 			"ProductionProjCurrGameMode.gen.cpp.obj",
 			"ProductionProjCurrPlayerController.gen.cpp.obj",
@@ -42,11 +40,13 @@
 			"BG_CaptureActor.cpp.obj",
 			"ProductionProjCurrGameMode.cpp.obj",
 			"BG_AC_MouseOverlapReciever.cpp.obj",
+			"ProductionProjCurrPlayerController.cpp.obj",
 			"BG_PlayerPawn.cpp.obj",
 			"ProductionProjCurrCharacter.cpp.obj",
-			"BG_Tile.cpp.obj",
+			"BG_TileSpawner.gen.cpp.obj",
+			"ProductionProjCurr.init.gen.cpp.obj",
 			"TileManager.cpp.obj",
-			"ProductionProjCurrPlayerController.cpp.obj",
+			"BG_Tile.cpp.obj",
 			"BG_TileSpawner.cpp.obj"
 		]
 	}

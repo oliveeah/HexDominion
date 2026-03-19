@@ -35,39 +35,42 @@ public:
 		return TileGrid;
 	}
 
-protected:
+private:
 	// Grid Setup
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hex | Setup")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Setup", meta = (AllowPrivateAccess = "true"))
 	float tileWidth;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hex | Setup")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Setup", meta = (AllowPrivateAccess = "true"))
 	int32 numberOfColumns;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hex | Setup")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Setup", meta = (AllowPrivateAccess = "true"))
 	int32 numberOfRows;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hex | Setup")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Setup", meta = (AllowPrivateAccess = "true"))
 	float xSpawnOffset;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hex | Setup")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Setup", meta = (AllowPrivateAccess = "true"))
 	float ySpawnOffset;
 
 	// Noise Settings
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Setup")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Setup", meta = (AllowPrivateAccess = "true"))
 	float noiseFrequency;
 
 	// Tile Classes
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Hex | Biomes")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Hex | Biomes", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<ABG_Tile> TileClass;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hex | Biomes")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Biomes", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<ABG_Tile> WaterTile;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hex | Biomes")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Biomes", meta = (AllowPrivateAccess = "true"))
 	TArray<TSubclassOf<ABG_Tile>> MeadowTiles;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Biomes", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<ABG_Tile> PathTile;
 
 	TArray<TArray<ABG_Tile*>> TileGrid;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TileManager")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "TileManager", meta = (AllowPrivateAccess = "true"))
 	ATileManager* TileManager;
 
 	FRandomStream randomStream;
@@ -77,7 +80,7 @@ protected:
 	void clearGrid();
 
 	TSubclassOf<ABG_Tile> GetTileClassForBiome(EBiomeType Biome) const;
-	EBiomeType			  generateBiomeTypeBasedOnNoise(int32 rows, int32 cols, FastNoiseLite _Noise);
+	EBiomeType			  generateBiomeTypeBasedOnNoise(int32 rows, int32 cols, FastNoiseLite& _Noise);
 	ABG_Tile*			  spawnTile(TSubclassOf<ABG_Tile> _ChosenTileClass, const FTransform& _instanceTransform);
 	TSubclassOf<ABG_Tile> PickVariantFromNoise(
 		const TArray<TSubclassOf<ABG_Tile>>& Variants,
@@ -85,6 +88,7 @@ protected:
 		int32								 Col,
 		int32								 Row);
 
-private:
 	bool IsEdgeTile(const FIntPoint& Coords) const;
+
+	void SpawnPath();
 };

@@ -89,6 +89,7 @@ public:
 	void SetGridHeight(int32 Height) { GridHeight = Height; }
 
 
+	protected:
 		// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

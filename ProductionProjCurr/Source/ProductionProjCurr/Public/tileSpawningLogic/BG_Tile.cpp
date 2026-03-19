@@ -47,7 +47,7 @@ void ABG_Tile::BeginPlay()
 void ABG_Tile::OnDebugToggled()
 {
 
-FString DebugText = FString::Printf(
+	FString DebugText = FString::Printf(
 		TEXT("(%d, %d)"),
 		gridCoordinates.X,
 		gridCoordinates.Y);

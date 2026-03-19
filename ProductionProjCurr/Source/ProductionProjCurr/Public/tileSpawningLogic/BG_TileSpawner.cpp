@@ -61,10 +61,10 @@ void ABG_TileSpawner::spawnGrid(const float& randomNum)
 	TileManager->SetGridWidth(numberOfColumns);
 	TileManager->SetGridHeight(numberOfRows);
 
-	for (int32 rows = 0; rows < numberOfRows; rows++)
+	for (int32 rows = 0; rows < numberOfRows; ++rows)
 	{
 		TileGrid[rows].SetNum(numberOfColumns);
-		for (int32 cols = 0; cols < numberOfColumns; cols++)
+		for (int32 cols = 0; cols < numberOfColumns; ++cols)
 		{
 
 			// Determine biome type based on noise
@@ -73,12 +73,11 @@ void ABG_TileSpawner::spawnGrid(const float& randomNum)
 			// Get tile class for biome
 			TSubclassOf<ABG_Tile> ChosenTileClass = GetTileClassForBiome(biomeType);
 
-			if (biomeType == EBiomeType::Grassland)
+			if (biomeType == EBiomeType::Grassland && ChosenTileClass)
 			{
 				ChosenTileClass = PickVariantFromNoise(MeadowTiles, Noise, cols, rows);
 			}
 
-			bool isWater = biomeType == EBiomeType::Water;
 
 			// Offset every other row
 			const float xOffset = (rows % 2 == 0) ? 0.0f : (hexWidth * 0.5f);
@@ -86,21 +85,19 @@ void ABG_TileSpawner::spawnGrid(const float& randomNum)
 			float		Ny = rows * 0.8660254f;
 
 			float	HeightNoise = Noise.GetNoise(Nx, Ny); // reuse same coords
+
+			bool isWater = biomeType == EBiomeType::Water;
+
 			float	Height = HeightNoise * (ySpawnOffset * (isWater ? 1.0f : 0.0f));  // tweak this in editor
 
 			FVector spawnLocation = tileSpawnerLocation + FVector(cols * hexWidth + xOffset, rows * hexHeight, Height);
 
 			const FTransform instanceTransform(FRotator::ZeroRotator, spawnLocation);
 
-			// Safety fallback
-			if (!ChosenTileClass)
-			{
-				ChosenTileClass = GetTileClassForBiome(biomeType);
-			}
 			// Spawn the tile
 			ABG_Tile* NewTile = spawnTile(ChosenTileClass, instanceTransform);
 
-			if (NewTile)
+			if (NewTile) // set grid coords, register with manager and bind delegate
 			{
 				TileGrid[rows][cols] = NewTile;
 				NewTile->gridCoordinates = FIntPoint(cols, rows);
@@ -117,19 +114,8 @@ void ABG_TileSpawner::spawnGrid(const float& randomNum)
 		}
 	}
 
-	bool pathFirstTileGenerated = false;
+	SpawnPath();
 
-	while (!pathFirstTileGenerated)
-	{
-		int32 randomCol = FMath::RandRange(0, numberOfColumns - 1);
-		int32 randomRow = FMath::RandRange(0, numberOfRows - 1);
-		ABG_Tile*   randomTile = TileGrid[randomRow][randomCol];
-		if (randomTile && IsEdgeTile(FIntPoint(randomCol, randomRow)))
-		{
-			pathFirstTileGenerated = true;
-			UE_LOG(LogTemp, Display, TEXT("First path tile generated at %s"), *FIntPoint(randomCol, randomRow).ToString());
-		}
-	}
 
 }
 
@@ -146,7 +132,7 @@ TSubclassOf<ABG_Tile> ABG_TileSpawner::GetTileClassForBiome(EBiomeType Biome) co
 	}
 }
 
-EBiomeType ABG_TileSpawner::generateBiomeTypeBasedOnNoise(int32 rows, int32 cols, FastNoiseLite _Noise)
+EBiomeType ABG_TileSpawner::generateBiomeTypeBasedOnNoise(int32 rows, int32 cols, FastNoiseLite& _Noise)
 {
 	float Nx = cols + (rows % 2) * 0.5f;
 	float Ny = rows * 0.8660254f;
@@ -192,4 +178,89 @@ TSubclassOf<ABG_Tile> ABG_TileSpawner::PickVariantFromNoise(
 bool ABG_TileSpawner::IsEdgeTile(const FIntPoint& Coords) const
 {
 	return Coords.X == 0 || Coords.Y == 0 || Coords.X == numberOfColumns - 1 || Coords.Y == numberOfRows - 1;
+}
+
+void ABG_TileSpawner::SpawnPath()
+{
+	if (TileGrid.Num() == 0 || numberOfRows <= 0 || numberOfColumns <= 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("SpawnPath failed: grid is not initialized."));
+		return;
+	}
+
+	if (!PathTile)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("SpawnPath failed: PathTile class is not set."));
+		return;
+	}
+
+	const int32 MaxAttempts = numberOfRows * numberOfColumns * 2;
+	int32		Attempts = 0;
+	FIntPoint	ChosenCoords(-1, -1);
+	ABG_Tile*	ChosenTile = nullptr;
+
+	while (++Attempts < MaxAttempts && !ChosenTile)
+	{
+		const int32 RandomCol = randomStream.RandRange(0, numberOfColumns - 1);
+		const int32 RandomRow = randomStream.RandRange(0, numberOfRows - 1);
+		const FIntPoint TileCandidate(RandomCol, RandomRow);
+
+		if (!IsEdgeTile(TileCandidate))
+			continue;
+
+		if (!TileGrid.IsValidIndex(RandomRow) || !TileGrid[RandomRow].IsValidIndex(RandomCol))
+			continue;
+
+		if (ABG_Tile* RandomTile = TileGrid[RandomRow][RandomCol])
+		{
+			ChosenCoords = TileCandidate;
+			ChosenTile = RandomTile;
+		}
+	}
+
+	if (!ChosenTile)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("SpawnPath failed: no valid edge tile found."));
+		return;
+	}
+
+	const FVector  ActorScale = ChosenTile->GetActorScale3D();
+	const FVector  MeshScale = ChosenTile->tileMesh ? ChosenTile->tileMesh->GetRelativeScale3D() : FVector::OneVector;
+	const FTransform TileTransform(ChosenTile->GetActorRotation(), ChosenTile->GetActorLocation(), ActorScale);
+
+	ChosenTile->Destroy();
+
+	ABG_Tile* NewTile = spawnTile(PathTile, TileTransform);
+	if (!NewTile)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("SpawnPath failed: could not spawn PathTile."));
+		return;
+	}
+
+	NewTile->SetActorScale3D(ActorScale);
+	if (NewTile->tileMesh)
+	{
+		NewTile->tileMesh->SetRelativeScale3D(MeshScale);
+	}
+
+	TileGrid[ChosenCoords.Y][ChosenCoords.X] = NewTile;
+	NewTile->gridCoordinates = ChosenCoords;
+
+	if (TileManager)
+	{
+		NewTile->OnTileSelectedDelegate.AddDynamic(TileManager, &ATileManager::OnTileClicked);
+		TileManager->RegisterTile(ChosenCoords, NewTile);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("TileManager not set in TileSpawner! Cannot bind delegate."));
+	}
+
+	if (NewTile->GetRootComponent() && ChosenTile->GetRootComponent())
+	{
+		NewTile->GetRootComponent()->SetRelativeLocation(ChosenTile->GetRootComponent()->GetRelativeLocation());
+		NewTile->GetRootComponent()->SetRelativeRotation(ChosenTile->GetRootComponent()->GetRelativeRotation());
+	}
+
+	UE_LOG(LogTemp, Display, TEXT("First path tile generated at %s"), *ChosenCoords.ToString());
 }

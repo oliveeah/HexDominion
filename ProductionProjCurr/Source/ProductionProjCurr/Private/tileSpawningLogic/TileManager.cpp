@@ -429,10 +429,11 @@ FLinearColor ATileManager::GetOutlineColor(ETileHighlightState highlightState) c
 			return FLinearColor(0, 0, 0, 1); // black
 
 		case ETileHighlightState::Adjacency:
-			return FLinearColor(0, 0, 5, 1); // Blue
+			return FLinearColor(0.002000, 0.010000, 0.030000, 1.000000); // Darker Blue
 
 		case ETileHighlightState::Attack:
-			return FLinearColor(5, 0, 0, 1); // Red
+			return FLinearColor(2.000000, 0, 0, 1); // Darker Red
+
 		case ETileHighlightState::Blocked:
 			return FLinearColor(5, 5, 5, 1); // White
 		default:
