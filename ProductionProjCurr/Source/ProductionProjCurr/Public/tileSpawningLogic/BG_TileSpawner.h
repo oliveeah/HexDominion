@@ -99,6 +99,8 @@ private:
 	int32 GetEdgeMask(const FIntPoint& Coords) const;
 	bool IsDifferentEdge(const FIntPoint& Start, const FIntPoint& Current) const;
 
+	void ChangeTileToPath(const FIntPoint& Coords);
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Path", meta = (AllowPrivateAccess = "true"))
 	int32 numberOfPaths = 1;
 
