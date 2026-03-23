@@ -13,7 +13,7 @@
     </None>
     <None Include="..\..\.clang-format" />
     <None Include="..\..\.gitignore" />
-    <None Include="..\..\.vsconfig" />
+    <None Include="..\..\83304952ba764e0692d424fd490250b2-306x160-1-copy.avif" />
     <ClInclude Include="..\..\BG_TileSpawner.h" />
     <Filter Include="Config">
       <UniqueIdentifier>{FA535FFB-25E1-3D20-B416-52F9BE21E06E}</UniqueIdentifier>
@@ -225,8 +225,5 @@
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\TileManager.h">
       <Filter>Source\ProductionProjCurr\Public\tileSpawningLogic</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\Source\ProductionProjCurr\Public\gameMode\UIManager.cpp" />
   </ItemGroup>
 </Project>
