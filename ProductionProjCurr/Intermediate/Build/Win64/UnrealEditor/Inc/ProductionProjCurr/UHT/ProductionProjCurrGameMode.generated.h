@@ -19,21 +19,21 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 class ATileManager;
 
 // ********** Begin Delegate FOnToggleTileDebugCoordinates *****************************************
-#define FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_gameMode_ProductionProjCurrGameMode_h_11_DELEGATE \
+#define FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_gameMode_ProductionProjCurrGameMode_h_13_DELEGATE \
 PRODUCTIONPROJCURR_API void FOnToggleTileDebugCoordinates_DelegateWrapper(const FMulticastScriptDelegate& OnToggleTileDebugCoordinates);
 
 
 // ********** End Delegate FOnToggleTileDebugCoordinates *******************************************
 
 // ********** Begin Class AProductionProjCurrGameMode **********************************************
-#define FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_gameMode_ProductionProjCurrGameMode_h_18_RPC_WRAPPERS_NO_PURE_DECLS \
+#define FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_gameMode_ProductionProjCurrGameMode_h_20_RPC_WRAPPERS_NO_PURE_DECLS \
 	DECLARE_FUNCTION(execGetTileManager); \
 	DECLARE_FUNCTION(execToggleTileDebugCoordinates);
 
 
 PRODUCTIONPROJCURR_API UClass* Z_Construct_UClass_AProductionProjCurrGameMode_NoRegister();
 
-#define FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_gameMode_ProductionProjCurrGameMode_h_18_INCLASS_NO_PURE_DECLS \
+#define FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_gameMode_ProductionProjCurrGameMode_h_20_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesAProductionProjCurrGameMode(); \
 	friend struct Z_Construct_UClass_AProductionProjCurrGameMode_Statics; \
@@ -44,7 +44,7 @@ public: \
 	DECLARE_SERIALIZER(AProductionProjCurrGameMode)
 
 
-#define FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_gameMode_ProductionProjCurrGameMode_h_18_ENHANCED_CONSTRUCTORS \
+#define FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_gameMode_ProductionProjCurrGameMode_h_20_ENHANCED_CONSTRUCTORS \
 	/** Deleted move- and copy-constructors, should never be used */ \
 	AProductionProjCurrGameMode(AProductionProjCurrGameMode&&) = delete; \
 	AProductionProjCurrGameMode(const AProductionProjCurrGameMode&) = delete; \
@@ -54,13 +54,13 @@ public: \
 	NO_API virtual ~AProductionProjCurrGameMode();
 
 
-#define FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_gameMode_ProductionProjCurrGameMode_h_15_PROLOG
-#define FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_gameMode_ProductionProjCurrGameMode_h_18_GENERATED_BODY \
+#define FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_gameMode_ProductionProjCurrGameMode_h_17_PROLOG
+#define FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_gameMode_ProductionProjCurrGameMode_h_20_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_gameMode_ProductionProjCurrGameMode_h_18_RPC_WRAPPERS_NO_PURE_DECLS \
-	FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_gameMode_ProductionProjCurrGameMode_h_18_INCLASS_NO_PURE_DECLS \
-	FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_gameMode_ProductionProjCurrGameMode_h_18_ENHANCED_CONSTRUCTORS \
+	FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_gameMode_ProductionProjCurrGameMode_h_20_RPC_WRAPPERS_NO_PURE_DECLS \
+	FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_gameMode_ProductionProjCurrGameMode_h_20_INCLASS_NO_PURE_DECLS \
+	FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_gameMode_ProductionProjCurrGameMode_h_20_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 

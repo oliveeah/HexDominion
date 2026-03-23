@@ -2,9 +2,10 @@
 
 #include "ProductionProjCurrGameMode.h"
 #include "UObject/ConstructorHelpers.h"
-#include "EngineUtils.h"  
+#include "EngineUtils.h"
 #include "GameFramework/Actor.h"
-
+#include "tileSpawningLogic/TileManager.h"
+#include "tileSpawningLogic/BG_TileSpawner.h"
 
 void AProductionProjCurrGameMode::BeginPlay()
 {
@@ -22,29 +23,44 @@ void AProductionProjCurrGameMode::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("Failed to find TurnManager in the level!"));
 	}
 
+	for (TActorIterator<ATileManager> It(GetWorld()); It; ++It)
+	{
+		TileManagerInstance = *It;
+		UE_LOG(LogTemp, Display, TEXT("TileManager found and assigned!"));
+		break;
+	}
+
+	if (!TileManagerInstance)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Failed to find TileManager in the level!"));
+	}
+
+	ABG_TileSpawner* TileSpawner = nullptr;
+	for (TActorIterator<ABG_TileSpawner> It(GetWorld()); It; ++It)
+	{
+		TileSpawner = *It;
+		UE_LOG(LogTemp, Display, TEXT("TileSpawner found and assigned!"));
+		break;
+	}
+
+	if (TileSpawner)
+	{
+		TileSpawner->BuildGrid();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Failed to find TileSpawner in the level!"));
+	}
+
 	bGameActive = true;
 
-	//while (bGameActive)
-	//{
-		TurnLoop();
-
-	//}
-
+	TurnLoop();
 }
 
-void AProductionProjCurrGameMode::OnConstruction(const FTransform& transform)
-{
-	//Super::OnConstruction(transform);
 
-}
 
 AProductionProjCurrGameMode::AProductionProjCurrGameMode()
 {
-//	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnClassFinder(TEXT("/Game/RefactoredStuff/Blueprints/Animation/ABP_TestCharacter.ABP_TestCharacter"));
-	//DefaultPawnClass = PlayerPawnClassFinder.Class;
-
-	//static ConstructorHelpers::FClassFinder<UUserWidget> PlayerWidgetClassFinder(TEXT("/Game/MyStuff/Blueprints/UI/Player_Widget.Player_Widget"));
-	//HUDClass = PlayerWidgetClassFinder.Class;
 
 }
 
@@ -68,5 +84,4 @@ void AProductionProjCurrGameMode::TurnLoop()
 //	{
 		// Wait for turn to end
 //	}
-
 }

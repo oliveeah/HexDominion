@@ -48,6 +48,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Troop | Spawning")
 	float troopSpawnHeight = 20.0f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Troop | Spawning")
+	TSubclassOf<AOccupant_BaseClass> StartingTroopClass;
+
 	/*References*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	ABG_Tile* SelectedTile;
@@ -67,12 +70,16 @@ public:
 	UFUNCTION()
 	void HandleTurnChanged(EActivePlayerSide NewActivePlayer);
 
+	UFUNCTION()
+	void HandleGridBuilt();
 
 	EPlayerIntent		determinePlayerIntent(ABG_Tile* ClickedTile) const;
 	void				removeOutlineFromAllTiles();
 	void				RegisterTile(const FIntPoint& Coords, ABG_Tile* Tile);
 	bool				HasTile(const FIntPoint& Coords) const;
 	void				spawnTroop(TSubclassOf<AOccupant_BaseClass> Occupant, ABG_Tile* Tile);
+	void				spawnTroop(TSubclassOf<AOccupant_BaseClass> Occupant, ABG_Tile* Tile, EActivePlayerSide OwningPlayer);
+	void				spawnStartingTroops();
 	bool				IsFriendlyFire(EActivePlayerSide attackingPlayerID, EActivePlayerSide targetPlayerID);
 	bool				IsEnemyOccupant(EActivePlayerSide troopToCheck);
 	void			    ApplyHighlightState(ETileHighlightState highlight, ABG_Tile* Tile);
@@ -88,10 +95,7 @@ public:
 	void SetGridWidth(int32 Width) { GridWidth = Width; }
 	void SetGridHeight(int32 Height) { GridHeight = Height; }
 
-
 	protected:
 		// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-
 };

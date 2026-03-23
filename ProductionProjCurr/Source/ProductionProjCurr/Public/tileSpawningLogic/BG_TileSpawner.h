@@ -11,6 +11,8 @@
 class ABG_Tile;
 class ATileManager;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnGridBuilt);
+
 // Delegate declaration for when tiles are spawned
 
 UENUM(BlueprintType)
@@ -34,6 +36,11 @@ public:
 	{
 		return TileGrid;
 	}
+
+	void BuildGrid();
+
+	UPROPERTY(BlueprintAssignable, Category = "Tile Spawner")
+	FOnGridBuilt OnGridBuilt;
 
 private:
 	// Grid Setup
@@ -91,6 +98,7 @@ private:
 	bool IsEdgeTile(const FIntPoint& Coords) const;
 
 	void SpawnPath();
+
 
 	bool TryBuildRandomPath(TArray<FIntPoint>& OutPath);
 	void GetNeighborCoords(const FIntPoint& Coords, TArray<FIntPoint>& OutNeighbors) const;

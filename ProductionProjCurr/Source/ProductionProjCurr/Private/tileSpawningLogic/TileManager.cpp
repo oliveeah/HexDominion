@@ -17,19 +17,18 @@ ATileManager::ATileManager()
 }
 
 // Called when the game starts or when spawned
+// Called when the game starts or when spawned
 void ATileManager::BeginPlay()
 {
 	Super::BeginPlay();
 
 	if (ABG_TileSpawner* TileSpawner = Cast<ABG_TileSpawner>(UGameplayStatics::GetActorOfClass(this, ABG_TileSpawner::StaticClass())))
 	{
-		UE_LOG(LogTemp, Display, TEXT("Found TileSpawner, binding to delegate"));
-
-		TileGrid = TileSpawner->getTileGrid();
+		TileSpawner->OnGridBuilt.AddDynamic(this, &ATileManager::HandleGridBuilt);
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("TileSpawner not found!"));
+		UE_LOG(LogTemp, Warning, TEXT("TileSpawner not found for grid binding!"));
 	}
 
 	if (turnManager)
@@ -39,6 +38,74 @@ void ATileManager::BeginPlay()
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("TurnManager not assigned in TileManager!"));
+	}
+}
+
+void ATileManager::HandleGridBuilt()
+{
+	if (ABG_TileSpawner* TileSpawner = Cast<ABG_TileSpawner>(UGameplayStatics::GetActorOfClass(this, ABG_TileSpawner::StaticClass())))
+	{
+		TileGrid = TileSpawner->getTileGrid();
+	}
+
+	spawnStartingTroops();
+}
+
+void ATileManager::spawnStartingTroops()
+{
+	if (!StartingTroopClass)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("StartingTroopClass not set in TileManager!"));
+		return;
+	}
+
+	if (TileGrid.Num() == 0 || TileGrid[0].Num() == 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("TileGrid is empty; cannot spawn starting troops."));
+		return;
+	}
+
+	const int32 LeftCol = 0;
+	const int32 RightCol = TileGrid[0].Num() - 1;
+
+	auto FindSpawnTileOnEdge = [this](int32 Col) -> ABG_Tile*
+	{
+		for (int32 Row = 0; Row < TileGrid.Num(); ++Row)
+		{
+			if (!TileGrid[Row].IsValidIndex(Col))
+				continue;
+
+			ABG_Tile* Candidate = TileGrid[Row][Col];
+			if (!Candidate)
+				continue;
+
+			if (Candidate->getCanSpawnTroopOnTile() && !Candidate->isOccupied)
+			{
+				return Candidate;
+			}
+		}
+		return nullptr;
+	};
+
+	ABG_Tile* LeftTile = FindSpawnTileOnEdge(LeftCol);
+	ABG_Tile* RightTile = FindSpawnTileOnEdge(RightCol);
+
+	if (LeftTile)
+	{
+		spawnTroop(StartingTroopClass, LeftTile, EActivePlayerSide::PlayerA);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No valid spawn tile found on left edge."));
+	}
+
+	if (RightTile && RightTile != LeftTile)
+	{
+		spawnTroop(StartingTroopClass, RightTile, EActivePlayerSide::PlayerB);
+	}
+	else if (!RightTile)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No valid spawn tile found on right edge."));
 	}
 }
 
@@ -305,6 +372,17 @@ void ATileManager::RegisterTile(const FIntPoint& Coords, ABG_Tile* Tile)
 
 void ATileManager::spawnTroop(TSubclassOf<AOccupant_BaseClass> Occupant, ABG_Tile* Tile)
 {
+	if (!turnManager)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("TurnManager not assigned; cannot spawn troop."));
+		return;
+	}
+
+	spawnTroop(Occupant, Tile, turnManager->GetActivePlayer());
+}
+
+void ATileManager::spawnTroop(TSubclassOf<AOccupant_BaseClass> Occupant, ABG_Tile* Tile, EActivePlayerSide OwningPlayer)
+{
 	/*Ptr Checks and Setting Member vals*/
 	if (!Occupant || !Tile)
 		return;
@@ -339,10 +417,8 @@ void ATileManager::spawnTroop(TSubclassOf<AOccupant_BaseClass> Occupant, ABG_Til
 		FAttachmentTransformRules::SnapToTargetNotIncludingScale,
 		SpawnSocketName);
 
-	EActivePlayerSide CurrentPlayer = turnManager->GetActivePlayer();
-
 	SpawnedOccupant->SetGridPosition(Tile->getGridCoordinates());
-	SpawnedOccupant->SetOwningPlayer(CurrentPlayer);
+	SpawnedOccupant->SetOwningPlayer(OwningPlayer);
 
 	if (AOccupant_Troop_BaseClass* Troop = Cast<AOccupant_Troop_BaseClass>(SpawnedOccupant))
 	{
@@ -352,12 +428,12 @@ void ATileManager::spawnTroop(TSubclassOf<AOccupant_BaseClass> Occupant, ABG_Til
 	}
 	else if (AOccupant_Building_BaseClass* Building = Cast<AOccupant_Building_BaseClass>(SpawnedOccupant))
 	{
-		Building->SetOwningPlayer(CurrentPlayer);
+		Building->SetOwningPlayer(OwningPlayer);
 		Tile->SetOccupyingBuilding(Building);
 		Tile->setHasBuilding(true);
 	}
 
-	Tile->SetOwningPlayer(CurrentPlayer);
+	Tile->SetOwningPlayer(OwningPlayer);
 }
 
 bool ATileManager::IsFriendlyFire(EActivePlayerSide attackingPlayerID, EActivePlayerSide targetPlayerID)
@@ -440,32 +516,4 @@ FLinearColor ATileManager::GetOutlineColor(ETileHighlightState highlightState) c
 			return FLinearColor(5, 5, 5, 1); // White
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

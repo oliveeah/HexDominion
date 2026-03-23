@@ -8,6 +8,8 @@
 #include "TurnManager.h"
 #include "ProductionProjCurrGameMode.generated.h"
 
+class ATileManager;
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnToggleTileDebugCoordinates);
 /**
  *  Simple GameMode for a third person game
@@ -21,7 +23,6 @@ protected:
 
 	virtual void BeginPlay() override;
 
-	virtual void OnConstruction(const FTransform& transform) override;
 public:
 	
 	/** Constructor */

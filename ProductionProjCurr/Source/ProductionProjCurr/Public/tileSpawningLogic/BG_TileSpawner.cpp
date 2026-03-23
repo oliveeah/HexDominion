@@ -16,6 +16,21 @@ void ABG_TileSpawner::BeginPlay()
 {
 	Super::BeginPlay();
 
+
+}
+
+void ABG_TileSpawner::BuildGrid()
+{
+	if (!TileManager)
+	{
+		TileManager = Cast<ATileManager>(UGameplayStatics::GetActorOfClass(this, ATileManager::StaticClass()));
+	}
+	if (!TileManager)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("TileManager not found; aborting BuildGrid."));
+		return;
+	}
+
 	// Generate random number and seed with it
 	const float randomNum = FMath::Rand();
 	randomStream.Initialize(randomNum);
@@ -25,6 +40,11 @@ void ABG_TileSpawner::BeginPlay()
 
 	// Spawn new tiles
 	spawnGrid(randomNum);
+
+	if (TileGrid.Num() > 0)
+	{
+		OnGridBuilt.Broadcast();
+	}
 }
 
 void ABG_TileSpawner::clearGrid()
@@ -58,6 +78,10 @@ void ABG_TileSpawner::spawnGrid(const float& randomNum)
 	Noise.SetFrequency(noiseFrequency);
 
 	TileGrid.SetNum(numberOfRows);
+
+	if (!TileManager)
+		return;
+
 	TileManager->SetGridWidth(numberOfColumns);
 	TileManager->SetGridHeight(numberOfRows);
 
