@@ -79,7 +79,7 @@ public:
 	bool				HasTile(const FIntPoint& Coords) const;
 	void				spawnTroop(TSubclassOf<AOccupant_BaseClass> Occupant, ABG_Tile* Tile);
 	void				spawnTroop(TSubclassOf<AOccupant_BaseClass> Occupant, ABG_Tile* Tile, EActivePlayerSide OwningPlayer);
-	void				spawnStartingTroops();
+	void				spawnStartingTroops(int cols, int rows);
 	bool				IsFriendlyFire(EActivePlayerSide attackingPlayerID, EActivePlayerSide targetPlayerID);
 	bool				IsEnemyOccupant(EActivePlayerSide troopToCheck);
 	void			    ApplyHighlightState(ETileHighlightState highlight, ABG_Tile* Tile);

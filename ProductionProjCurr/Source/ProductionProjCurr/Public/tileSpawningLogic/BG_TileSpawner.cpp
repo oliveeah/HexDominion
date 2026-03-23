@@ -79,12 +79,12 @@ void ABG_TileSpawner::spawnGrid(const float& randomNum)
 
 	TileGrid.SetNum(numberOfRows);
 
-	if (!TileManager)
-		return;
-
-	TileManager->SetGridWidth(numberOfColumns);
-	TileManager->SetGridHeight(numberOfRows);
-
+	if (TileManager)
+	{
+		TileManager->SetGridWidth(numberOfColumns);
+		TileManager->SetGridHeight(numberOfRows);
+	}
+		
 	for (int32 rows = 0; rows < numberOfRows; ++rows)
 	{
 		TileGrid[rows].SetNum(numberOfColumns);
@@ -108,11 +108,22 @@ void ABG_TileSpawner::spawnGrid(const float& randomNum)
 			float		Nx = cols + (rows % 2) * 0.5f;
 			float		Ny = rows * 0.8660254f;
 
-			float	HeightNoise = Noise.GetNoise(Nx, Ny); // reuse same coords
+			float HeightNoise = Noise.GetNoise(Nx, Ny); // reuse same coords
 
-			bool isWater = biomeType == EBiomeType::Water;
+		float Height = HeightNoise * ySpawnOffset;
 
-			float	Height = HeightNoise * (ySpawnOffset * (isWater ? 1.0f : 0.0f));  // tweak this in editor
+			switch (biomeType)
+			{
+				case EBiomeType::Water:
+					Height = -FMath::Abs(Height);
+					break;
+				case EBiomeType::Hill:
+					Height = FMath::Abs(Height);
+					break;
+				default:
+					Height = 0.0f;
+					break;
+			}
 
 			FVector spawnLocation = tileSpawnerLocation + FVector(cols * hexWidth + xOffset, rows * hexHeight, Height);
 
@@ -151,6 +162,8 @@ TSubclassOf<ABG_Tile> ABG_TileSpawner::GetTileClassForBiome(EBiomeType Biome) co
 			return WaterTile;
 		case EBiomeType::Grassland:
 			return MeadowTiles.Num() > 0 ? MeadowTiles[0] : TileClass;
+		case EBiomeType::Hill:
+			return HillTile;
 		default:
 			return TileClass; // Fallback to base tile
 	}
@@ -163,9 +176,23 @@ EBiomeType ABG_TileSpawner::generateBiomeTypeBasedOnNoise(int32 rows, int32 cols
 
 	float Value = (_Noise.GetNoise(Nx, Ny) + 1.f) * 0.5f;
 
-	if (Value < 0.45f)
+	const FVector2D Center((numberOfColumns - 1) * 0.5f, (numberOfRows - 1) * 0.5f);
+	const FVector2D Pos(cols, rows);
+	const float		MaxRadius = FMath::Max(Center.X, Center.Y);
+	const float		Dist = FVector2D::Distance(Pos, Center);
+	const float		T = 1.0f - FMath::Clamp(Dist / MaxRadius, 0.0f, 1.0f);
+	const float		CenterWeight = FMath::Pow(T, centerBiasExponent);
+
+	Value = FMath::Clamp(
+		FMath::Lerp(Value, 1.0f, centerBiasStrength * CenterWeight),
+		0.0f, 1.0f);
+
+	if (Value < 0.4f)
 		return EBiomeType::Water;
-	return EBiomeType::Grassland;
+	if (Value < 0.7f)
+		return EBiomeType::Grassland;
+	return EBiomeType::Hill;
+
 }
 
 ABG_Tile* ABG_TileSpawner::spawnTile(TSubclassOf<ABG_Tile> _ChosenTileClass, const FTransform& _instanceTransform)

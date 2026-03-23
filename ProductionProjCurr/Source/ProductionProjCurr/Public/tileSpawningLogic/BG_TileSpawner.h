@@ -19,7 +19,8 @@ UENUM(BlueprintType)
 enum class EBiomeType : uint8
 {
 	Water,
-	Grassland
+	Grassland,
+	Hill
 };
 
 UCLASS()
@@ -41,6 +42,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "Tile Spawner")
 	FOnGridBuilt OnGridBuilt;
+
+
+
 
 private:
 	// Grid Setup
@@ -70,6 +74,9 @@ private:
 	TSubclassOf<ABG_Tile> WaterTile;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Biomes", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<ABG_Tile> HillTile;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Biomes", meta = (AllowPrivateAccess = "true"))
 	TArray<TSubclassOf<ABG_Tile>> MeadowTiles;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Biomes", meta = (AllowPrivateAccess = "true"))
@@ -95,6 +102,8 @@ private:
 		int32								 Col,
 		int32								 Row);
 
+
+
 	bool IsEdgeTile(const FIntPoint& Coords) const;
 
 	void SpawnPath();
@@ -117,4 +126,16 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Path", meta = (AllowPrivateAccess = "true"))
 	float turnChance = 0.25f;
+
+		UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Setup", meta = (AllowPrivateAccess = "true"))
+	float centerBiasStrength = 0.35f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Setup", meta = (AllowPrivateAccess = "true"))
+	float centerBiasExponent = 2.0f;
+
+
+public:
+	int getNumberOfCols() { return numberOfColumns; }
+	int getNumberOfRows() { return numberOfRows; }
 };
+

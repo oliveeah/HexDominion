@@ -17,7 +17,6 @@ ATileManager::ATileManager()
 }
 
 // Called when the game starts or when spawned
-// Called when the game starts or when spawned
 void ATileManager::BeginPlay()
 {
 	Super::BeginPlay();
@@ -46,13 +45,15 @@ void ATileManager::HandleGridBuilt()
 	if (ABG_TileSpawner* TileSpawner = Cast<ABG_TileSpawner>(UGameplayStatics::GetActorOfClass(this, ABG_TileSpawner::StaticClass())))
 	{
 		TileGrid = TileSpawner->getTileGrid();
+		spawnStartingTroops(TileSpawner->getNumberOfCols(), TileSpawner->getNumberOfRows());
+
 	}
 
-	spawnStartingTroops();
 }
 
-void ATileManager::spawnStartingTroops()
+void ATileManager::spawnStartingTroops(int cols, int rows)
 {
+	int numPlayers = 2;
 	if (!StartingTroopClass)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("StartingTroopClass not set in TileManager!"));
@@ -65,47 +66,84 @@ void ATileManager::spawnStartingTroops()
 		return;
 	}
 
-	const int32 LeftCol = 0;
-	const int32 RightCol = TileGrid[0].Num() - 1;
-
-	auto FindSpawnTileOnEdge = [this](int32 Col) -> ABG_Tile*
+	auto IsSpawnable = [](ABG_Tile* Tile) -> bool
 	{
-		for (int32 Row = 0; Row < TileGrid.Num(); ++Row)
+		return Tile && Tile->getCanSpawnTroopOnTile() && !Tile->isOccupied;
+	};
+
+	auto FindSpawnFromCorner = [this, cols, rows, IsSpawnable](const FIntPoint& Corner) -> ABG_Tile*
+	{
+		if (TileGrid.IsValidIndex(Corner.Y) && TileGrid[Corner.Y].IsValidIndex(Corner.X))
 		{
-			if (!TileGrid[Row].IsValidIndex(Col))
-				continue;
+			ABG_Tile* CornerTile = TileGrid[Corner.Y][Corner.X];
+			if (IsSpawnable(CornerTile))
+				return CornerTile;
+		}
 
-			ABG_Tile* Candidate = TileGrid[Row][Col];
-			if (!Candidate)
-				continue;
+		const bool bLeft = Corner.X == 0;
+		const bool bTop = Corner.Y == 0;
 
-			if (Candidate->getCanSpawnTroopOnTile() && !Candidate->isOccupied)
+		// Scan along horizontal edge from the corner
+		if (bTop)
+		{
+			for (int32 Col = 0; Col < cols; ++Col)
 			{
-				return Candidate;
+				ABG_Tile* Tile = TileGrid[0][Col];
+				if (IsSpawnable(Tile))
+					return Tile;
 			}
 		}
+		else // if bottom edge
+		{
+			for (int32 Col = 0; Col < cols; ++Col)
+			{
+				ABG_Tile* Tile = TileGrid[rows - 1][Col];
+				if (IsSpawnable(Tile))
+					return Tile;
+			}
+		}
+
+		// Scan along vertical edge from the corner
+		if (bLeft)
+		{
+			for (int32 Row = 0; Row < rows; ++Row)
+			{
+				ABG_Tile* Tile = TileGrid[Row][0];
+				if (IsSpawnable(Tile))
+					return Tile;
+			}
+		}
+		else // if right edge
+		{
+			for (int32 Row = 0; Row < rows; ++Row)
+			{
+				ABG_Tile* Tile = TileGrid[Row][cols - 1];
+				if (IsSpawnable(Tile))
+					return Tile;
+			}
+		}
+
 		return nullptr;
 	};
 
-	ABG_Tile* LeftTile = FindSpawnTileOnEdge(LeftCol);
-	ABG_Tile* RightTile = FindSpawnTileOnEdge(RightCol);
+	const FIntPoint PlayerCorners[2] = {
+		{ 0, 0 },                 // PlayerA: top-left
+		{ cols - 1, rows - 1 }    // PlayerB: bottom-right
+	};
 
-	if (LeftTile)
+	const int32 MaxPlayers = FMath::Min(numPlayers, 2);
+	for (int32 i = 0; i < MaxPlayers; ++i)
 	{
-		spawnTroop(StartingTroopClass, LeftTile, EActivePlayerSide::PlayerA);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("No valid spawn tile found on left edge."));
-	}
-
-	if (RightTile && RightTile != LeftTile)
-	{
-		spawnTroop(StartingTroopClass, RightTile, EActivePlayerSide::PlayerB);
-	}
-	else if (!RightTile)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("No valid spawn tile found on right edge."));
+		ABG_Tile* SpawnTile = FindSpawnFromCorner(PlayerCorners[i]);
+		if (SpawnTile)
+		{
+			EActivePlayerSide Player = (i == 0) ? EActivePlayerSide::PlayerA : EActivePlayerSide::PlayerB;
+			spawnTroop(StartingTroopClass, SpawnTile, Player);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("No valid edge tile found for player %d."), i);
+		}
 	}
 }
 

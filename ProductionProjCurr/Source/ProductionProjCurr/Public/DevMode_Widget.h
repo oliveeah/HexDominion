@@ -6,7 +6,6 @@
 #include "Blueprint/UserWidget.h"
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
-#include "gameMode/ProductionProjCurrGameMode.h"
 #include "gameMode/TurnManager.h"
 #include "DevMode_Widget.generated.h"
 
@@ -30,25 +29,13 @@ class PRODUCTIONPROJCURR_API UDevMode_Widget : public UUserWidget
 
 	// callbacks
 	UFUNCTION()
-	void ShowTileCoord_ButtonClicked();
-
-	UFUNCTION()
-	void ShowAdjacentTiles_ButtonClicked();
-
-	UFUNCTION()
-	void OwnTiles_ButtonClicked();
-
-	UFUNCTION()
-	void SwapCurrentPlayer_ButtonClicked();
-
-	UFUNCTION()
 	void SpawnTroopAtSelectedTile_ButtonClicked();
 
 	UFUNCTION()
 	void SpawnBuildingAtSelectedTile_ButtonClicked();
 
 	UFUNCTION()
-	void EndGame_ButtonClicked();
+	void PassTurn_ButtonClicked();
 
 
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
@@ -62,35 +49,12 @@ class PRODUCTIONPROJCURR_API UDevMode_Widget : public UUserWidget
 	TObjectPtr<UTextBlock> SpawnTroopAtSelectedTiled_ButtonLabel;
 
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
-	TObjectPtr<UButton> ShowTileCoord_Button;
+	TObjectPtr<UButton> PassTurn_Button;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidgetOptional))
-	TObjectPtr<UTextBlock> ShowTileCoord_ButtonLabel;
-	
-	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
-	TObjectPtr<UButton> ShowAdjacentTiles_Button;
-	UPROPERTY(BlueprintReadWrite, meta = (BindWidgetOptional))
-	TObjectPtr<UTextBlock> ShowAdjacentTiles_ButtonLabel;
-
-	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
-	TObjectPtr<UButton> OwnTiles_Button;
-	UPROPERTY(BlueprintReadWrite, meta = (BindWidgetOptional))
-	TObjectPtr<UTextBlock> OwnTiles_ButtonLabel;
-
-	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
-	TObjectPtr<UButton> EndGame_Button;
-	UPROPERTY(BlueprintReadWrite, meta = (BindWidgetOptional))
-	TObjectPtr<UTextBlock> EndGame_ButtonLabel;
-
-	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
-	TObjectPtr<UButton> SwapCurrentPlayer_Button;
-	UPROPERTY(BlueprintReadWrite, meta = (BindWidgetOptional))
-	TObjectPtr<UTextBlock> SwapCurrentPlayer_ButtonLabel;
+	TObjectPtr<UTextBlock> PassTurn_ButtonLabel;
 
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	TObjectPtr<UTextBlock> WidgetTitle;
-
-	UPROPERTY(BlueprintReadWrite, meta = (BindWidgetOptional))
-	TObjectPtr<UTextBlock> SelectedTile;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "TileManager")
 	ATileManager* DevTileManager;

@@ -23,9 +23,7 @@
 			"TurnManager.gen.cpp.obj",
 			"UIManager.gen.cpp.obj",
 			"UPlayerProfile.gen.cpp.obj",
-			"PerModuleInline.gen.cpp.obj",
 			"Building.cpp.obj",
-			"DevMode_Widget.cpp.obj",
 			"TurnManager.cpp.obj",
 			"UIManager.cpp.obj",
 			"OccupantInterface.cpp.obj",
@@ -38,6 +36,7 @@
 			"UPlayerProfile.cpp.obj",
 			"ProductionProjCurr.cpp.obj",
 			"BG_CaptureActor.cpp.obj",
+			"ProductionProjCurrGameMode.cpp.obj",
 			"BG_AC_MouseOverlapReciever.cpp.obj",
 			"ProductionProjCurrPlayerController.cpp.obj",
 			"BG_PlayerPawn.cpp.obj",
@@ -45,8 +44,9 @@
 			"BG_Tile.cpp.obj",
 			"BG_TileSpawner.gen.cpp.obj",
 			"ProductionProjCurr.init.gen.cpp.obj",
+			"PerModuleInline.gen.cpp.obj",
+			"DevMode_Widget.cpp.obj",
 			"TileManager.cpp.obj",
-			"ProductionProjCurrGameMode.cpp.obj",
 			"BG_TileSpawner.cpp.obj"
 		]
 	}
