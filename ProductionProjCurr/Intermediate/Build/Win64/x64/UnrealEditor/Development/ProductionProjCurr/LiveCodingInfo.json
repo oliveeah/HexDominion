@@ -17,6 +17,7 @@
 			"Occupant_Building_BaseClass.gen.cpp.obj",
 			"Occupant_Troop_BaseClass.gen.cpp.obj",
 			"Occupant_Troop_Data.gen.cpp.obj",
+			"ProductionProjCurr.init.gen.cpp.obj",
 			"ProductionProjCurrCharacter.gen.cpp.obj",
 			"ProductionProjCurrGameMode.gen.cpp.obj",
 			"ProductionProjCurrPlayerController.gen.cpp.obj",
@@ -33,6 +34,8 @@
 			"OccupantInterface.cpp.obj",
 			"Occupant_BaseClass.cpp.obj",
 			"Occupant_Building_BaseClass.cpp.obj",
+			"Occupant_Troop_BaseClass.cpp.obj",
+			"Occupant_Troop_Data.cpp.obj",
 			"InteractionInterface.cpp.obj",
 			"MyPlayerState.cpp.obj",
 			"TileManager.cpp.obj",
@@ -46,10 +49,7 @@
 			"BG_PlayerPawn.cpp.obj",
 			"ProductionProjCurrCharacter.cpp.obj",
 			"BG_Tile.cpp.obj",
-			"BG_TileSpawner.cpp.obj",
-			"ProductionProjCurr.init.gen.cpp.obj",
-			"Occupant_Troop_BaseClass.cpp.obj",
-			"Occupant_Troop_Data.cpp.obj"
+			"BG_TileSpawner.cpp.obj"
 		]
 	}
 }
