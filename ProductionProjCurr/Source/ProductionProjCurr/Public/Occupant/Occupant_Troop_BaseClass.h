@@ -48,16 +48,6 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 		UPROPERTY(VisibleAnywhere, Category = "Animation")
 		bool bIsAttacking = false;
 
-
-		UPROPERTY(EditAnywhere, Category = "Animation")
-		float AttackAnimationSpeed = 1.0f;
-
-		UPROPERTY(EditAnywhere, Category = "Animation")
-		float IdleAnimationSpeed = 1.0f;
-
-		UPROPERTY(EditAnywhere, Category = "Animation")
-		UAnimMontage* IdleMontage;
-
 	public:
 		UPROPERTY(BlueprintAssignable, Category = "Events")
 		FOnIsMovingChanged OnIsMovingChanged;

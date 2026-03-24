@@ -97,12 +97,6 @@ AOccupant_Troop_BaseClass::AOccupant_Troop_BaseClass()
 void AOccupant_Troop_BaseClass::BeginPlay()
 {
 	Super::BeginPlay();
-
-	IdleMontage = SkeletalMesh->GetAnimInstance()->GetCurrentActiveMontage();
-	if (IdleMontage)
-	{
-		SkeletalMesh->GetAnimInstance()->Montage_Play(IdleMontage, IdleAnimationSpeed);
-	}
 }
 
 bool AOccupant_Troop_BaseClass::CanMoveTo(const FIntPoint& Target, TArray<FIntPoint> Neighbors) const
