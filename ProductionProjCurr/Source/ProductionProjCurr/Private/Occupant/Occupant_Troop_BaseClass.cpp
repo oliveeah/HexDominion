@@ -32,14 +32,18 @@ void AOccupant_Troop_BaseClass::SetOwningPlayer(EActivePlayerSide NewPlayer)
 			if (PlayerASkeletalMesh)
 			{
 				SkeletalMesh->SetSkeletalMesh(PlayerASkeletalMesh);
+				SkeletalMesh->SetWorldScale3D(FVector(PlayerAScale)); 
 			}
 			break;
+
 		case EActivePlayerSide::PlayerB:
 			if (PlayerBSkeletalMesh)
 			{
 				SkeletalMesh->SetSkeletalMesh(PlayerBSkeletalMesh);
+				SkeletalMesh->SetWorldScale3D(FVector(PlayerBScale)); 
 			}
 			break;
+
 		case EActivePlayerSide::None:
 		default:
 			break;
@@ -72,7 +76,7 @@ void AOccupant_Troop_BaseClass::Tick(float DeltaTime)
 			AttachToComponent(
 				TargetTile->tileMesh,
 				FAttachmentTransformRules::KeepWorldTransform,
-				"TroopSpawnSocket");
+				MoveSocketName);
 
 			SetActorLocation(MoveTarget);
 			SetGridPosition(TargetTile->getGridCoordinates());
@@ -93,6 +97,12 @@ AOccupant_Troop_BaseClass::AOccupant_Troop_BaseClass()
 void AOccupant_Troop_BaseClass::BeginPlay()
 {
 	Super::BeginPlay();
+
+	IdleMontage = SkeletalMesh->GetAnimInstance()->GetCurrentActiveMontage();
+	if (IdleMontage)
+	{
+		SkeletalMesh->GetAnimInstance()->Montage_Play(IdleMontage, IdleAnimationSpeed);
+	}
 }
 
 bool AOccupant_Troop_BaseClass::CanMoveTo(const FIntPoint& Target, TArray<FIntPoint> Neighbors) const
@@ -115,7 +125,20 @@ void AOccupant_Troop_BaseClass::MoveToTile(ABG_Tile* Tile)
 	TargetTile = Tile;
 	this->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 
-	MoveTarget = Tile->tileMesh->GetSocketLocation("TroopSpawnSocket");
+	EActivePlayerSide OwnerSide = GetOwningPlayer();
+
+	MoveSocketName = TEXT("TroopSpawnSocket");
+
+	if (OwnerSide == EActivePlayerSide::PlayerA)
+	{
+		MoveSocketName = TEXT("TroopSpawnSocket_PlayerA");
+	}
+	else if (OwnerSide == EActivePlayerSide::PlayerB)
+	{
+		MoveSocketName = TEXT("TroopSpawnSocket_PlayerB");
+	}
+
+	MoveTarget = Tile->tileMesh->GetSocketLocation(MoveSocketName);
 
 	FVector ToTarget = MoveTarget - GetActorLocation();
 

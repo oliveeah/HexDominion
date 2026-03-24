@@ -32,6 +32,8 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 
 		FVector MoveTarget;
 
+		FName MoveSocketName = TEXT("TroopSpawnSocket");
+		
 		UPROPERTY(EditAnywhere, Category = "Movement")
 		float MoveInterpSpeed = 6.f;
 
@@ -45,6 +47,17 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 
 		UPROPERTY(VisibleAnywhere, Category = "Animation")
 		bool bIsAttacking = false;
+
+
+		UPROPERTY(EditAnywhere, Category = "Animation")
+		float AttackAnimationSpeed = 1.0f;
+
+		UPROPERTY(EditAnywhere, Category = "Animation")
+		float IdleAnimationSpeed = 1.0f;
+
+		UPROPERTY(EditAnywhere, Category = "Animation")
+		UAnimMontage* IdleMontage;
+
 	public:
 		UPROPERTY(BlueprintAssignable, Category = "Events")
 		FOnIsMovingChanged OnIsMovingChanged;
@@ -63,6 +76,12 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 
 		UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Team")
 		USkeletalMesh* PlayerBSkeletalMesh;
+
+		UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Team")
+		float PlayerAScale = 10.0f;
+
+		UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Team")
+		float PlayerBScale = 1.0f;
 
 		/*Setters*/ 
 		UFUNCTION(BlueprintCallable)

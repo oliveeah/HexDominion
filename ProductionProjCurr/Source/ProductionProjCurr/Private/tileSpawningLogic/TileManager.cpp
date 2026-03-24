@@ -440,7 +440,11 @@ void ATileManager::spawnTroop(TSubclassOf<AOccupant_BaseClass> Occupant, ABG_Til
 
 	const FName SpawnSocketName = OccupantCDO->IsBuilding()
 		? TEXT("BuildingSpawnSocket")
-		: TEXT("TroopSpawnSocket");
+		: (OwningPlayer == EActivePlayerSide::PlayerA
+			? TEXT("TroopSpawnSocket_PlayerA")
+			: (OwningPlayer == EActivePlayerSide::PlayerB
+				? TEXT("TroopSpawnSocket_PlayerB")
+				: TEXT("TroopSpawnSocket")));
 
 	/*Spawn and attach*/
 	FVector	   SpawnLocation = Tile->GetActorLocation();

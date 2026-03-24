@@ -57,7 +57,7 @@ void AProductionProjCurrPlayerController::SetupInputComponent()
 
 		if (lookAction)
 		{
-			//EnhancedInputComponent->BindAction(lookAction, ETriggerEvent::Triggered, this, &AProductionProjCurrPlayerController::LookCallback);
+			EnhancedInputComponent->BindAction(lookAction, ETriggerEvent::Triggered, this, &AProductionProjCurrPlayerController::LookCallback);
 		}
 
 		if (clickAction)
@@ -128,9 +128,8 @@ void AProductionProjCurrPlayerController::MoveCallback(const FInputActionValue& 
 void AProductionProjCurrPlayerController::LookCallback(const FInputActionValue& Value)
 {
 	const FVector2D LookAxisVector = Value.Get<FVector2D>();
-	
+
 	AddYawInput(LookAxisVector.X);
-	AddPitchInput(LookAxisVector.Y);
 }
 
 void AProductionProjCurrPlayerController::ClickCallback()
