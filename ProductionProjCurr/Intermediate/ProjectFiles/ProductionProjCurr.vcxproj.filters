@@ -13,6 +13,7 @@
     </None>
     <None Include="..\..\.clang-format" />
     <None Include="..\..\.gitignore" />
+    <None Include="..\..\.vsconfig" />
     <ClInclude Include="..\..\BG_TileSpawner.h" />
     <Filter Include="Config">
       <UniqueIdentifier>{FA535FFB-25E1-3D20-B416-52F9BE21E06E}</UniqueIdentifier>
@@ -57,6 +58,9 @@
       <Filter>Source\ProductionProjCurr\Private</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ProductionProjCurr\Private\OccupantInterface.cpp">
+      <Filter>Source\ProductionProjCurr\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ProductionProjCurr\Private\Occupant_Troop_Data.cpp">
       <Filter>Source\ProductionProjCurr\Private</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ProductionProjCurr\Private\Troop.cpp">
@@ -114,6 +118,9 @@
       <Filter>Source\ProductionProjCurr\Public</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\OccupantInterface.h">
+      <Filter>Source\ProductionProjCurr\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\Occupant_Troop_Data.h">
       <Filter>Source\ProductionProjCurr\Public</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\Troop.h">

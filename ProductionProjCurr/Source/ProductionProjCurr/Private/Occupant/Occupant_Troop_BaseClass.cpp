@@ -2,6 +2,7 @@
 
 
 #include "Occupant/Occupant_Troop_BaseClass.h"
+#include "Occupant_Troop_Data.h"
 #include "tileSpawningLogic/BG_Tile.h"
 
 void AOccupant_Troop_BaseClass::SetHealth(int32 NewHealth)
@@ -23,38 +24,39 @@ void AOccupant_Troop_BaseClass::SetOwningPlayer(EActivePlayerSide NewPlayer)
 {
 	Super::SetOwningPlayer(NewPlayer);
 
-	if (!SkeletalMesh)
+	if (!SkeletalMesh || !TroopData)
 		return;
+
+	const FTeamVisualData* TeamData = nullptr;
 
 	switch (NewPlayer)
 	{
 		case EActivePlayerSide::PlayerA:
-			if (PlayerASkeletalMesh)
-			{
-				SkeletalMesh->SetSkeletalMesh(PlayerASkeletalMesh);
-				SkeletalMesh->SetWorldScale3D(FVector(PlayerAScale)); 
-			}
+			TeamData = &TroopData->PlayerA;
 			break;
-
 		case EActivePlayerSide::PlayerB:
-			if (PlayerBSkeletalMesh)
-			{
-				SkeletalMesh->SetSkeletalMesh(PlayerBSkeletalMesh);
-				SkeletalMesh->SetWorldScale3D(FVector(PlayerBScale)); 
-			}
+			TeamData = &TroopData->PlayerB;
 			break;
-
-		case EActivePlayerSide::None:
 		default:
-			break;
+			return;
 	}
+
+	if (TeamData->Mesh)
+	{
+		SkeletalMesh->SetSkeletalMesh(TeamData->Mesh);
+	}
+	if (TeamData->AnimClass)
+	{
+		SkeletalMesh->SetAnimInstanceClass(TeamData->AnimClass);
+	}
+	SkeletalMesh->SetWorldScale3D(FVector(TeamData->Scale));
 }
 
 void AOccupant_Troop_BaseClass::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (bIsMoving)
+	if (bIsMoving)//moveToTile in world space, attach to new socket
 	{
 		FVector TargetLocation = MoveTarget;
 		FVector CurrentLocation = GetActorLocation();
@@ -92,6 +94,10 @@ AOccupant_Troop_BaseClass::AOccupant_Troop_BaseClass()
 
 	SkeletalMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMesh"));
 	SkeletalMesh->SetupAttachment(RootComp);
+
+	SkeletalMesh->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	SkeletalMesh->SetCollisionResponseToAllChannels(ECR_Ignore);
+	SkeletalMesh->SetCollisionResponseToChannel(ECC_Visibility, ECR_Ignore);
 }
 
 void AOccupant_Troop_BaseClass::BeginPlay()

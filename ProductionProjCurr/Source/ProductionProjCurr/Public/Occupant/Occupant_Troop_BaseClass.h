@@ -8,6 +8,8 @@
 #include "Occupant_Troop_BaseClass.generated.h"
 
 class USkeletalMesh;
+class UOccupant_Troop_Data;
+class UAnimInstance;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
 	FOnIsMovingChanged,
@@ -34,10 +36,10 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 
 		FName MoveSocketName = TEXT("TroopSpawnSocket");
 		
-		UPROPERTY(EditAnywhere, Category = "Movement")
+		UPROPERTY(EditDefaultsOnly, Category = "Movement")
 		float MoveInterpSpeed = 6.f;
 
-		UPROPERTY(EditAnywhere, Category = "Movement")
+		UPROPERTY(EditDefaultsOnly, Category = "Movement")
 		float SnapDistance = 5.f;
 
 		ABG_Tile* TargetTile = nullptr;
@@ -48,7 +50,14 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 		UPROPERTY(VisibleAnywhere, Category = "Animation")
 		bool bIsAttacking = false;
 
+		UPROPERTY(EditDefaultsOnly, Category = "Components")
+		USkeletalMeshComponent* SkeletalMesh;
+
+		UPROPERTY(EditDefaultsOnly, Category = "Team")
+		UOccupant_Troop_Data* TroopData;
+
 	public:
+		//delegates
 		UPROPERTY(BlueprintAssignable, Category = "Events")
 		FOnIsMovingChanged OnIsMovingChanged;
 
@@ -58,20 +67,9 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 		UPROPERTY(BlueprintAssignable, Category = "Events")
 		FOnTroopDeath OnTroopDeath;
 
-		UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
-		USkeletalMeshComponent* SkeletalMesh;
 
-		UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Team")
-		USkeletalMesh* PlayerASkeletalMesh;
 
-		UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Team")
-		USkeletalMesh* PlayerBSkeletalMesh;
 
-		UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Team")
-		float PlayerAScale = 10.0f;
-
-		UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Team")
-		float PlayerBScale = 1.0f;
 
 		/*Setters*/ 
 		UFUNCTION(BlueprintCallable)
