@@ -12,8 +12,11 @@ ABG_Tile::ABG_Tile()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
+	sceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("scene component"));
+	SetRootComponent(sceneComponent);
+
 	tileMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("tile mesh"));
-	SetRootComponent(tileMesh);
+	tileMesh->SetupAttachment(sceneComponent);
 
 	tileMesh->SetBoundsScale(1000.0f);
 	tileMesh->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
@@ -21,7 +24,7 @@ ABG_Tile::ABG_Tile()
 	tileMesh->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
 
 	decalComponent = CreateDefaultSubobject<UDecalComponent>(TEXT("decal component"));
-	decalComponent->SetupAttachment(tileMesh);
+	decalComponent->SetupAttachment(sceneComponent);
 
 	Tags.Add(FName("Tile"));
 }

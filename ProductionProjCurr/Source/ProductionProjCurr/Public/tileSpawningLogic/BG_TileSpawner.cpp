@@ -4,6 +4,7 @@
 #include "BG_Tile.h"
 #include "TileManager.h"
 #include "Kismet/GameplayStatics.h"
+#include "Components/StaticMeshComponent.h"
 
 // Sets default values
 ABG_TileSpawner::ABG_TileSpawner()
@@ -136,6 +137,12 @@ void ABG_TileSpawner::spawnGrid(const float& randomNum)
 			{
 				TileGrid[rows][cols] = NewTile;
 				NewTile->gridCoordinates = FIntPoint(cols, rows);
+
+				if (biomeType == EBiomeType::Grassland)
+				{
+					SpawnFoliage(NewTile);
+				}
+
 				if (TileManager)
 				{
 					NewTile->OnTileSelectedDelegate.AddDynamic(TileManager, &ATileManager::OnTileClicked);
@@ -221,8 +228,8 @@ TSubclassOf<ABG_Tile> ABG_TileSpawner::PickVariantFromNoise(
 	if (Variants.Num() == 0)
 		return nullptr;
 
-	float VariantNoise = Noise.GetNoise(Col * 0.5f, Row * 0.5f);
-	int32 Index = FMath::Abs((int32)(VariantNoise * 1000)) % Variants.Num();
+	const int32 Index = randomStream.RandRange(0, Variants.Num() - 1);
+
 	return Variants[Index];
 }
 
@@ -317,6 +324,46 @@ void ABG_TileSpawner::ChangeTileToPath(const FIntPoint& Coords)
 	{
 		NewTile->OnTileSelectedDelegate.AddDynamic(TileManager, &ATileManager::OnTileClicked);
 		TileManager->RegisterTile(Coords, NewTile);
+	}
+}
+
+void ABG_TileSpawner::SpawnFoliage(ABG_Tile* Tile)
+{
+	if (!Tile || !Tile->tileMesh || !Tile->sceneComponent || FoliageMeshes.Num() == 0)
+		return;
+
+	const int32 FoliageCount = randomStream.RandRange(1, 2); // num of foliage that can spawn per tile
+
+	for (int32 i = 0; i < FoliageCount; ++i) // foreach foliage instance we want to spawn
+	{
+		const int32 MeshIndex = randomStream.RandRange(0, FoliageMeshes.Num() - 1);
+		UStaticMesh* Mesh = FoliageMeshes[MeshIndex];
+		if (!Mesh)
+			continue;
+
+		const int32 SocketIndex = randomStream.RandRange(1, 6);// assuming each tile has sockets named FoliageSpawnLOC_1 to FoliageSpawnLOC_6
+		const FName SocketName(*FString::Printf(TEXT("FoliageSpawnLOC_%d"), SocketIndex));
+
+		if (!Tile->tileMesh->DoesSocketExist(SocketName))
+			continue;
+
+		const float Yaw = randomStream.FRandRange(0.0f, 360.0f);
+		const float Scale = randomStream.FRandRange(0.8f, 1.2f);
+
+		const FTransform SocketTransform = Tile->tileMesh->GetSocketTransform(SocketName, RTS_World);
+		const FTransform RandomOffset(FRotator(0.0f, Yaw, 0.0f), FVector::ZeroVector, FVector(Scale));
+		const FTransform FoliageTransform = RandomOffset * SocketTransform;
+
+		UStaticMeshComponent* FoliageComp = NewObject<UStaticMeshComponent>(Tile);
+		if (!FoliageComp)
+			continue;
+
+		FoliageComp->SetStaticMesh(Mesh);
+		FoliageComp->SetupAttachment(Tile->sceneComponent);
+		FoliageComp->RegisterComponent();
+		FoliageComp->SetWorldTransform(FoliageTransform);
+		FoliageComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		FoliageComp->SetWorldScale3D(FVector(.3f));
 	}
 }
 

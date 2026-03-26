@@ -10,6 +10,7 @@
 // Forward declarations
 class ABG_Tile;
 class ATileManager;
+class UStaticMeshComponent;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnGridBuilt);
 
@@ -87,6 +88,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "TileManager", meta = (AllowPrivateAccess = "true"))
 	ATileManager* TileManager;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Foliage", meta = (AllowPrivateAccess = "true"))
+	TArray<UStaticMesh*> FoliageMeshes;
+
 	FRandomStream randomStream;
 
 	// Methods
@@ -117,6 +121,8 @@ private:
 	bool IsDifferentEdge(const FIntPoint& Start, const FIntPoint& Current) const;
 
 	void ChangeTileToPath(const FIntPoint& Coords);
+
+	void SpawnFoliage(ABG_Tile* Tile);
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Path", meta = (AllowPrivateAccess = "true"))
 	int32 numberOfPaths = 1;

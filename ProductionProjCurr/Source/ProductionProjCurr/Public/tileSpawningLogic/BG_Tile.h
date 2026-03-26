@@ -71,6 +71,8 @@ private:
 		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 		UDecalComponent* decalComponent;
 
+		USceneComponent* sceneComponent;
+
 		UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Tile Info")
 		FIntPoint gridCoordinates;
 
