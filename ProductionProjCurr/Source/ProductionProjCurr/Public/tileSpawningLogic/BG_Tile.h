@@ -133,10 +133,4 @@ private:
 		UMaterialInstanceDynamic* TileMeshMID;
 
 		void ApplyHueFromNoise(float NoiseValue);
-
-		UPROPERTY(EditAnywhere, Category = "Tile Visual")
-		UMaterialInterface* HighlightMaterial;
-
-		UPROPERTY(EditAnywhere, Category = "Tile Visual")
-		FName HighlightColorParameterName = TEXT("DecalTint");
 };

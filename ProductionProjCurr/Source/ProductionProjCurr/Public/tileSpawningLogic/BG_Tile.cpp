@@ -98,22 +98,14 @@ void ABG_Tile::addOutlineEffect(const FLinearColor& color)
 {
 	isPlayingEffect = true;
 
-	if (decalComponent)
+	if (HexDecalMID)
 	{
-		if (HighlightMaterial)
-		{
-			decalComponent->SetMaterial(0, HighlightMaterial);
-			HexDecalMID = UMaterialInstanceDynamic::Create(HighlightMaterial, this);
-			decalComponent->SetMaterial(0, HexDecalMID);
-		}
-
-		if (HexDecalMID)
-		{
-			HexDecalMID->SetVectorParameterValue(HighlightColorParameterName, color);
-		}
-
-		decalComponent->SetVisibility(true);
+		HexDecalMID->SetVectorParameterValue(
+			TEXT("DecalTint"),
+			color);
 	}
+
+	decalComponent->SetVisibility(true);
 }
 
 void ABG_Tile::ApplyHueFromNoise(float NoiseValue)
@@ -132,6 +124,42 @@ void ABG_Tile::ApplyHueFromNoise(float NoiseValue)
 
 	TileMeshMID->SetVectorParameterValue(TileHueParameterName, Tint);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
