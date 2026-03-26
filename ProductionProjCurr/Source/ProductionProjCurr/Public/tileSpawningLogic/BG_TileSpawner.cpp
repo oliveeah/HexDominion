@@ -140,7 +140,7 @@ void ABG_TileSpawner::spawnGrid(const float& randomNum)
 
 				if (biomeType == EBiomeType::Grassland)
 				{
-					SpawnFoliage(NewTile);
+					ChosenTileClass = PickVariantFromNoise(MeadowTiles, Noise, cols, rows);
 				}
 
 				if (TileManager)
@@ -327,45 +327,6 @@ void ABG_TileSpawner::ChangeTileToPath(const FIntPoint& Coords)
 	}
 }
 
-void ABG_TileSpawner::SpawnFoliage(ABG_Tile* Tile)
-{
-	if (!Tile || !Tile->tileMesh || !Tile->sceneComponent || FoliageMeshes.Num() == 0)
-		return;
-
-	const int32 FoliageCount = randomStream.RandRange(1, 2); // num of foliage that can spawn per tile
-
-	for (int32 i = 0; i < FoliageCount; ++i) // foreach foliage instance we want to spawn
-	{
-		const int32 MeshIndex = randomStream.RandRange(0, FoliageMeshes.Num() - 1);
-		UStaticMesh* Mesh = FoliageMeshes[MeshIndex];
-		if (!Mesh)
-			continue;
-
-		const int32 SocketIndex = randomStream.RandRange(1, 6);// assuming each tile has sockets named FoliageSpawnLOC_1 to FoliageSpawnLOC_6
-		const FName SocketName(*FString::Printf(TEXT("FoliageSpawnLOC_%d"), SocketIndex));
-
-		if (!Tile->tileMesh->DoesSocketExist(SocketName))
-			continue;
-
-		const float Yaw = randomStream.FRandRange(0.0f, 360.0f);
-		const float Scale = randomStream.FRandRange(0.8f, 1.2f);
-
-		const FTransform SocketTransform = Tile->tileMesh->GetSocketTransform(SocketName, RTS_World);
-		const FTransform RandomOffset(FRotator(0.0f, Yaw, 0.0f), FVector::ZeroVector, FVector(Scale));
-		const FTransform FoliageTransform = RandomOffset * SocketTransform;
-
-		UStaticMeshComponent* FoliageComp = NewObject<UStaticMeshComponent>(Tile);
-		if (!FoliageComp)
-			continue;
-
-		FoliageComp->SetStaticMesh(Mesh);
-		FoliageComp->SetupAttachment(Tile->sceneComponent);
-		FoliageComp->RegisterComponent();
-		FoliageComp->SetWorldTransform(FoliageTransform);
-		FoliageComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		FoliageComp->SetWorldScale3D(FVector(.3f));
-	}
-}
 
 bool ABG_TileSpawner::TryBuildRandomPath(TArray<FIntPoint>& OutPath)
 {

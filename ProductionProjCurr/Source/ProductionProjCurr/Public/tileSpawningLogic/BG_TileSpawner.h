@@ -88,8 +88,6 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "TileManager", meta = (AllowPrivateAccess = "true"))
 	ATileManager* TileManager;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Foliage", meta = (AllowPrivateAccess = "true"))
-	TArray<UStaticMesh*> FoliageMeshes;
 
 	FRandomStream randomStream;
 
@@ -122,7 +120,6 @@ private:
 
 	void ChangeTileToPath(const FIntPoint& Coords);
 
-	void SpawnFoliage(ABG_Tile* Tile);
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Path", meta = (AllowPrivateAccess = "true"))
 	int32 numberOfPaths = 1;
@@ -139,6 +136,8 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Setup", meta = (AllowPrivateAccess = "true"))
 	float centerBiasExponent = 2.0f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Foliage", meta = (AllowPrivateAccess = "true"))
+	float foliageSpawnChance = 0.6f;
 
 public:
 	int getNumberOfCols() { return numberOfColumns; }
