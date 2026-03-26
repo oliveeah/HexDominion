@@ -12,17 +12,27 @@ ATurnManager::ATurnManager()
 
 void ATurnManager::PassTurn()
 {
-	if (activePlayer == EActivePlayerSide::PlayerA)
+	switch (activePlayer)
 	{
-		activePlayer = EActivePlayerSide::PlayerB;
-		UE_LOG(LogTemp, Display, TEXT("Player B is active"));
+		case EActivePlayerSide::PlayerA:
+			activePlayer = EActivePlayerSide::PlayerB;
+			UE_LOG(LogTemp, Display, TEXT("Player B is active"));
+			break;
+		case EActivePlayerSide::PlayerB:
+			activePlayer = EActivePlayerSide::PlayerC;
+			UE_LOG(LogTemp, Display, TEXT("Player C is active"));
+			break;
+		case EActivePlayerSide::PlayerC:
+			activePlayer = EActivePlayerSide::PlayerD;
+			UE_LOG(LogTemp, Display, TEXT("Player D is active"));
+			break;
+		case EActivePlayerSide::PlayerD:
+		default:
+			activePlayer = EActivePlayerSide::PlayerA;
+			UE_LOG(LogTemp, Display, TEXT("Player A is active"));
+			break;
 	}
-	else
-	{
-		activePlayer = EActivePlayerSide::PlayerA;
-		UE_LOG(LogTemp, Display, TEXT("Player A is active"));
 
-	}
 	OnTurnChanged.Broadcast(activePlayer);
 }
 
@@ -32,6 +42,8 @@ void ATurnManager::BeginPlay()
 	Super::BeginPlay();
 	
 }
+
+
 
 
 

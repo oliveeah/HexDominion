@@ -53,7 +53,7 @@ void ATileManager::HandleGridBuilt()
 
 void ATileManager::spawnStartingTroops(int cols, int rows)
 {
-	int numPlayers = 2;
+	int numPlayers = 4;
 	if (!StartingTroopClass)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("StartingTroopClass not set in TileManager!"));
@@ -83,7 +83,6 @@ void ATileManager::spawnStartingTroops(int cols, int rows)
 		const bool bLeft = Corner.X == 0;
 		const bool bTop = Corner.Y == 0;
 
-		// Scan along horizontal edge from the corner
 		if (bTop)
 		{
 			for (int32 Col = 0; Col < cols; ++Col)
@@ -93,7 +92,7 @@ void ATileManager::spawnStartingTroops(int cols, int rows)
 					return Tile;
 			}
 		}
-		else // if bottom edge
+		else
 		{
 			for (int32 Col = 0; Col < cols; ++Col)
 			{
@@ -103,7 +102,6 @@ void ATileManager::spawnStartingTroops(int cols, int rows)
 			}
 		}
 
-		// Scan along vertical edge from the corner
 		if (bLeft)
 		{
 			for (int32 Row = 0; Row < rows; ++Row)
@@ -113,7 +111,7 @@ void ATileManager::spawnStartingTroops(int cols, int rows)
 					return Tile;
 			}
 		}
-		else // if right edge
+		else
 		{
 			for (int32 Row = 0; Row < rows; ++Row)
 			{
@@ -126,19 +124,27 @@ void ATileManager::spawnStartingTroops(int cols, int rows)
 		return nullptr;
 	};
 
-	const FIntPoint PlayerCorners[2] = {
-		{ 0, 0 },                 // PlayerA: top-left
-		{ cols - 1, rows - 1 }    // PlayerB: bottom-right
+	const FIntPoint PlayerCorners[4] = {
+		{ 0, 0 },					// PlayerA: top-left
+		{ cols - 1, 0 },			// PlayerB: top-right
+		{ cols - 1, rows - 1 },		// PlayerC: bottom-right
+		{ 0, rows - 1 }				// PlayerD: bottom-left
 	};
 
-	const int32 MaxPlayers = FMath::Min(numPlayers, 2);
+	const EActivePlayerSide Players[4] = {
+		EActivePlayerSide::PlayerA,
+		EActivePlayerSide::PlayerB,
+		EActivePlayerSide::PlayerC,
+		EActivePlayerSide::PlayerD
+	};
+
+	const int32 MaxPlayers = FMath::Min(numPlayers, 4);
 	for (int32 i = 0; i < MaxPlayers; ++i)
 	{
 		ABG_Tile* SpawnTile = FindSpawnFromCorner(PlayerCorners[i]);
 		if (SpawnTile)
 		{
-			EActivePlayerSide Player = (i == 0) ? EActivePlayerSide::PlayerA : EActivePlayerSide::PlayerB;
-			spawnTroop(StartingTroopClass, SpawnTile, Player);
+			spawnTroop(StartingTroopClass, SpawnTile, Players[i]);
 		}
 		else
 		{
@@ -444,7 +450,11 @@ void ATileManager::spawnTroop(TSubclassOf<AOccupant_BaseClass> Occupant, ABG_Til
 			? TEXT("TroopSpawnSocket_PlayerA")
 			: (OwningPlayer == EActivePlayerSide::PlayerB
 				? TEXT("TroopSpawnSocket_PlayerB")
-				: TEXT("TroopSpawnSocket")));
+				: (OwningPlayer == EActivePlayerSide::PlayerC
+					? TEXT("TroopSpawnSocket_PlayerC")
+					: (OwningPlayer == EActivePlayerSide::PlayerD
+						? TEXT("TroopSpawnSocket_PlayerD")
+						: TEXT("TroopSpawnSocket")))));
 
 	/*Spawn and attach*/
 	FVector	   SpawnLocation = Tile->GetActorLocation();

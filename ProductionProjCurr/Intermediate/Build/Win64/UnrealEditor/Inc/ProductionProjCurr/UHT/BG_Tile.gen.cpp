@@ -130,7 +130,7 @@ struct Z_Construct_UFunction_ABG_Tile_SetOwningPlayer_Statics
 	static const UECodeGen_Private::FFunctionParams FuncParams;
 };
 const UECodeGen_Private::FBytePropertyParams Z_Construct_UFunction_ABG_Tile_SetOwningPlayer_Statics::NewProp_newOwner_Underlying = { "UnderlyingType", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Byte, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, 0, nullptr, METADATA_PARAMS(0, nullptr) };
-const UECodeGen_Private::FEnumPropertyParams Z_Construct_UFunction_ABG_Tile_SetOwningPlayer_Statics::NewProp_newOwner = { "newOwner", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Enum, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(BG_Tile_eventSetOwningPlayer_Parms, newOwner), Z_Construct_UEnum_ProductionProjCurr_EActivePlayerSide, METADATA_PARAMS(0, nullptr) }; // 285499111
+const UECodeGen_Private::FEnumPropertyParams Z_Construct_UFunction_ABG_Tile_SetOwningPlayer_Statics::NewProp_newOwner = { "newOwner", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Enum, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(BG_Tile_eventSetOwningPlayer_Parms, newOwner), Z_Construct_UEnum_ProductionProjCurr_EActivePlayerSide, METADATA_PARAMS(0, nullptr) }; // 3225171363
 const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_ABG_Tile_SetOwningPlayer_Statics::PropPointers[] = {
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_ABG_Tile_SetOwningPlayer_Statics::NewProp_newOwner_Underlying,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_ABG_Tile_SetOwningPlayer_Statics::NewProp_newOwner,
@@ -299,7 +299,7 @@ struct Z_Construct_UClass_ABG_Tile_Statics
 	static UObject* (*const DependentSingletons[])();
 	static constexpr FClassFunctionLinkInfo FuncInfo[] = {
 		{ &Z_Construct_UFunction_ABG_Tile_OnDebugToggled, "OnDebugToggled" }, // 3843552734
-		{ &Z_Construct_UFunction_ABG_Tile_SetOwningPlayer, "SetOwningPlayer" }, // 648653819
+		{ &Z_Construct_UFunction_ABG_Tile_SetOwningPlayer, "SetOwningPlayer" }, // 2190297953
 	};
 	static_assert(UE_ARRAY_COUNT(FuncInfo) < 2048);
 	static const UECodeGen_Private::FImplementedInterfaceParams InterfaceParams[];
@@ -338,7 +338,7 @@ void Z_Construct_UClass_ABG_Tile_Statics::NewProp_isSpawnableTile_SetBit(void* O
 const UECodeGen_Private::FBoolPropertyParams Z_Construct_UClass_ABG_Tile_Statics::NewProp_isSpawnableTile = { "isSpawnableTile", nullptr, (EPropertyFlags)0x0010000000000005, UECodeGen_Private::EPropertyGenFlags::Bool | UECodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, sizeof(bool), sizeof(ABG_Tile), &Z_Construct_UClass_ABG_Tile_Statics::NewProp_isSpawnableTile_SetBit, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_isSpawnableTile_MetaData), NewProp_isSpawnableTile_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_ABG_Tile_Statics::NewProp_HexDecalMID = { "HexDecalMID", nullptr, (EPropertyFlags)0x0010000000000000, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_Tile, HexDecalMID), Z_Construct_UClass_UMaterialInstanceDynamic_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_HexDecalMID_MetaData), NewProp_HexDecalMID_MetaData) };
 const UECodeGen_Private::FBytePropertyParams Z_Construct_UClass_ABG_Tile_Statics::NewProp_owningPlayer_Underlying = { "UnderlyingType", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Byte, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, 0, nullptr, METADATA_PARAMS(0, nullptr) };
-const UECodeGen_Private::FEnumPropertyParams Z_Construct_UClass_ABG_Tile_Statics::NewProp_owningPlayer = { "owningPlayer", nullptr, (EPropertyFlags)0x0010000000020015, UECodeGen_Private::EPropertyGenFlags::Enum, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_Tile, owningPlayer), Z_Construct_UEnum_ProductionProjCurr_EActivePlayerSide, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_owningPlayer_MetaData), NewProp_owningPlayer_MetaData) }; // 285499111
+const UECodeGen_Private::FEnumPropertyParams Z_Construct_UClass_ABG_Tile_Statics::NewProp_owningPlayer = { "owningPlayer", nullptr, (EPropertyFlags)0x0010000000020015, UECodeGen_Private::EPropertyGenFlags::Enum, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_Tile, owningPlayer), Z_Construct_UEnum_ProductionProjCurr_EActivePlayerSide, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_owningPlayer_MetaData), NewProp_owningPlayer_MetaData) }; // 3225171363
 const UECodeGen_Private::FNamePropertyParams Z_Construct_UClass_ABG_Tile_Statics::NewProp_TileHueParameterName = { "TileHueParameterName", nullptr, (EPropertyFlags)0x0010000000000001, UECodeGen_Private::EPropertyGenFlags::Name, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_Tile, TileHueParameterName), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_TileHueParameterName_MetaData), NewProp_TileHueParameterName_MetaData) };
 const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_ABG_Tile_Statics::NewProp_TileHueSaturation = { "TileHueSaturation", nullptr, (EPropertyFlags)0x0010000000000001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_Tile, TileHueSaturation), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_TileHueSaturation_MetaData), NewProp_TileHueSaturation_MetaData) };
 const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_ABG_Tile_Statics::NewProp_TileHueValue = { "TileHueValue", nullptr, (EPropertyFlags)0x0010000000000001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_Tile, TileHueValue), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_TileHueValue_MetaData), NewProp_TileHueValue_MetaData) };
@@ -404,10 +404,10 @@ ABG_Tile::~ABG_Tile() {}
 struct Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_Tile_h__Script_ProductionProjCurr_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_ABG_Tile, ABG_Tile::StaticClass, TEXT("ABG_Tile"), &Z_Registration_Info_UClass_ABG_Tile, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ABG_Tile), 1046731506U) },
+		{ Z_Construct_UClass_ABG_Tile, ABG_Tile::StaticClass, TEXT("ABG_Tile"), &Z_Registration_Info_UClass_ABG_Tile, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ABG_Tile), 1293769181U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_Tile_h__Script_ProductionProjCurr_2709535097(TEXT("/Script/ProductionProjCurr"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_Tile_h__Script_ProductionProjCurr_1087917734(TEXT("/Script/ProductionProjCurr"),
 	Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_Tile_h__Script_ProductionProjCurr_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_Tile_h__Script_ProductionProjCurr_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);

@@ -33,4 +33,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FTeamVisualData PlayerB;
 	
+		UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FTeamVisualData PlayerC;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FTeamVisualData PlayerD;
 };
