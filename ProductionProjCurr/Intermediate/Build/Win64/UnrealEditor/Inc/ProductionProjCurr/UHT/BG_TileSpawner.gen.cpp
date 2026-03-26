@@ -14,7 +14,6 @@ void EmptyLinkFunctionForGeneratedCodeBG_TileSpawner() {}
 // ********** Begin Cross Module References ********************************************************
 COREUOBJECT_API UClass* Z_Construct_UClass_UClass();
 ENGINE_API UClass* Z_Construct_UClass_AActor();
-ENGINE_API UClass* Z_Construct_UClass_UStaticMesh_NoRegister();
 PRODUCTIONPROJCURR_API UClass* Z_Construct_UClass_ABG_Tile_NoRegister();
 PRODUCTIONPROJCURR_API UClass* Z_Construct_UClass_ABG_TileSpawner();
 PRODUCTIONPROJCURR_API UClass* Z_Construct_UClass_ABG_TileSpawner_NoRegister();
@@ -207,7 +206,7 @@ struct Z_Construct_UClass_ABG_TileSpawner_Statics
 		{ "ToolTip", "Tile Classes" },
 #endif
 	};
-	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_WaterTile_MetaData[] = {
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_WaterTiles_MetaData[] = {
 		{ "AllowPrivateAccess", "true" },
 		{ "Category", "Hex | Biomes" },
 		{ "ModuleRelativePath", "Public/tileSpawningLogic/BG_TileSpawner.h" },
@@ -230,11 +229,6 @@ struct Z_Construct_UClass_ABG_TileSpawner_Statics
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_TileManager_MetaData[] = {
 		{ "AllowPrivateAccess", "true" },
 		{ "Category", "TileManager" },
-		{ "ModuleRelativePath", "Public/tileSpawningLogic/BG_TileSpawner.h" },
-	};
-	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_FoliageMeshes_MetaData[] = {
-		{ "AllowPrivateAccess", "true" },
-		{ "Category", "Hex | Foliage" },
 		{ "ModuleRelativePath", "Public/tileSpawningLogic/BG_TileSpawner.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_numberOfPaths_MetaData[] = {
@@ -276,14 +270,13 @@ struct Z_Construct_UClass_ABG_TileSpawner_Statics
 	static const UECodeGen_Private::FFloatPropertyParams NewProp_ySpawnOffset;
 	static const UECodeGen_Private::FFloatPropertyParams NewProp_noiseFrequency;
 	static const UECodeGen_Private::FClassPropertyParams NewProp_TileClass;
-	static const UECodeGen_Private::FClassPropertyParams NewProp_WaterTile;
+	static const UECodeGen_Private::FClassPropertyParams NewProp_WaterTiles_Inner;
+	static const UECodeGen_Private::FArrayPropertyParams NewProp_WaterTiles;
 	static const UECodeGen_Private::FClassPropertyParams NewProp_HillTile;
 	static const UECodeGen_Private::FClassPropertyParams NewProp_MeadowTiles_Inner;
 	static const UECodeGen_Private::FArrayPropertyParams NewProp_MeadowTiles;
 	static const UECodeGen_Private::FClassPropertyParams NewProp_PathTile;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_TileManager;
-	static const UECodeGen_Private::FObjectPropertyParams NewProp_FoliageMeshes_Inner;
-	static const UECodeGen_Private::FArrayPropertyParams NewProp_FoliageMeshes;
 	static const UECodeGen_Private::FIntPropertyParams NewProp_numberOfPaths;
 	static const UECodeGen_Private::FIntPropertyParams NewProp_minPathDistance;
 	static const UECodeGen_Private::FFloatPropertyParams NewProp_turnChance;
@@ -305,14 +298,13 @@ const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_ABG_TileSpawner
 const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_ySpawnOffset = { "ySpawnOffset", nullptr, (EPropertyFlags)0x0040000000000015, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_TileSpawner, ySpawnOffset), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_ySpawnOffset_MetaData), NewProp_ySpawnOffset_MetaData) };
 const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_noiseFrequency = { "noiseFrequency", nullptr, (EPropertyFlags)0x0040000000000015, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_TileSpawner, noiseFrequency), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_noiseFrequency_MetaData), NewProp_noiseFrequency_MetaData) };
 const UECodeGen_Private::FClassPropertyParams Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_TileClass = { "TileClass", nullptr, (EPropertyFlags)0x0044000000010015, UECodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_TileSpawner, TileClass), Z_Construct_UClass_UClass, Z_Construct_UClass_ABG_Tile_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_TileClass_MetaData), NewProp_TileClass_MetaData) };
-const UECodeGen_Private::FClassPropertyParams Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_WaterTile = { "WaterTile", nullptr, (EPropertyFlags)0x0044000000000015, UECodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_TileSpawner, WaterTile), Z_Construct_UClass_UClass, Z_Construct_UClass_ABG_Tile_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_WaterTile_MetaData), NewProp_WaterTile_MetaData) };
+const UECodeGen_Private::FClassPropertyParams Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_WaterTiles_Inner = { "WaterTiles", nullptr, (EPropertyFlags)0x0004000000000000, UECodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, 0, Z_Construct_UClass_UClass, Z_Construct_UClass_ABG_Tile_NoRegister, METADATA_PARAMS(0, nullptr) };
+const UECodeGen_Private::FArrayPropertyParams Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_WaterTiles = { "WaterTiles", nullptr, (EPropertyFlags)0x0044000000000015, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_TileSpawner, WaterTiles), EArrayPropertyFlags::None, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_WaterTiles_MetaData), NewProp_WaterTiles_MetaData) };
 const UECodeGen_Private::FClassPropertyParams Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_HillTile = { "HillTile", nullptr, (EPropertyFlags)0x0044000000000015, UECodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_TileSpawner, HillTile), Z_Construct_UClass_UClass, Z_Construct_UClass_ABG_Tile_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_HillTile_MetaData), NewProp_HillTile_MetaData) };
 const UECodeGen_Private::FClassPropertyParams Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_MeadowTiles_Inner = { "MeadowTiles", nullptr, (EPropertyFlags)0x0004000000000000, UECodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, 0, Z_Construct_UClass_UClass, Z_Construct_UClass_ABG_Tile_NoRegister, METADATA_PARAMS(0, nullptr) };
 const UECodeGen_Private::FArrayPropertyParams Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_MeadowTiles = { "MeadowTiles", nullptr, (EPropertyFlags)0x0044000000000015, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_TileSpawner, MeadowTiles), EArrayPropertyFlags::None, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_MeadowTiles_MetaData), NewProp_MeadowTiles_MetaData) };
 const UECodeGen_Private::FClassPropertyParams Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_PathTile = { "PathTile", nullptr, (EPropertyFlags)0x0044000000000015, UECodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_TileSpawner, PathTile), Z_Construct_UClass_UClass, Z_Construct_UClass_ABG_Tile_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_PathTile_MetaData), NewProp_PathTile_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_TileManager = { "TileManager", nullptr, (EPropertyFlags)0x0040000000000015, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_TileSpawner, TileManager), Z_Construct_UClass_ATileManager_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_TileManager_MetaData), NewProp_TileManager_MetaData) };
-const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_FoliageMeshes_Inner = { "FoliageMeshes", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, 0, Z_Construct_UClass_UStaticMesh_NoRegister, METADATA_PARAMS(0, nullptr) };
-const UECodeGen_Private::FArrayPropertyParams Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_FoliageMeshes = { "FoliageMeshes", nullptr, (EPropertyFlags)0x0040000000000015, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_TileSpawner, FoliageMeshes), EArrayPropertyFlags::None, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_FoliageMeshes_MetaData), NewProp_FoliageMeshes_MetaData) };
 const UECodeGen_Private::FIntPropertyParams Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_numberOfPaths = { "numberOfPaths", nullptr, (EPropertyFlags)0x0040000000000015, UECodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_TileSpawner, numberOfPaths), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_numberOfPaths_MetaData), NewProp_numberOfPaths_MetaData) };
 const UECodeGen_Private::FIntPropertyParams Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_minPathDistance = { "minPathDistance", nullptr, (EPropertyFlags)0x0040000000000015, UECodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_TileSpawner, minPathDistance), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_minPathDistance_MetaData), NewProp_minPathDistance_MetaData) };
 const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_turnChance = { "turnChance", nullptr, (EPropertyFlags)0x0040000000000015, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_TileSpawner, turnChance), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_turnChance_MetaData), NewProp_turnChance_MetaData) };
@@ -328,14 +320,13 @@ const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_ABG_TileS
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_ySpawnOffset,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_noiseFrequency,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_TileClass,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_WaterTile,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_WaterTiles_Inner,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_WaterTiles,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_HillTile,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_MeadowTiles_Inner,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_MeadowTiles,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_PathTile,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_TileManager,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_FoliageMeshes_Inner,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_FoliageMeshes,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_numberOfPaths,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_minPathDistance,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_TileSpawner_Statics::NewProp_turnChance,
@@ -383,10 +374,10 @@ struct Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project
 		{ EBiomeType_StaticEnum, TEXT("EBiomeType"), &Z_Registration_Info_UEnum_EBiomeType, CONSTRUCT_RELOAD_VERSION_INFO(FEnumReloadVersionInfo, 3239956023U) },
 	};
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_ABG_TileSpawner, ABG_TileSpawner::StaticClass, TEXT("ABG_TileSpawner"), &Z_Registration_Info_UClass_ABG_TileSpawner, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ABG_TileSpawner), 996419381U) },
+		{ Z_Construct_UClass_ABG_TileSpawner, ABG_TileSpawner::StaticClass, TEXT("ABG_TileSpawner"), &Z_Registration_Info_UClass_ABG_TileSpawner, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ABG_TileSpawner), 2675471154U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_TileSpawner_h__Script_ProductionProjCurr_3601159670(TEXT("/Script/ProductionProjCurr"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_TileSpawner_h__Script_ProductionProjCurr_2204525356(TEXT("/Script/ProductionProjCurr"),
 	Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_TileSpawner_h__Script_ProductionProjCurr_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_TileSpawner_h__Script_ProductionProjCurr_Statics::ClassInfo),
 	nullptr, 0,
 	Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_TileSpawner_h__Script_ProductionProjCurr_Statics::EnumInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_TileSpawner_h__Script_ProductionProjCurr_Statics::EnumInfo));

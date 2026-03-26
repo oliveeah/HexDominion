@@ -72,7 +72,7 @@ private:
 	TSubclassOf<ABG_Tile> TileClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Biomes", meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<ABG_Tile> WaterTile;
+	TArray<TSubclassOf<ABG_Tile>> WaterTiles;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Biomes", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<ABG_Tile> HillTile;

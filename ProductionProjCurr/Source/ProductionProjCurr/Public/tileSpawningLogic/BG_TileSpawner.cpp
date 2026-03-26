@@ -98,11 +98,14 @@ void ABG_TileSpawner::spawnGrid(const float& randomNum)
 			// Get tile class for biome
 			TSubclassOf<ABG_Tile> ChosenTileClass = GetTileClassForBiome(biomeType);
 
-			if (biomeType == EBiomeType::Grassland && ChosenTileClass)
+			if (biomeType == EBiomeType::Grassland && MeadowTiles.Num() > 0)
 			{
 				ChosenTileClass = PickVariantFromNoise(MeadowTiles, Noise, cols, rows);
 			}
-
+			else if (biomeType == EBiomeType::Water && WaterTiles.Num() > 0)
+			{
+				ChosenTileClass = PickVariantFromNoise(WaterTiles, Noise, cols, rows);
+			}
 
 			// Offset every other row
 			const float xOffset = (rows % 2 == 0) ? 0.0f : (hexWidth * 0.5f);
@@ -166,7 +169,7 @@ TSubclassOf<ABG_Tile> ABG_TileSpawner::GetTileClassForBiome(EBiomeType Biome) co
 	switch (Biome)
 	{
 		case EBiomeType::Water:
-			return WaterTile;
+			return WaterTiles.Num() > 0 ? WaterTiles[0] : TileClass;
 		case EBiomeType::Grassland:
 			return MeadowTiles.Num() > 0 ? MeadowTiles[0] : TileClass;
 		case EBiomeType::Hill:
