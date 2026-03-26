@@ -38,6 +38,12 @@ void ABG_Tile::BeginPlay()
 		GameMode->OnToggleTileDebugCoordinates.AddDynamic(this, &ABG_Tile::OnDebugToggled);
 	}
 
+	if (tileMesh && tileMesh->GetMaterial(0))
+	{
+		TileMeshMID = UMaterialInstanceDynamic::Create(tileMesh->GetMaterial(0), this);
+		tileMesh->SetMaterial(0, TileMeshMID);
+	}
+
 	if (decalComponent && decalComponent->GetMaterial(0))
 	{
 		HexDecalMID = UMaterialInstanceDynamic::Create(
@@ -90,19 +96,69 @@ void ABG_Tile::removeOutlineEffect()
 
 void ABG_Tile::addOutlineEffect(const FLinearColor& color)
 {
-	
-	//tileEdgeMesh->SetVisibility(true);
 	isPlayingEffect = true;
 
-	if (HexDecalMID)
+	if (decalComponent)
 	{
-		HexDecalMID->SetVectorParameterValue(
-			TEXT("DecalTint"), // Must match your material parameter name
-			color);
-	}
+		if (HighlightMaterial)
+		{
+			decalComponent->SetMaterial(0, HighlightMaterial);
+			HexDecalMID = UMaterialInstanceDynamic::Create(HighlightMaterial, this);
+			decalComponent->SetMaterial(0, HexDecalMID);
+		}
 
-	decalComponent->SetVisibility(true);
+		if (HexDecalMID)
+		{
+			HexDecalMID->SetVectorParameterValue(HighlightColorParameterName, color);
+		}
+
+		decalComponent->SetVisibility(true);
+	}
 }
+
+void ABG_Tile::ApplyHueFromNoise(float NoiseValue)
+{
+	if (!TileMeshMID)
+		return;
+
+	const float Normalized = (NoiseValue + 1.0f) * 0.5f;
+	const float Hue = FMath::Clamp(Normalized, 0.0f, 1.0f);
+
+	const uint8 HueByte = static_cast<uint8>(Hue * 255.0f);
+	const uint8 SatByte = static_cast<uint8>(FMath::Clamp(TileHueSaturation, 0.0f, 1.0f) * 255.0f);
+	const uint8 ValByte = static_cast<uint8>(FMath::Clamp(TileHueValue, 0.0f, 1.0f) * 255.0f);
+
+	const FLinearColor Tint = FLinearColor::MakeFromHSV8(HueByte, SatByte, ValByte);
+
+	TileMeshMID->SetVectorParameterValue(TileHueParameterName, Tint);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

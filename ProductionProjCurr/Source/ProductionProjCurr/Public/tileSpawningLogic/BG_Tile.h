@@ -119,4 +119,24 @@ private:
 		EActivePlayerSide GetOccupyingPlayer() const { return owningPlayer; }
 
 		bool GetIsOccupied() const { return isOccupied; }
+
+		UPROPERTY(EditAnywhere, Category = "Tile Visual")
+		FName TileHueParameterName = TEXT("TileTint");
+
+		UPROPERTY(EditAnywhere, Category = "Tile Visual")
+		float TileHueSaturation = 0.25f;
+
+		UPROPERTY(EditAnywhere, Category = "Tile Visual")
+		float TileHueValue = 1.0f;
+
+		UPROPERTY()
+		UMaterialInstanceDynamic* TileMeshMID;
+
+		void ApplyHueFromNoise(float NoiseValue);
+
+		UPROPERTY(EditAnywhere, Category = "Tile Visual")
+		UMaterialInterface* HighlightMaterial;
+
+		UPROPERTY(EditAnywhere, Category = "Tile Visual")
+		FName HighlightColorParameterName = TEXT("DecalTint");
 };

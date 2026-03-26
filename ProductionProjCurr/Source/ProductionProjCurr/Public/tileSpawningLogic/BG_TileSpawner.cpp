@@ -145,6 +145,7 @@ void ABG_TileSpawner::spawnGrid(const float& randomNum)
 			{
 				TileGrid[rows][cols] = NewTile;
 				NewTile->gridCoordinates = FIntPoint(cols, rows);
+				NewTile->ApplyHueFromNoise(HeightNoise);
 
 				if (TileManager)
 				{
