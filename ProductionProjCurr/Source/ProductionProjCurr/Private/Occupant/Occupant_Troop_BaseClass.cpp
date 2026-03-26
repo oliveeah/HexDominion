@@ -37,6 +37,12 @@ void AOccupant_Troop_BaseClass::SetOwningPlayer(EActivePlayerSide NewPlayer)
 		case EActivePlayerSide::PlayerB:
 			TeamData = &TroopData->PlayerB;
 			break;
+		case EActivePlayerSide::PlayerC:
+			TeamData = &TroopData->PlayerC;
+			break;
+		case EActivePlayerSide::PlayerD:
+			TeamData = &TroopData->PlayerD;
+			break;
 		default:
 			return;
 	}
@@ -136,6 +142,14 @@ void AOccupant_Troop_BaseClass::MoveToTile(ABG_Tile* Tile)
 	else if (OwnerSide == EActivePlayerSide::PlayerB)
 	{
 		MoveSocketName = TEXT("TroopSpawnSocket_PlayerB");
+	}
+	else if (OwnerSide == EActivePlayerSide::PlayerC)
+	{
+		MoveSocketName = TEXT("TroopSpawnSocket_PlayerC");
+	}
+	else if (OwnerSide == EActivePlayerSide::PlayerD)
+	{
+		MoveSocketName = TEXT("TroopSpawnSocket_PlayerD");
 	}
 
 	MoveTarget = Tile->tileMesh->GetSocketLocation(MoveSocketName);

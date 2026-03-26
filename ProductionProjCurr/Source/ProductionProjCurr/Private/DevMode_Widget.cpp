@@ -58,6 +58,10 @@ void UDevMode_Widget::NativeConstruct()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Failed to find TurnManager in the level!"));
 	}
+	else
+	{
+		turnManager->OnTurnChanged.AddUniqueDynamic(this, &UDevMode_Widget::HandleTurnChanged);
+	}
 }
 
 void UDevMode_Widget::initializeButtonLabels()
@@ -142,5 +146,10 @@ void UDevMode_Widget::generateButtonLabelText(UTextBlock* buttonLabel, const FSt
 	{
 		buttonLabel->SetText(FText::FromString(labelText));
 	}
+}
+
+void UDevMode_Widget::HandleTurnChanged(EActivePlayerSide NewActivePlayer)
+{
+	OnDevTurnChanged.Broadcast(NewActivePlayer);
 }
 

@@ -66,13 +66,15 @@ void ATileManager::spawnStartingTroops(int cols, int rows)
 		return;
 	}
 
-	auto IsSpawnable = [](ABG_Tile* Tile) -> bool
+	TSet<ABG_Tile*> UsedSpawnTiles;
+
+	auto IsSpawnable = [&UsedSpawnTiles](ABG_Tile* Tile) -> bool
 	{
-		return Tile && Tile->getCanSpawnTroopOnTile() && !Tile->isOccupied;
+		return Tile && Tile->getCanSpawnTroopOnTile() && !Tile->isOccupied
+			&& !UsedSpawnTiles.Contains(Tile);
 	};
 
-	auto FindSpawnFromCorner = [this, cols, rows, IsSpawnable](const FIntPoint& Corner) -> ABG_Tile*
-	{
+	auto FindSpawnFromCorner = [this, cols, rows, IsSpawnable](const FIntPoint& Corner) -> ABG_Tile* {
 		if (TileGrid.IsValidIndex(Corner.Y) && TileGrid[Corner.Y].IsValidIndex(Corner.X))
 		{
 			ABG_Tile* CornerTile = TileGrid[Corner.Y][Corner.X];
@@ -85,7 +87,11 @@ void ATileManager::spawnStartingTroops(int cols, int rows)
 
 		if (bTop)
 		{
-			for (int32 Col = 0; Col < cols; ++Col)
+			const int32 StartCol = bLeft ? 0 : cols - 1;
+			const int32 EndCol = bLeft ? cols : -1;
+			const int32 StepCol = bLeft ? 1 : -1;
+
+			for (int32 Col = StartCol; Col != EndCol; Col += StepCol)
 			{
 				ABG_Tile* Tile = TileGrid[0][Col];
 				if (IsSpawnable(Tile))
@@ -94,7 +100,11 @@ void ATileManager::spawnStartingTroops(int cols, int rows)
 		}
 		else
 		{
-			for (int32 Col = 0; Col < cols; ++Col)
+			const int32 StartCol = bLeft ? 0 : cols - 1;
+			const int32 EndCol = bLeft ? cols : -1;
+			const int32 StepCol = bLeft ? 1 : -1;
+
+			for (int32 Col = StartCol; Col != EndCol; Col += StepCol)
 			{
 				ABG_Tile* Tile = TileGrid[rows - 1][Col];
 				if (IsSpawnable(Tile))
@@ -104,7 +114,11 @@ void ATileManager::spawnStartingTroops(int cols, int rows)
 
 		if (bLeft)
 		{
-			for (int32 Row = 0; Row < rows; ++Row)
+			const int32 StartRow = bTop ? 0 : rows - 1;
+			const int32 EndRow = bTop ? rows : -1;
+			const int32 StepRow = bTop ? 1 : -1;
+
+			for (int32 Row = StartRow; Row != EndRow; Row += StepRow)
 			{
 				ABG_Tile* Tile = TileGrid[Row][0];
 				if (IsSpawnable(Tile))
@@ -113,7 +127,11 @@ void ATileManager::spawnStartingTroops(int cols, int rows)
 		}
 		else
 		{
-			for (int32 Row = 0; Row < rows; ++Row)
+			const int32 StartRow = bTop ? 0 : rows - 1;
+			const int32 EndRow = bTop ? rows : -1;
+			const int32 StepRow = bTop ? 1 : -1;
+
+			for (int32 Row = StartRow; Row != EndRow; Row += StepRow)
 			{
 				ABG_Tile* Tile = TileGrid[Row][cols - 1];
 				if (IsSpawnable(Tile))
@@ -123,7 +141,6 @@ void ATileManager::spawnStartingTroops(int cols, int rows)
 
 		return nullptr;
 	};
-
 	const FIntPoint PlayerCorners[4] = {
 		{ 0, 0 },					// PlayerA: top-left
 		{ cols - 1, 0 },			// PlayerB: top-right
@@ -144,6 +161,7 @@ void ATileManager::spawnStartingTroops(int cols, int rows)
 		ABG_Tile* SpawnTile = FindSpawnFromCorner(PlayerCorners[i]);
 		if (SpawnTile)
 		{
+			UsedSpawnTiles.Add(SpawnTile);
 			spawnTroop(StartingTroopClass, SpawnTile, Players[i]);
 		}
 		else

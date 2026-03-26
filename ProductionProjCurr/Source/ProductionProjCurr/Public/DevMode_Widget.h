@@ -13,6 +13,8 @@ class ATileManager;
 class AOccupant_Troop_BaseClass;
 class AOccupant_Building_BaseClass;
 class AOccupant_BaseClass;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDevTurnChanged, EActivePlayerSide, NewActivePlayer);
 /**
  * 
  */
@@ -37,6 +39,12 @@ class PRODUCTIONPROJCURR_API UDevMode_Widget : public UUserWidget
 	UFUNCTION()
 	void PassTurn_ButtonClicked();
 
+	UFUNCTION()
+	void HandleTurnChanged(EActivePlayerSide NewActivePlayer);
+
+	public:
+	UPROPERTY(BlueprintAssignable, Category = "TurnManager")
+	FOnDevTurnChanged OnDevTurnChanged;
 
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	TObjectPtr<UButton> SpawnBuildingAtSelectedTile_Button;
