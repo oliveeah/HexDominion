@@ -95,12 +95,17 @@ void ABG_TileSpawner::spawnGrid(const float& randomNum)
 			// Determine biome type based on noise
 			const EBiomeType biomeType = generateBiomeTypeBasedOnNoise(rows, cols, Noise);
 
-			// Get tile class for biome
+			// Get default tile class for biome
 			TSubclassOf<ABG_Tile> ChosenTileClass = GetTileClassForBiome(biomeType);
 
+			// Foliage chance for grassland tiles
 			if (biomeType == EBiomeType::Grassland && MeadowTiles.Num() > 0)
 			{
-				ChosenTileClass = PickVariantFromNoise(MeadowTiles, Noise, cols, rows);
+				const float SpawnChance = FMath::Clamp(foliageSpawnChance, 0.0f, 1.0f);
+				if (randomStream.FRand() < SpawnChance)
+				{
+					ChosenTileClass = PickVariantFromNoise(MeadowTiles, Noise, cols, rows);
+				}
 			}
 			else if (biomeType == EBiomeType::Water && WaterTiles.Num() > 0)
 			{
@@ -141,11 +146,6 @@ void ABG_TileSpawner::spawnGrid(const float& randomNum)
 				TileGrid[rows][cols] = NewTile;
 				NewTile->gridCoordinates = FIntPoint(cols, rows);
 
-				if (biomeType == EBiomeType::Grassland)
-				{
-					ChosenTileClass = PickVariantFromNoise(MeadowTiles, Noise, cols, rows);
-				}
-
 				if (TileManager)
 				{
 					NewTile->OnTileSelectedDelegate.AddDynamic(TileManager, &ATileManager::OnTileClicked);
@@ -171,7 +171,7 @@ TSubclassOf<ABG_Tile> ABG_TileSpawner::GetTileClassForBiome(EBiomeType Biome) co
 		case EBiomeType::Water:
 			return WaterTiles.Num() > 0 ? WaterTiles[0] : TileClass;
 		case EBiomeType::Grassland:
-			return MeadowTiles.Num() > 0 ? MeadowTiles[0] : TileClass;
+			return MeadowDefaultTile ? MeadowDefaultTile : TileClass;
 		case EBiomeType::Hill:
 			return HillTile;
 		default:

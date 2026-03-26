@@ -83,6 +83,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Biomes", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<ABG_Tile> PathTile;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Biomes", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<ABG_Tile> MeadowDefaultTile;
+
 	TArray<TArray<ABG_Tile*>> TileGrid;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "TileManager", meta = (AllowPrivateAccess = "true"))
