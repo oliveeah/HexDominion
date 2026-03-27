@@ -112,6 +112,7 @@ private:
 	bool IsEdgeTile(const FIntPoint& Coords) const;
 
 	void SpawnPath();
+	void SpawnSubdivisionGaps();
 
 
 	bool TryBuildRandomPath(TArray<FIntPoint>& OutPath);
@@ -141,6 +142,12 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Foliage", meta = (AllowPrivateAccess = "true"))
 	float foliageSpawnChance = 0.6f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Path", meta = (AllowPrivateAccess = "true"))
+	bool bUseSubdivisionGaps = true;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Path", meta = (AllowPrivateAccess = "true"))
+	int32 subdivisionGapWidth = 1;
 
 public:
 	int getNumberOfCols() { return numberOfColumns; }

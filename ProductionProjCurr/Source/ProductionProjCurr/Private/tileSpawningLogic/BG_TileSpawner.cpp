@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "BG_TileSpawner.h"
-#include "BG_Tile.h"
-#include "TileManager.h"
+#include "tileSpawningLogic/BG_TileSpawner.h"
+#include "tileSpawningLogic/BG_Tile.h"
+#include "tileSpawningLogic/TileManager.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/StaticMeshComponent.h"
 
@@ -16,8 +16,6 @@ ABG_TileSpawner::ABG_TileSpawner()
 void ABG_TileSpawner::BeginPlay()
 {
 	Super::BeginPlay();
-
-
 }
 
 void ABG_TileSpawner::BuildGrid()
@@ -85,7 +83,7 @@ void ABG_TileSpawner::spawnGrid(const float& randomNum)
 		TileManager->SetGridWidth(numberOfColumns);
 		TileManager->SetGridHeight(numberOfRows);
 	}
-		
+
 	for (int32 rows = 0; rows < numberOfRows; ++rows)
 	{
 		TileGrid[rows].SetNum(numberOfColumns);
@@ -119,7 +117,7 @@ void ABG_TileSpawner::spawnGrid(const float& randomNum)
 
 			float HeightNoise = Noise.GetNoise(Nx, Ny); // reuse same coords
 
-		float Height = HeightNoise * ySpawnOffset;
+			float Height = HeightNoise * ySpawnOffset;
 
 			switch (biomeType)
 			{
@@ -161,8 +159,6 @@ void ABG_TileSpawner::spawnGrid(const float& randomNum)
 	}
 
 	SpawnPath();
-
-
 }
 
 TSubclassOf<ABG_Tile> ABG_TileSpawner::GetTileClassForBiome(EBiomeType Biome) const
@@ -203,7 +199,6 @@ EBiomeType ABG_TileSpawner::generateBiomeTypeBasedOnNoise(int32 rows, int32 cols
 	if (Value < 0.7f)
 		return EBiomeType::Grassland;
 	return EBiomeType::Hill;
-
 }
 
 ABG_Tile* ABG_TileSpawner::spawnTile(TSubclassOf<ABG_Tile> _ChosenTileClass, const FTransform& _instanceTransform)
@@ -278,10 +273,14 @@ void ABG_TileSpawner::GetNeighborCoords(const FIntPoint& Coords, TArray<FIntPoin
 int32 ABG_TileSpawner::GetEdgeMask(const FIntPoint& Coords) const
 {
 	int32 Mask = 0;
-	if (Coords.X == 0)					 Mask |= 1; // left
-	if (Coords.X == numberOfColumns - 1) Mask |= 2; // right
-	if (Coords.Y == 0)					 Mask |= 4; // top
-	if (Coords.Y == numberOfRows - 1)	 Mask |= 8; // bottom
+	if (Coords.X == 0)
+		Mask |= 1; // left
+	if (Coords.X == numberOfColumns - 1)
+		Mask |= 2; // right
+	if (Coords.Y == 0)
+		Mask |= 4; // top
+	if (Coords.Y == numberOfRows - 1)
+		Mask |= 8; // bottom
 	return Mask;
 }
 
@@ -331,19 +330,18 @@ void ABG_TileSpawner::ChangeTileToPath(const FIntPoint& Coords)
 	}
 }
 
-
 bool ABG_TileSpawner::TryBuildRandomPath(TArray<FIntPoint>& OutPath)
 {
 	OutPath.Reset();
 
 	const int32 MaxStartAttempts = numberOfRows * numberOfColumns * 2;
-	int32 StartAttempts = 0;
-	FIntPoint Start(-1, -1);
+	int32		StartAttempts = 0;
+	FIntPoint	Start(-1, -1);
 
 	while (++StartAttempts < MaxStartAttempts) // loop until we find a valid starting edge tile or exhaust attempts
 	{
-		const int32 RandomCol = randomStream.RandRange(0, numberOfColumns - 1);
-		const int32 RandomRow = randomStream.RandRange(0, numberOfRows - 1);
+		const int32		RandomCol = randomStream.RandRange(0, numberOfColumns - 1);
+		const int32		RandomRow = randomStream.RandRange(0, numberOfRows - 1);
 		const FIntPoint Candidate(RandomCol, RandomRow);
 
 		if (IsEdgeTile(Candidate) && IsValidCoord(Candidate) && TileGrid[RandomRow][RandomCol])
@@ -360,8 +358,8 @@ bool ABG_TileSpawner::TryBuildRandomPath(TArray<FIntPoint>& OutPath)
 	Visited.Add(Start);
 	OutPath.Add(Start);
 
-	FIntPoint Current = Start;
-	FIntPoint Previous = Start;
+	FIntPoint	Current = Start;
+	FIntPoint	Previous = Start;
 	const int32 MaxSteps = numberOfRows * numberOfColumns * 2;
 
 	for (int32 Step = 0; Step < MaxSteps; ++Step)
@@ -404,7 +402,7 @@ bool ABG_TileSpawner::TryBuildRandomPath(TArray<FIntPoint>& OutPath)
 
 		// Prefer to go straight, but sometimes turn for natural variation
 		FIntPoint Forward = Current + (Current - Previous);
-		int32 ForwardIndex = Choices.IndexOfByKey(Forward);
+		int32	  ForwardIndex = Choices.IndexOfByKey(Forward);
 
 		const bool bForceTurn = randomStream.FRand() < turnChance || ForwardIndex == INDEX_NONE;
 
@@ -436,13 +434,19 @@ void ABG_TileSpawner::SpawnPath()
 		return;
 	}
 
+	if (bUseSubdivisionGaps)
+	{
+		SpawnSubdivisionGaps();
+		return;
+	}
+
 	const int32 PathsToGenerate = FMath::Max(1, numberOfPaths);
 	const int32 MaxPathAttempts = 10;
 
 	for (int32 PathIndex = 0; PathIndex < PathsToGenerate; ++PathIndex) // for each path we want to generate
 	{
 		TArray<FIntPoint> Path;
-		bool bBuilt = false;
+		bool			  bBuilt = false;
 
 		for (int32 Attempt = 0; Attempt < MaxPathAttempts; ++Attempt) // for each attempt to build a path
 		{
@@ -465,7 +469,45 @@ void ABG_TileSpawner::SpawnPath()
 				continue;
 
 			ChangeTileToPath(Coords);
+		}
+	}
+}
 
+void ABG_TileSpawner::SpawnSubdivisionGaps()
+{
+	const int32 GapWidth = FMath::Max(1, subdivisionGapWidth);
+	const int32 MidCol = numberOfColumns / 2;
+	const int32 MidRow = numberOfRows / 2;
+
+	const int32 StartCol = MidCol - (GapWidth - 1) / 2;
+	const int32 StartRow = MidRow - (GapWidth - 1) / 2;
+
+	for (int32 Offset = 0; Offset < GapWidth; ++Offset)
+	{
+		const int32 Col = StartCol + Offset;
+		if (Col >= 0 && Col < numberOfColumns)
+		{
+			for (int32 Row = 0; Row < numberOfRows; ++Row)
+			{
+				const FIntPoint Coords(Col, Row);
+				if (IsValidCoord(Coords))
+				{
+					ChangeTileToPath(Coords);
+				}
+			}
+		}
+
+		const int32 Row = StartRow + Offset;
+		if (Row >= 0 && Row < numberOfRows)
+		{
+			for (int32 ColIndex = 0; ColIndex < numberOfColumns; ++ColIndex)
+			{
+				const FIntPoint Coords(ColIndex, Row);
+				if (IsValidCoord(Coords))
+				{
+					ChangeTileToPath(Coords);
+				}
+			}
 		}
 	}
 }

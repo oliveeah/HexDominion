@@ -155,7 +155,7 @@ void AOccupant_Troop_BaseClass::MoveToTile(ABG_Tile* Tile)
 	MoveTarget = Tile->tileMesh->GetSocketLocation(MoveSocketName);
 
 	FVector ToTarget = MoveTarget - GetActorLocation();
-
+	ToTarget.Z = 0; // Ignore vertical difference for rotation
 	if (!ToTarget.IsNearlyZero())
 	{
 		SetActorRotation(ToTarget.Rotation());
