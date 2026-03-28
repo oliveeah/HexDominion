@@ -1,16 +1,18 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
-#include "UObject/ConstructorHelpers.h"
-#include "Components/StaticMeshComponent.h"
+
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "playerData/InteractionInterface.h"
-#include "Components/DecalComponent.h"
-#include "Materials/MaterialInstanceDynamic.h"
 #include "tileSpawningLogic/TileHighlightState.h"
 #include "gameMode/Enum_PlayerSide.h"
 #include "BG_Tile.generated.h"
+
+class UStaticMeshComponent;
+class UDecalComponent;
+class UMaterialInstanceDynamic;
+class USceneComponent;
 
 class AOccupant_BaseClass;
 class AOccupant_Troop_BaseClass;
@@ -31,31 +33,50 @@ class PRODUCTIONPROJCURR_API ABG_Tile : public AActor, public IInteractionInterf
 private:
 	bool isPlayingEffect = false;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "Tile Properties | Occupants")
 	AOccupant_Troop_BaseClass* occupyingTroopClass;
-	UPROPERTY(VisibleAnywhere)
 
-	ETileHighlightState currentHighlightType = ETileHighlightState::None;
-
-	UPROPERTY(EditAnywhere, Category = "Tile Spawn")
-	bool bCanSpawnTroopOnTile = true;
-
-	UPROPERTY(EditAnywhere, Category = "Tile Spawn")
-	bool bBuildingCanBePlacedOnTile = true;
-
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "Tile Properties | Occupants")
 	AOccupant_Building_BaseClass* occupyingBuildingClass;
 
+	UPROPERTY(VisibleAnywhere, Category = "Tile Properties | Occupants")
+	bool isOccupied = false;
+
+	UPROPERTY(VisibleAnywhere, Category = "Tile Properties | Occupants")
 	bool bHasBuilding = false;
 
+	UPROPERTY(VisibleAnywhere, Category = "Tile Properties | Occupants")
+	EActivePlayerSide owningPlayer = EActivePlayerSide::None;
+
+	UPROPERTY(EditAnywhere, Category = "Tile Properties | Spawning")
+	bool bCanSpawnTroopOnTile = true;
+
+	UPROPERTY(EditAnywhere, Category = "Tile Properties | Spawning")
+	bool bBuildingCanBePlacedOnTile = true;
+
+	UPROPERTY(VisibleAnywhere, Category = "Tile Properties | Spawning")
+	bool isSpawnableTile = true;
+	
+	UPROPERTY(VisibleAnywhere, Category = "Tile Properties | Visual")
+	ETileHighlightState currentHighlightType = ETileHighlightState::None;
+
+	UPROPERTY(EditAnywhere, Category = "Tile Properties | Visual")
+	FName TileHueParameterName = TEXT("TileTint");
+
+	UPROPERTY(EditAnywhere, Category = "Tile Properties | Visual")
+	float TileHueSaturation = 0.25f;
+
+	UPROPERTY(EditAnywhere, Category = "Tile Properties | Visual")
+	float TileHueValue = 1.0f;
+
+	UPROPERTY(VisibleAnywhere, Category = "Tile | Info")
+	FIntPoint gridCoordinates;
+	
 	public:
-	// Sets default values for this actor's properties
+
 		ABG_Tile();
 
 		virtual void BeginPlay() override;
-
-		UFUNCTION()
-		void OnDebugToggled();
 
 		virtual void ReactToPlayerInteraction_Implementation() override;
 
@@ -73,61 +94,35 @@ private:
 
 		USceneComponent* sceneComponent;
 
-		UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Tile Info")
-		FIntPoint gridCoordinates;
-
+		//getters
 		FIntPoint getGridCoordinates() const { return gridCoordinates; }
-
-		void drawDebugPointer(FColor color);
-
-		UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		bool isOccupied = false;
-
-		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tile Info")
-		bool isSpawnableTile = true;
-
-		void	SetOccupyingTroop(AOccupant_Troop_BaseClass* Troop) { occupyingTroopClass = Troop; }
 		AOccupant_Troop_BaseClass* getOccupyingTroop() const { return occupyingTroopClass; }
+		bool					   getIsPlayingEffect() const { return isPlayingEffect; }
+		bool					   getCanSpawnTroopOnTile() const { return bCanSpawnTroopOnTile; }
+		bool					   getHasBuilding() const { return bHasBuilding; }
+		bool					   getBuildingCanBePlacedOnTile() const { return bBuildingCanBePlacedOnTile; }
+		AOccupant_Building_BaseClass* getOccupyingBuilding() const { return occupyingBuildingClass; }
+		bool						  GetIsOccupied() const { return isOccupied; }
+		EActivePlayerSide			  GetOccupyingPlayer() const { return owningPlayer; }
+		ETileHighlightState&		  getHighlightType() { return currentHighlightType; }
 
+		//getters
 
+		//setters
+		void SetOccupyingTroop(AOccupant_Troop_BaseClass* Troop) { occupyingTroopClass = Troop; }
+		void SetHighlightType(ETileHighlightState newType) { currentHighlightType = newType; }
+		void SetOccupyingBuilding(AOccupant_Building_BaseClass* Building) { occupyingBuildingClass = Building; }
+		void setHasBuilding(bool hasBuilding) { bHasBuilding = hasBuilding; }
+
+		UFUNCTION()
+		void SetOwningPlayer(EActivePlayerSide newOwner) { owningPlayer = newOwner; }
+		//setters
 
 		void removeOutlineEffect();
 		void addOutlineEffect(const FLinearColor& color);
 
 		UPROPERTY()
 		UMaterialInstanceDynamic* HexDecalMID;
-
-		bool getIsPlayingEffect() const { return isPlayingEffect; }
-		void SetHighlightType(ETileHighlightState newType) { currentHighlightType = newType; }
-		ETileHighlightState& getHighlightType() { return currentHighlightType; }
-
-		bool getCanSpawnTroopOnTile() const { return bCanSpawnTroopOnTile; }
-
-		bool getBuildingCanBePlacedOnTile() const { return bBuildingCanBePlacedOnTile; }
-		AOccupant_Building_BaseClass* getOccupyingBuilding() const { return occupyingBuildingClass; }
-		void SetOccupyingBuilding(AOccupant_Building_BaseClass* Building) { occupyingBuildingClass = Building; }
-
-		bool getHasBuilding() const { return bHasBuilding; }
-		void setHasBuilding(bool hasBuilding) { bHasBuilding = hasBuilding; }
-
-		UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		EActivePlayerSide owningPlayer =  EActivePlayerSide::None;
-
-		UFUNCTION()
-		void SetOwningPlayer(EActivePlayerSide newOwner) { owningPlayer = newOwner; }
-
-		EActivePlayerSide GetOccupyingPlayer() const { return owningPlayer; }
-
-		bool GetIsOccupied() const { return isOccupied; }
-
-		UPROPERTY(EditAnywhere, Category = "Tile Visual")
-		FName TileHueParameterName = TEXT("TileTint");
-
-		UPROPERTY(EditAnywhere, Category = "Tile Visual")
-		float TileHueSaturation = 0.25f;
-
-		UPROPERTY(EditAnywhere, Category = "Tile Visual")
-		float TileHueValue = 1.0f;
 
 		UPROPERTY()
 		UMaterialInstanceDynamic* TileMeshMID;

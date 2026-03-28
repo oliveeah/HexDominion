@@ -2,10 +2,11 @@
 
 
 #include "BG_Tile.h"
-#include <gameMode/ProductionProjCurrGameMode.h>
+#include "Components/StaticMeshComponent.h"
+#include "Components/DecalComponent.h"
+#include "Materials/MaterialInstanceDynamic.h"
 #include <Kismet/GameplayStatics.h>
 #include "Materials/MaterialInstance.h"
-#include "TileManager.h" // Only if you need to reference it here
 
 
 ABG_Tile::ABG_Tile()
@@ -18,7 +19,7 @@ ABG_Tile::ABG_Tile()
 	tileMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("tile mesh"));
 	tileMesh->SetupAttachment(sceneComponent);
 
-	tileMesh->SetBoundsScale(1000.0f);
+	tileMesh->SetBoundsScale(1000.0f); // stop occlusion culling from hiding the tile when the player is close to it
 	tileMesh->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	tileMesh->SetCollisionResponseToAllChannels(ECR_Ignore);
 	tileMesh->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
@@ -32,11 +33,6 @@ ABG_Tile::ABG_Tile()
 void ABG_Tile::BeginPlay()
 {
 	Super::BeginPlay();
-
-	if(AProductionProjCurrGameMode* GameMode = Cast<AProductionProjCurrGameMode>(UGameplayStatics::GetGameMode(this)))	
-	{
-		GameMode->OnToggleTileDebugCoordinates.AddDynamic(this, &ABG_Tile::OnDebugToggled);
-	}
 
 	if (tileMesh && tileMesh->GetMaterial(0))
 	{
@@ -53,18 +49,6 @@ void ABG_Tile::BeginPlay()
 	}
 }
 
-void ABG_Tile::OnDebugToggled()
-{
-
-	FString DebugText = FString::Printf(
-		TEXT("(%d, %d)"),
-		gridCoordinates.X,
-		gridCoordinates.Y);
-
-	DrawDebugString(GetWorld(), GetActorLocation() + FVector(0, 0, 100), DebugText, nullptr, FColor::Green, 5.0f, true);
-
-}
-
 void ABG_Tile::ReactToPlayerInteraction_Implementation()
 {
 //	drawDebugPointer(FColor::Yellow);
@@ -77,17 +61,10 @@ void ABG_Tile::setSelectedTile()
 	OnTileSelectedDelegate.Broadcast(this, isOccupied);
 }
 
-void ABG_Tile::drawDebugPointer(FColor color)
-{
-	FString DebugText = FString::Printf(TEXT("^^^"));
-	DrawDebugString(GetWorld(), GetActorLocation() + FVector(0, 0, 200), DebugText, nullptr, color, 5.0f, true);
-}
-
 void ABG_Tile::removeOutlineEffect()
 {
 	if (isPlayingEffect)
 	{
-		//tileEdgeMesh->SetVisibility(false);
 		isPlayingEffect = false;
 		decalComponent->SetVisibility(false);
 		currentHighlightType = ETileHighlightState::None;
