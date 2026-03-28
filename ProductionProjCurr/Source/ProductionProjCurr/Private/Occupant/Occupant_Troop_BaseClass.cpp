@@ -87,7 +87,7 @@ void AOccupant_Troop_BaseClass::Tick(float DeltaTime)
 				MoveSocketName);
 
 			SetActorLocation(MoveTarget);
-			SetGridPosition(TargetTile->getGridCoordinates());
+			SetGridPosition(TargetTile->GetGridCoordinates());
 			SetActorTickEnabled(false);
 			TargetTile = nullptr;
 		}

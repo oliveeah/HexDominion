@@ -14,6 +14,7 @@
     <None Include="..\..\.clang-format" />
     <None Include="..\..\.gitignore" />
     <None Include="..\..\.vsconfig" />
+    <ClInclude Include="..\..\BG_TileSpawner.h" />
     <Filter Include="Config">
       <UniqueIdentifier>{FA535FFB-25E1-3D20-B416-52F9BE21E06E}</UniqueIdentifier>
     </Filter>
@@ -62,6 +63,9 @@
     <ClCompile Include="..\..\Source\ProductionProjCurr\Private\Occupant_Troop_Data.cpp">
       <Filter>Source\ProductionProjCurr\Private</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ProductionProjCurr\Private\Troop.cpp">
+      <Filter>Source\ProductionProjCurr\Private</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\ProductionProjCurr\Private\UPlayerProfile.cpp">
       <Filter>Source\ProductionProjCurr\Private</Filter>
     </ClCompile>
@@ -104,7 +108,13 @@
     <Filter Include="Source\ProductionProjCurr\Private\tileSpawningLogic">
       <UniqueIdentifier>{FCDAFDBD-806D-3FA3-BDEB-39AFCD5BEA69}</UniqueIdentifier>
     </Filter>
+    <ClCompile Include="..\..\Source\ProductionProjCurr\Private\tileSpawningLogic\BG_TileSpawner.cpp">
+      <Filter>Source\ProductionProjCurr\Private\tileSpawningLogic</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\ProductionProjCurr\Private\tileSpawningLogic\TileManager.cpp">
+      <Filter>Source\ProductionProjCurr\Private\tileSpawningLogic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ProductionProjCurr\Private\tileSpawningLogic\TileSpawner_Data.cpp">
       <Filter>Source\ProductionProjCurr\Private\tileSpawningLogic</Filter>
     </ClCompile>
     <Filter Include="Source\ProductionProjCurr\Public">
@@ -117,6 +127,9 @@
       <Filter>Source\ProductionProjCurr\Public</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\Occupant_Troop_Data.h">
+      <Filter>Source\ProductionProjCurr\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\Troop.h">
       <Filter>Source\ProductionProjCurr\Public</Filter>
     </ClInclude>
     <Filter Include="Source\ProductionProjCurr\Public\animations">
@@ -221,10 +234,8 @@
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\TileManager.h">
       <Filter>Source\ProductionProjCurr\Public\tileSpawningLogic</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\Source\ProductionProjCurr\Private\tileSpawningLogic\BG_TileSpawner.cpp">
-      <Filter>Source\ProductionProjCurr\Private\tileSpawningLogic</Filter>
-    </ClCompile>
+    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\TileSpawner_Data.h">
+      <Filter>Source\ProductionProjCurr\Public\tileSpawningLogic</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

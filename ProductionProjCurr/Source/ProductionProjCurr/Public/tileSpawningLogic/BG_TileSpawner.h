@@ -10,7 +10,7 @@
 // Forward declarations
 class ABG_Tile;
 class ATileManager;
-class UStaticMeshComponent;
+class UTileSpawner_Data;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnGridBuilt);
 
@@ -48,43 +48,8 @@ public:
 
 
 private:
-	// Grid Setup
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Setup", meta = (AllowPrivateAccess = "true"))
-	float tileWidth;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Setup", meta = (AllowPrivateAccess = "true"))
-	int32 numberOfColumns;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Setup", meta = (AllowPrivateAccess = "true"))
-	int32 numberOfRows;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Setup", meta = (AllowPrivateAccess = "true"))
-	float xSpawnOffset;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Setup", meta = (AllowPrivateAccess = "true"))
-	float ySpawnOffset;
-
-	// Noise Settings
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Setup", meta = (AllowPrivateAccess = "true"))
-	float noiseFrequency;
-
-	// Tile Classes
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Hex | Biomes", meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<ABG_Tile> TileClass;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Biomes", meta = (AllowPrivateAccess = "true"))
-	TArray<TSubclassOf<ABG_Tile>> WaterTiles;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Biomes", meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<ABG_Tile> HillTile;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Biomes", meta = (AllowPrivateAccess = "true"))
-	TArray<TSubclassOf<ABG_Tile>> MeadowTiles;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Biomes", meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<ABG_Tile> PathTile;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Biomes", meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<ABG_Tile> MeadowDefaultTile;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Tile Spawner", meta = (AllowPrivateAccess = "true"))
+	UTileSpawner_Data* TileSpawnerData;
 
 	TArray<TArray<ABG_Tile*>> TileGrid;
 
@@ -125,32 +90,9 @@ private:
 	void ChangeTileToPath(const FIntPoint& Coords);
 
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Path", meta = (AllowPrivateAccess = "true"))
-	int32 numberOfPaths = 1;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Path", meta = (AllowPrivateAccess = "true"))
-	int32 minPathDistance = 10;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Path", meta = (AllowPrivateAccess = "true"))
-	float turnChance = 0.25f;
-
-		UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Setup", meta = (AllowPrivateAccess = "true"))
-	float centerBiasStrength = 0.35f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Setup", meta = (AllowPrivateAccess = "true"))
-	float centerBiasExponent = 2.0f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Foliage", meta = (AllowPrivateAccess = "true"))
-	float foliageSpawnChance = 0.6f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Path", meta = (AllowPrivateAccess = "true"))
-	bool bUseSubdivisionGaps = true;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Path", meta = (AllowPrivateAccess = "true"))
-	int32 subdivisionGapWidth = 1;
 
 public:
-	int getNumberOfCols() { return numberOfColumns; }
-	int getNumberOfRows() { return numberOfRows; }
+	int getNumberOfCols();
+	int getNumberOfRows();
 };
 

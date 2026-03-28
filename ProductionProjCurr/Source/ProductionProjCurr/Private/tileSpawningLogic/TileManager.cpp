@@ -70,7 +70,7 @@ void ATileManager::spawnStartingTroops(int cols, int rows)
 
 	auto IsSpawnable = [&UsedSpawnTiles](ABG_Tile* Tile) -> bool
 	{
-		return Tile && Tile->getCanSpawnTroopOnTile() && !Tile->isOccupied
+		return Tile && Tile->getCanSpawnTroopOnTile() && !Tile->GetIsOccupied()
 			&& !UsedSpawnTiles.Contains(Tile);
 	};
 
@@ -182,7 +182,7 @@ FString& ATileManager::GetSelectedTileCoordinates()
 	static FString coords = TEXT("N/A");
 		if (SelectedTile)
 		{
-			coords = FString::Printf(TEXT("(%d, %d)"), (int)SelectedTile->getGridCoordinates().X, (int)SelectedTile->getGridCoordinates().Y);
+			coords = FString::Printf(TEXT("(%d, %d)"), (int)SelectedTile->GetGridCoordinates().X, (int)SelectedTile->GetGridCoordinates().Y);
 		}
 		else
 		{
@@ -278,12 +278,12 @@ void ATileManager::OnTileClicked(ABG_Tile* Tile, bool isOccupied)
 			if (OccupyingTroop && OccupyingTroop->GetHealth() > 0)
 			{
 				TArray<FIntPoint> adjacentTiles = GetAdjacentTiles(true, 1, previousTile);
-				bool canMove = OccupyingTroop->CanMoveTo(Tile->getGridCoordinates(), adjacentTiles);
+				bool canMove = OccupyingTroop->CanMoveTo(Tile->GetGridCoordinates(), adjacentTiles);
 				if (canMove)
 				{
 					OccupyingTroop->MoveToTile(Tile);
 					Tile->SetOccupyingTroop(OccupyingTroop);
-					Tile->isOccupied = true;
+					Tile->SetIsOccupied(true);
 
 					if (turnManager && Tile)
 					{
@@ -291,7 +291,7 @@ void ATileManager::OnTileClicked(ABG_Tile* Tile, bool isOccupied)
 						Tile->SetOwningPlayer(turnManager->GetActivePlayer());
 					}
 
-					previousTile->isOccupied = false;
+					previousTile->SetIsOccupied(false);
 				}
 			}
 
@@ -313,7 +313,7 @@ void ATileManager::OnTileClicked(ABG_Tile* Tile, bool isOccupied)
 
 			AttackingTroop->SetIsAttacking(true);
 			DefendingTroop->SetHealth(0);
-			Tile->isOccupied = false;
+			Tile->SetIsOccupied(false);
 
 			break;
 		}
@@ -393,7 +393,7 @@ TArray<FIntPoint> ATileManager::GetAdjacentTiles( bool bIncludeDiagonals, int32 
 	if (!Tile)
 		return Neighbors;
 
-	const FIntPoint SelectedCoords = Tile->getGridCoordinates();
+	const FIntPoint SelectedCoords = Tile->GetGridCoordinates();
 
 	static const FIntPoint EvenRowDirs[6] = {
 		{ -1, 0 }, { 1, 0 },
@@ -459,7 +459,7 @@ void ATileManager::spawnTroop(TSubclassOf<AOccupant_BaseClass> Occupant, ABG_Til
 	if ((OccupantCDO->IsBuilding() && !Tile->getBuildingCanBePlacedOnTile()) || (OccupantCDO->IsBuilding() && Tile->getHasBuilding()))
 		return;
 
-	if ((OccupantCDO->IsTroop() && !Tile->getCanSpawnTroopOnTile()) || (OccupantCDO->IsTroop() && Tile->isOccupied))
+	if ((OccupantCDO->IsTroop() && !Tile->getCanSpawnTroopOnTile()) || (OccupantCDO->IsTroop() && Tile->GetIsOccupied()))
 		return;
 
 	const FName SpawnSocketName = OccupantCDO->IsBuilding()
@@ -487,14 +487,14 @@ void ATileManager::spawnTroop(TSubclassOf<AOccupant_BaseClass> Occupant, ABG_Til
 		FAttachmentTransformRules::SnapToTargetNotIncludingScale,
 		SpawnSocketName);
 
-	SpawnedOccupant->SetGridPosition(Tile->getGridCoordinates());
+	SpawnedOccupant->SetGridPosition(Tile->GetGridCoordinates());
 	SpawnedOccupant->SetOwningPlayer(OwningPlayer);
 
 	if (AOccupant_Troop_BaseClass* Troop = Cast<AOccupant_Troop_BaseClass>(SpawnedOccupant))
 	{
 		Troop->OnTroopDeath.AddDynamic(this, &ATileManager::OnTroopDeath);
 		Tile->SetOccupyingTroop(Troop);
-		Tile->isOccupied = true;
+		Tile->SetIsOccupied(true);
 	}
 	else if (AOccupant_Building_BaseClass* Building = Cast<AOccupant_Building_BaseClass>(SpawnedOccupant))
 	{

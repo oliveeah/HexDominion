@@ -3,8 +3,8 @@
 #include "tileSpawningLogic/BG_TileSpawner.h"
 #include "tileSpawningLogic/BG_Tile.h"
 #include "tileSpawningLogic/TileManager.h"
+#include "tileSpawningLogic/TileSpawner_Data.h"
 #include "Kismet/GameplayStatics.h"
-#include "Components/StaticMeshComponent.h"
 
 // Sets default values
 ABG_TileSpawner::ABG_TileSpawner()
@@ -29,6 +29,11 @@ void ABG_TileSpawner::BuildGrid()
 		UE_LOG(LogTemp, Warning, TEXT("TileManager not found; aborting BuildGrid."));
 		return;
 	}
+	if (!TileSpawnerData)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("TileSpawnerData not set; aborting BuildGrid."));
+		return;
+	}
 
 	// Generate random number and seed with it
 	const float randomNum = FMath::Rand();
@@ -36,6 +41,7 @@ void ABG_TileSpawner::BuildGrid()
 
 	// Clear old instances so we don't duplicate
 	clearGrid();
+
 
 	// Spawn new tiles
 	spawnGrid(randomNum);
@@ -64,30 +70,34 @@ void ABG_TileSpawner::clearGrid()
 
 void ABG_TileSpawner::spawnGrid(const float& randomNum)
 {
-	if (!GetWorld())
+	if (!GetWorld() || !TileSpawnerData)
 		return;
 
-	const float	  hexWidth = tileWidth;
-	const float	  hexHeight = hexWidth * 0.866f; // hexHeight
+	const UTileSpawner_Data& Data = *TileSpawnerData;
+
+	const float hexWidth = Data.tileWidth;
+	const float hexHeight = hexWidth * 0.866f;
 	const FVector tileSpawnerLocation = GetActorLocation();
 
 	FastNoiseLite Noise;
-	Noise.SetSeed(randomNum);
+	Noise.SetSeed(static_cast<int32>(randomNum));
 	Noise.SetNoiseType(FastNoiseLite::NoiseType_ValueCubic);
-	Noise.SetFrequency(noiseFrequency);
+	Noise.SetFrequency(Data.noiseFrequency);
 
-	TileGrid.SetNum(numberOfRows);
+	TileGrid.SetNum(Data.numberOfRows);
+
+	TileGrid.SetNum(Data.numberOfRows);
 
 	if (TileManager)
 	{
-		TileManager->SetGridWidth(numberOfColumns);
-		TileManager->SetGridHeight(numberOfRows);
+		TileManager->SetGridWidth(Data.numberOfColumns);
+		TileManager->SetGridHeight(Data.numberOfRows);
 	}
 
-	for (int32 rows = 0; rows < numberOfRows; ++rows)
+	for (int32 rows = 0; rows < Data.numberOfRows; ++rows)
 	{
-		TileGrid[rows].SetNum(numberOfColumns);
-		for (int32 cols = 0; cols < numberOfColumns; ++cols)
+		TileGrid[rows].SetNum(Data.numberOfColumns);
+		for (int32 cols = 0; cols < Data.numberOfColumns; ++cols)
 		{
 
 			// Determine biome type based on noise
@@ -97,17 +107,17 @@ void ABG_TileSpawner::spawnGrid(const float& randomNum)
 			TSubclassOf<ABG_Tile> ChosenTileClass = GetTileClassForBiome(biomeType);
 
 			// Foliage chance for grassland tiles
-			if (biomeType == EBiomeType::Grassland && MeadowTiles.Num() > 0)
+			if (biomeType == EBiomeType::Grassland && Data.MeadowTiles.Num() > 0)
 			{
-				const float SpawnChance = FMath::Clamp(foliageSpawnChance, 0.0f, 1.0f);
+				const float SpawnChance = FMath::Clamp(Data.foliageSpawnChance, 0.0f, 1.0f);
 				if (randomStream.FRand() < SpawnChance)
 				{
-					ChosenTileClass = PickVariantFromNoise(MeadowTiles, Noise, cols, rows);
+					ChosenTileClass = PickVariantFromNoise(Data.MeadowTiles, Noise, cols, rows);
 				}
 			}
-			else if (biomeType == EBiomeType::Water && WaterTiles.Num() > 0)
+			else if (biomeType == EBiomeType::Water && Data.WaterTiles.Num() > 0)
 			{
-				ChosenTileClass = PickVariantFromNoise(WaterTiles, Noise, cols, rows);
+				ChosenTileClass = PickVariantFromNoise(Data.WaterTiles, Noise, cols, rows);
 			}
 
 			// Offset every other row
@@ -117,7 +127,7 @@ void ABG_TileSpawner::spawnGrid(const float& randomNum)
 
 			float HeightNoise = Noise.GetNoise(Nx, Ny); // reuse same coords
 
-			float Height = HeightNoise * ySpawnOffset;
+			float Height = HeightNoise * Data.ySpawnOffset;
 
 			switch (biomeType)
 			{
@@ -142,7 +152,7 @@ void ABG_TileSpawner::spawnGrid(const float& randomNum)
 			if (NewTile) // set grid coords, register with manager and bind delegate
 			{
 				TileGrid[rows][cols] = NewTile;
-				NewTile->gridCoordinates = FIntPoint(cols, rows);
+				NewTile->SetGridCoordinates(FIntPoint(cols, rows));
 				NewTile->ApplyHueFromNoise(HeightNoise);
 
 				if (TileManager)
@@ -166,13 +176,13 @@ TSubclassOf<ABG_Tile> ABG_TileSpawner::GetTileClassForBiome(EBiomeType Biome) co
 	switch (Biome)
 	{
 		case EBiomeType::Water:
-			return WaterTiles.Num() > 0 ? WaterTiles[0] : TileClass;
+			return TileSpawnerData->WaterTiles.Num() > 0 ? TileSpawnerData->WaterTiles[0] : TileSpawnerData->TileClass;
 		case EBiomeType::Grassland:
-			return MeadowDefaultTile ? MeadowDefaultTile : TileClass;
+			return TileSpawnerData->MeadowDefaultTile ? TileSpawnerData->MeadowDefaultTile : TileSpawnerData->TileClass;
 		case EBiomeType::Hill:
-			return HillTile;
+			return TileSpawnerData->HillTile;
 		default:
-			return TileClass; // Fallback to base tile
+			return TileSpawnerData->TileClass; // Fallback to base tile
 	}
 }
 
@@ -183,20 +193,20 @@ EBiomeType ABG_TileSpawner::generateBiomeTypeBasedOnNoise(int32 rows, int32 cols
 
 	float Value = (_Noise.GetNoise(Nx, Ny) + 1.f) * 0.5f;
 
-	const FVector2D Center((numberOfColumns - 1) * 0.5f, (numberOfRows - 1) * 0.5f);
+	const FVector2D Center((TileSpawnerData->numberOfColumns - 1) * 0.5f, (TileSpawnerData->numberOfRows - 1) * 0.5f);
 	const FVector2D Pos(cols, rows);
 	const float		MaxRadius = FMath::Max(Center.X, Center.Y);
 	const float		Dist = FVector2D::Distance(Pos, Center);
 	const float		T = 1.0f - FMath::Clamp(Dist / MaxRadius, 0.0f, 1.0f);
-	const float		CenterWeight = FMath::Pow(T, centerBiasExponent);
+	const float		CenterWeight = FMath::Pow(T, TileSpawnerData->centerBiasExponent);
 
 	Value = FMath::Clamp(
-		FMath::Lerp(Value, 1.0f, centerBiasStrength * CenterWeight),
+		FMath::Lerp(Value, 1.0f, TileSpawnerData->centerBiasStrength * CenterWeight),
 		0.0f, 1.0f);
 
-	if (Value < 0.4f)
+	if (Value < TileSpawnerData->waterThreshold)
 		return EBiomeType::Water;
-	if (Value < 0.7f)
+	if (Value < TileSpawnerData->grasslandThreshold)
 		return EBiomeType::Grassland;
 	return EBiomeType::Hill;
 }
@@ -234,7 +244,7 @@ TSubclassOf<ABG_Tile> ABG_TileSpawner::PickVariantFromNoise(
 
 bool ABG_TileSpawner::IsEdgeTile(const FIntPoint& Coords) const
 {
-	return Coords.X == 0 || Coords.Y == 0 || Coords.X == numberOfColumns - 1 || Coords.Y == numberOfRows - 1;
+	return Coords.X == 0 || Coords.Y == 0 || Coords.X == TileSpawnerData->numberOfColumns - 1 || Coords.Y == TileSpawnerData->numberOfRows - 1;
 }
 
 bool ABG_TileSpawner::IsValidCoord(const FIntPoint& Coords) const
@@ -275,11 +285,11 @@ int32 ABG_TileSpawner::GetEdgeMask(const FIntPoint& Coords) const
 	int32 Mask = 0;
 	if (Coords.X == 0)
 		Mask |= 1; // left
-	if (Coords.X == numberOfColumns - 1)
+	if (Coords.X == TileSpawnerData->numberOfColumns - 1)
 		Mask |= 2; // right
 	if (Coords.Y == 0)
 		Mask |= 4; // top
-	if (Coords.Y == numberOfRows - 1)
+	if (Coords.Y == TileSpawnerData->numberOfRows - 1)
 		Mask |= 8; // bottom
 	return Mask;
 }
@@ -305,7 +315,7 @@ void ABG_TileSpawner::ChangeTileToPath(const FIntPoint& Coords)
 
 	OldTile->Destroy();
 
-	ABG_Tile* NewTile = spawnTile(PathTile, TileTransform);
+	ABG_Tile* NewTile = spawnTile(TileSpawnerData->PathTile, TileTransform);
 	if (!NewTile)
 		return;
 
@@ -320,7 +330,7 @@ void ABG_TileSpawner::ChangeTileToPath(const FIntPoint& Coords)
 		NewTile->GetRootComponent()->SetRelativeRotation(RootRelRot);
 	}
 
-	NewTile->gridCoordinates = Coords;
+	NewTile->SetGridCoordinates(Coords);
 	TileGrid[Coords.Y][Coords.X] = NewTile;
 
 	if (TileManager)
@@ -334,14 +344,14 @@ bool ABG_TileSpawner::TryBuildRandomPath(TArray<FIntPoint>& OutPath)
 {
 	OutPath.Reset();
 
-	const int32 MaxStartAttempts = numberOfRows * numberOfColumns * 2;
+	const int32 MaxStartAttempts = TileSpawnerData->numberOfRows * TileSpawnerData->numberOfColumns * 2;
 	int32		StartAttempts = 0;
 	FIntPoint	Start(-1, -1);
 
 	while (++StartAttempts < MaxStartAttempts) // loop until we find a valid starting edge tile or exhaust attempts
 	{
-		const int32		RandomCol = randomStream.RandRange(0, numberOfColumns - 1);
-		const int32		RandomRow = randomStream.RandRange(0, numberOfRows - 1);
+		const int32		RandomCol = randomStream.RandRange(0, TileSpawnerData->numberOfColumns - 1);
+		const int32		RandomRow = randomStream.RandRange(0, TileSpawnerData->numberOfRows - 1);
 		const FIntPoint Candidate(RandomCol, RandomRow);
 
 		if (IsEdgeTile(Candidate) && IsValidCoord(Candidate) && TileGrid[RandomRow][RandomCol])
@@ -360,12 +370,12 @@ bool ABG_TileSpawner::TryBuildRandomPath(TArray<FIntPoint>& OutPath)
 
 	FIntPoint	Current = Start;
 	FIntPoint	Previous = Start;
-	const int32 MaxSteps = numberOfRows * numberOfColumns * 2;
+	const int32 MaxSteps = TileSpawnerData->numberOfRows * TileSpawnerData->numberOfColumns * 2;
 
 	for (int32 Step = 0; Step < MaxSteps; ++Step)
 	{
 		const int32 DistanceFromStart = FMath::Abs(Current.X - Start.X) + FMath::Abs(Current.Y - Start.Y); // Manhattan distance
-		if (Step > 0 && IsEdgeTile(Current) && IsDifferentEdge(Start, Current) && DistanceFromStart >= minPathDistance)
+		if (Step > 0 && IsEdgeTile(Current) && IsDifferentEdge(Start, Current) && DistanceFromStart >= TileSpawnerData->minPathDistance)
 		{
 			return true;
 		}
@@ -404,7 +414,7 @@ bool ABG_TileSpawner::TryBuildRandomPath(TArray<FIntPoint>& OutPath)
 		FIntPoint Forward = Current + (Current - Previous);
 		int32	  ForwardIndex = Choices.IndexOfByKey(Forward);
 
-		const bool bForceTurn = randomStream.FRand() < turnChance || ForwardIndex == INDEX_NONE;
+		const bool bForceTurn = randomStream.FRand() < TileSpawnerData->turnChance || ForwardIndex == INDEX_NONE;
 
 		FIntPoint Next = Forward;
 		if (bForceTurn)
@@ -428,19 +438,19 @@ bool ABG_TileSpawner::TryBuildRandomPath(TArray<FIntPoint>& OutPath)
 
 void ABG_TileSpawner::SpawnPath()
 {
-	if (TileGrid.Num() == 0 || numberOfRows <= 0 || numberOfColumns <= 0 || !PathTile)
+	if (TileGrid.Num() == 0 || TileSpawnerData->numberOfRows <= 0 || TileSpawnerData->numberOfColumns <= 0 || !TileSpawnerData->PathTile)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("SpawnPath failed: grid is not initialized, or pathtile class not set."));
 		return;
 	}
 
-	if (bUseSubdivisionGaps)
+	if (TileSpawnerData->bUseSubdivisionGaps)
 	{
 		SpawnSubdivisionGaps();
 		return;
 	}
 
-	const int32 PathsToGenerate = FMath::Max(1, numberOfPaths);
+	const int32 PathsToGenerate = FMath::Max<int32>(1, TileSpawnerData->numberOfPaths);
 	const int32 MaxPathAttempts = 10;
 
 	for (int32 PathIndex = 0; PathIndex < PathsToGenerate; ++PathIndex) // for each path we want to generate
@@ -475,9 +485,9 @@ void ABG_TileSpawner::SpawnPath()
 
 void ABG_TileSpawner::SpawnSubdivisionGaps()
 {
-	const int32 GapWidth = FMath::Max(1, subdivisionGapWidth);
-	const int32 MidCol = numberOfColumns / 2;
-	const int32 MidRow = numberOfRows / 2;
+	const int32 GapWidth = FMath::Max(1, TileSpawnerData->subdivisionGapWidth);
+	const int32 MidCol = TileSpawnerData->numberOfColumns / 2;
+	const int32 MidRow = TileSpawnerData->numberOfRows / 2;
 
 	const int32 StartCol = MidCol - (GapWidth - 1) / 2;
 	const int32 StartRow = MidRow - (GapWidth - 1) / 2;
@@ -485,9 +495,9 @@ void ABG_TileSpawner::SpawnSubdivisionGaps()
 	for (int32 Offset = 0; Offset < GapWidth; ++Offset)
 	{
 		const int32 Col = StartCol + Offset;
-		if (Col >= 0 && Col < numberOfColumns)
+		if (Col >= 0 && Col < TileSpawnerData->numberOfColumns)
 		{
-			for (int32 Row = 0; Row < numberOfRows; ++Row)
+			for (int32 Row = 0; Row < TileSpawnerData->numberOfRows; ++Row)
 			{
 				const FIntPoint Coords(Col, Row);
 				if (IsValidCoord(Coords))
@@ -498,9 +508,9 @@ void ABG_TileSpawner::SpawnSubdivisionGaps()
 		}
 
 		const int32 Row = StartRow + Offset;
-		if (Row >= 0 && Row < numberOfRows)
+		if (Row >= 0 && Row < TileSpawnerData->numberOfRows)
 		{
-			for (int32 ColIndex = 0; ColIndex < numberOfColumns; ++ColIndex)
+			for (int32 ColIndex = 0; ColIndex < TileSpawnerData->numberOfColumns; ++ColIndex)
 			{
 				const FIntPoint Coords(ColIndex, Row);
 				if (IsValidCoord(Coords))
@@ -510,4 +520,14 @@ void ABG_TileSpawner::SpawnSubdivisionGaps()
 			}
 		}
 	}
+}
+
+int ABG_TileSpawner::getNumberOfCols()
+{
+	return TileSpawnerData ? TileSpawnerData->numberOfColumns : 0;
+}
+
+int ABG_TileSpawner::getNumberOfRows()
+{
+	return TileSpawnerData ? TileSpawnerData->numberOfRows : 0;
 }

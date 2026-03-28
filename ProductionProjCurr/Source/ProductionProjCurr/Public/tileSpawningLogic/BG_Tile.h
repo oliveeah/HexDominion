@@ -14,7 +14,6 @@ class UDecalComponent;
 class UMaterialInstanceDynamic;
 class USceneComponent;
 
-class AOccupant_BaseClass;
 class AOccupant_Troop_BaseClass;
 class AOccupant_Building_BaseClass;
 
@@ -71,7 +70,11 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Tile | Info")
 	FIntPoint gridCoordinates;
-	
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	USceneComponent* sceneComponent;
+
+
 	public:
 
 		ABG_Tile();
@@ -92,10 +95,9 @@ private:
 		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 		UDecalComponent* decalComponent;
 
-		USceneComponent* sceneComponent;
 
 		//getters
-		FIntPoint getGridCoordinates() const { return gridCoordinates; }
+		FIntPoint GetGridCoordinates() const { return gridCoordinates; }
 		AOccupant_Troop_BaseClass* getOccupyingTroop() const { return occupyingTroopClass; }
 		bool					   getIsPlayingEffect() const { return isPlayingEffect; }
 		bool					   getCanSpawnTroopOnTile() const { return bCanSpawnTroopOnTile; }
@@ -112,7 +114,9 @@ private:
 		void SetOccupyingTroop(AOccupant_Troop_BaseClass* Troop) { occupyingTroopClass = Troop; }
 		void SetHighlightType(ETileHighlightState newType) { currentHighlightType = newType; }
 		void SetOccupyingBuilding(AOccupant_Building_BaseClass* Building) { occupyingBuildingClass = Building; }
+		void SetIsOccupied(bool occupied) { isOccupied = occupied; }
 		void setHasBuilding(bool hasBuilding) { bHasBuilding = hasBuilding; }
+		void SetGridCoordinates(const FIntPoint& coordinates) { gridCoordinates = coordinates; }
 
 		UFUNCTION()
 		void SetOwningPlayer(EActivePlayerSide newOwner) { owningPlayer = newOwner; }
