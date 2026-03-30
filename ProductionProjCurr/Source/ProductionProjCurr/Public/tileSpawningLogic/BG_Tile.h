@@ -68,6 +68,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Tile Properties | Visual")
 	float TileHueValue = 1.0f;
 
+	UPROPERTY(EditAnywhere, Category = "Tile Properties | Visual")
+	bool bUseHueFromNoise = true;
+
 	UPROPERTY(VisibleAnywhere, Category = "Tile | Info")
 	FIntPoint gridCoordinates;
 

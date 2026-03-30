@@ -219,9 +219,6 @@
     <Filter Include="Source\ProductionProjCurr\Public\tileSpawningLogic">
       <UniqueIdentifier>{BE9F21B0-68BD-3757-A122-3FF12EE9C5EB}</UniqueIdentifier>
     </Filter>
-    <ClCompile Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\BG_Tile.cpp">
-      <Filter>Source\ProductionProjCurr\Public\tileSpawningLogic</Filter>
-    </ClCompile>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\BG_Tile.h">
       <Filter>Source\ProductionProjCurr\Public\tileSpawningLogic</Filter>
     </ClInclude>
@@ -237,5 +234,10 @@
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\TileSpawner_Data.h">
       <Filter>Source\ProductionProjCurr\Public\tileSpawningLogic</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Source\ProductionProjCurr\Private\tileSpawningLogic\BG_Tile.cpp">
+      <Filter>Source\ProductionProjCurr\Private\tileSpawningLogic</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

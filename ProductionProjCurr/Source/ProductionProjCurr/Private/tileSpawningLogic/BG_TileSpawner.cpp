@@ -46,6 +46,7 @@ void ABG_TileSpawner::BuildGrid()
 	// Spawn new tiles
 	spawnGrid(randomNum);
 
+	//when grid is built
 	if (TileGrid.Num() > 0)
 	{
 		OnGridBuilt.Broadcast();
