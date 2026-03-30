@@ -5,13 +5,37 @@
 #include "Occupant_Troop_Data.h"
 #include "tileSpawningLogic/BG_Tile.h"
 
+void AOccupant_Troop_BaseClass::SetTroopState(ETroopState NewState)
+{
+	CurrentState = NewState;
+
+	switch (CurrentState)
+	{
+		case ETroopState::Idle:
+			break;
+		case ETroopState::Moving:
+			break;
+		case ETroopState::Attacking:
+			break;
+		case ETroopState::Dead:
+			TroopDeath();
+			break;
+		default:
+			break;
+	}
+	OnStateChanged.Broadcast(CurrentState);
+	if (CurrentState == ETroopState::Attacking)
+	{
+		SetTroopState(ETroopState::Idle);
+	}
+}
+
 void AOccupant_Troop_BaseClass::SetHealth(int32 NewHealth)
 {
 	Health = NewHealth;
 	if (Health <= 0)
 	{
-		OnTroopDeath.Broadcast();
-		TroopDeath();
+		SetTroopState(ETroopState::Dead);
 	}
 }
 
@@ -62,7 +86,7 @@ void AOccupant_Troop_BaseClass::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (bIsMoving)//moveToTile in world space, attach to new socket
+	if (CurrentState == ETroopState::Moving)//moveToTile in world space, attach to new socket
 	{
 		FVector TargetLocation = MoveTarget;
 		FVector CurrentLocation = GetActorLocation();
@@ -80,7 +104,7 @@ void AOccupant_Troop_BaseClass::Tick(float DeltaTime)
 			if (!TargetTile)
 				return;
 
-			SetIsMoving(false);
+			SetTroopState(ETroopState::Idle);
 			AttachToComponent(
 				TargetTile->tileMesh,
 				FAttachmentTransformRules::KeepWorldTransform,
@@ -109,6 +133,7 @@ AOccupant_Troop_BaseClass::AOccupant_Troop_BaseClass()
 void AOccupant_Troop_BaseClass::BeginPlay()
 {
 	Super::BeginPlay();
+	SetTroopState(ETroopState::Idle);	
 }
 
 bool AOccupant_Troop_BaseClass::CanMoveTo(const FIntPoint& Target, TArray<FIntPoint> Neighbors) const
@@ -161,6 +186,6 @@ void AOccupant_Troop_BaseClass::MoveToTile(ABG_Tile* Tile)
 		SetActorRotation(ToTarget.Rotation());
 	}
 
-	SetIsMoving(true);
+	SetTroopState(ETroopState::Moving);
 	SetActorTickEnabled(true);
 }

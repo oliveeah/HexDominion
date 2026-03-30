@@ -11,18 +11,21 @@ class USkeletalMesh;
 class UOccupant_Troop_Data;
 class UAnimInstance;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
-	FOnIsMovingChanged,
-	bool,
-	NewValue);
+
+UENUM(BlueprintType)
+enum class ETroopState : uint8
+{
+	Idle,
+	Moving,
+	Attacking,
+	Dead
+};
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
-	FOnIsAttackingChanged,
-	bool,
-	NewValue);
+	FOnStateChanged,
+	ETroopState,
+	NewState);
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(
-	FOnTroopDeath);
 
 UCLASS()
 class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseClass
@@ -30,25 +33,25 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 	GENERATED_BODY()
 
 	private:
+
+		UPROPERTY(EditDefaultsOnly, Category = "Animation")
+		ETroopState CurrentState = ETroopState::Idle;
+
+		UPROPERTY(EditDefaultsOnly, Category = "Stats")
 		int Damage = 1;
 
-		FVector MoveTarget;
 
 		FName MoveSocketName = TEXT("TroopSpawnSocket");
 		
-		UPROPERTY(EditDefaultsOnly, Category = "Movement")
-		float MoveInterpSpeed = 6.f;
+		UPROPERTY(EditDefaultsOnly, Category = "Stats | Debug")
+		 float MoveInterpSpeed = 6.f;
 
-		UPROPERTY(EditDefaultsOnly, Category = "Movement")
-		float SnapDistance = 5.f;
+		UPROPERTY(EditDefaultsOnly, Category = "Stats | Debug")
+		 float SnapDistance = 5.f;
 
 		ABG_Tile* TargetTile = nullptr;
+		FVector	  MoveTarget;
 
-		UPROPERTY(VisibleAnywhere, Category = "Animation")
-		bool bIsMoving = false;
-
-		UPROPERTY(VisibleAnywhere, Category = "Animation")
-		bool bIsAttacking = false;
 
 		UPROPERTY(EditDefaultsOnly, Category = "Components")
 		USkeletalMeshComponent* SkeletalMesh;
@@ -59,49 +62,18 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 	public:
 		//delegates
 		UPROPERTY(BlueprintAssignable, Category = "Events")
-		FOnIsMovingChanged OnIsMovingChanged;
-
-		UPROPERTY(BlueprintAssignable, Category = "Events")
-		FOnIsAttackingChanged OnIsAttackingChanged;
-
-		UPROPERTY(BlueprintAssignable, Category = "Events")
-		FOnTroopDeath OnTroopDeath;
-
-
-
-
-
-		/*Setters*/ 
-		UFUNCTION(BlueprintCallable)
-		void SetIsMoving(bool NewIsMoving)
-		{
-			if (bIsMoving != NewIsMoving)
-			{
-				bIsMoving = NewIsMoving;
-				OnIsMovingChanged.Broadcast(bIsMoving);
-			}
-		}
+		FOnStateChanged OnStateChanged;
 
 		UFUNCTION(BlueprintCallable)
-		void SetIsAttacking(bool NewIsAttacking)
-		{
-			if (bIsAttacking != NewIsAttacking)
-			{
-				bIsAttacking = NewIsAttacking;
-				OnIsAttackingChanged.Broadcast(bIsAttacking);
-			}
-		}
-
+		void SetTroopState(ETroopState NewState);
 		void SetHealth(int32 NewHealth) override;
 		void SetDamage(int NewDamage);
 		void SetOwningPlayer(EActivePlayerSide NewPlayer) override;
 
 		/*Getters*/ 
-		bool getIsMoving() const { return bIsMoving; }
-		bool getIsAttacking() const { return bIsAttacking; }
 		int  GetTroopHealth() const { return Health; }
 		int  GetTroopDamage() const { return Damage; }
-
+		ETroopState GetTroopState() const { return CurrentState; }
 
 		/*Movement*/
 		virtual bool CanMoveTo(const FIntPoint& Target, TArray<FIntPoint> Neighbors) const;
@@ -123,3 +95,5 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 
 	protected:
 };
+
+

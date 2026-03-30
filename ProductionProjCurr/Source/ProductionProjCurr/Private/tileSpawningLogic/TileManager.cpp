@@ -311,7 +311,7 @@ void ATileManager::OnTileClicked(ABG_Tile* Tile, bool isOccupied)
 			if (ff)
 				break;
 
-			AttackingTroop->SetIsAttacking(true);
+			AttackingTroop->SetTroopState(ETroopState::Attacking);
 			DefendingTroop->SetHealth(0);
 			Tile->SetIsOccupied(false);
 
@@ -492,7 +492,6 @@ void ATileManager::spawnTroop(TSubclassOf<AOccupant_BaseClass> Occupant, ABG_Til
 
 	if (AOccupant_Troop_BaseClass* Troop = Cast<AOccupant_Troop_BaseClass>(SpawnedOccupant))
 	{
-		Troop->OnTroopDeath.AddDynamic(this, &ATileManager::OnTroopDeath);
 		Tile->SetOccupyingTroop(Troop);
 		Tile->SetIsOccupied(true);
 	}

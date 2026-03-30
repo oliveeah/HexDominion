@@ -24,11 +24,6 @@ void ABG_TileSpawner::BuildGrid()
 	{
 		TileManager = Cast<ATileManager>(UGameplayStatics::GetActorOfClass(this, ATileManager::StaticClass()));
 	}
-	if (!TileManager)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("TileManager not found; aborting BuildGrid."));
-		return;
-	}
 	if (!TileSpawnerData)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("TileSpawnerData not set; aborting BuildGrid."));
@@ -81,7 +76,7 @@ void ABG_TileSpawner::spawnGrid(const float& randomNum)
 	const FVector tileSpawnerLocation = GetActorLocation();
 
 	FastNoiseLite Noise;
-	Noise.SetSeed(static_cast<int32>(randomNum));
+	Noise.SetSeed(static_cast<int>(randomNum));
 	Noise.SetNoiseType(FastNoiseLite::NoiseType_ValueCubic);
 	Noise.SetFrequency(Data.noiseFrequency);
 
@@ -95,10 +90,10 @@ void ABG_TileSpawner::spawnGrid(const float& randomNum)
 		TileManager->SetGridHeight(Data.numberOfRows);
 	}
 
-	for (int32 rows = 0; rows < Data.numberOfRows; ++rows)
+	for (int rows = 0; rows < Data.numberOfRows; ++rows)
 	{
 		TileGrid[rows].SetNum(Data.numberOfColumns);
-		for (int32 cols = 0; cols < Data.numberOfColumns; ++cols)
+		for (int cols = 0; cols < Data.numberOfColumns; ++cols)
 		{
 
 			// Determine biome type based on noise
