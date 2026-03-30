@@ -8,9 +8,10 @@
 #include "Occupant_Troop_BaseClass.generated.h"
 
 class USkeletalMesh;
+class AOccupant_BaseClass;
 class UOccupant_Troop_Data;
 class UAnimInstance;
-
+class ABG_Tile;
 
 UENUM(BlueprintType)
 enum class ETroopState : uint8
@@ -18,6 +19,7 @@ enum class ETroopState : uint8
 	Idle,
 	Moving,
 	Attacking,
+	Damage,
 	Dead
 };
 
@@ -33,6 +35,9 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 	GENERATED_BODY()
 
 	private:
+
+		UPROPERTY()
+		AOccupant_BaseClass* InteractingTroop = nullptr;
 
 		UPROPERTY(EditDefaultsOnly, Category = "Animation")
 		ETroopState CurrentState = ETroopState::Idle;
@@ -50,6 +55,7 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 		 float SnapDistance = 5.f;
 
 		ABG_Tile* TargetTile = nullptr;
+
 		FVector	  MoveTarget;
 
 
@@ -58,6 +64,12 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 
 		UPROPERTY(EditDefaultsOnly, Category = "Team")
 		UOccupant_Troop_Data* TroopData;
+
+		UPROPERTY()
+		ABG_Tile* OwningTile = nullptr;
+		
+		void LookAtTarget(const FVector& TargetLocation);
+		void LookAtTarget(AOccupant_BaseClass* Target);
 
 	public:
 		//delegates
@@ -69,20 +81,24 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 		void SetHealth(int32 NewHealth) override;
 		void SetDamage(int NewDamage);
 		void SetOwningPlayer(EActivePlayerSide NewPlayer) override;
+		void SetInteractingTroop(AOccupant_BaseClass* NewTarget) { InteractingTroop = NewTarget; }
+		void SetOwningTile(ABG_Tile* NewTile) { OwningTile = NewTile; }
 
 		/*Getters*/ 
 		int  GetTroopHealth() const { return Health; }
 		int  GetTroopDamage() const { return Damage; }
 		ETroopState GetTroopState() const { return CurrentState; }
+		ABG_Tile* GetOwningTile() const { return OwningTile; }
 
 		/*Movement*/
 		virtual bool CanMoveTo(const FIntPoint& Target, TArray<FIntPoint> Neighbors) const;
 		virtual void MoveToTile(class ABG_Tile* Tile);
 
-		void TroopDeath()
-		{
-			this->Destroy();
-		}
+		void TroopDeath();
+
+		void TroopAttack();
+
+		void TroopDamage();
 
 		/*Overrides*/
 		bool		 IsTroop() const override { return true; }
@@ -92,6 +108,10 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 		AOccupant_Troop_BaseClass();
 
 		void BeginPlay() override;
+
+
+
+
 
 	protected:
 };

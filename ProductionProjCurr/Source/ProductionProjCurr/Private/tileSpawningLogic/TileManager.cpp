@@ -311,10 +311,10 @@ void ATileManager::OnTileClicked(ABG_Tile* Tile, bool isOccupied)
 			if (ff)
 				break;
 
-			AttackingTroop->SetTroopState(ETroopState::Attacking);
-			DefendingTroop->SetHealth(0);
-			Tile->SetIsOccupied(false);
+			AttackingTroop->SetInteractingTroop(DefendingTroop);
+			DefendingTroop->SetInteractingTroop(AttackingTroop);
 
+			AttackingTroop->SetTroopState(ETroopState::Attacking);
 			break;
 		}
 		case EPlayerIntent::ReselectTile:
@@ -494,6 +494,7 @@ void ATileManager::spawnTroop(TSubclassOf<AOccupant_BaseClass> Occupant, ABG_Til
 	{
 		Tile->SetOccupyingTroop(Troop);
 		Tile->SetIsOccupied(true);
+		Troop->SetOwningTile(Tile);
 	}
 	else if (AOccupant_Building_BaseClass* Building = Cast<AOccupant_Building_BaseClass>(SpawnedOccupant))
 	{

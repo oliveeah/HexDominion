@@ -5,6 +5,34 @@
 #include "Occupant_Troop_Data.h"
 #include "tileSpawningLogic/BG_Tile.h"
 
+void AOccupant_Troop_BaseClass::LookAtTarget(const FVector& TargetLocation)
+{
+	FVector ToTarget = TargetLocation - GetActorLocation();
+	ToTarget.Z = 0.0f;
+
+	if (ToTarget.IsNearlyZero())
+		return;
+
+	const FRotator YawOnly(0.0f, ToTarget.Rotation().Yaw, 0.0f);
+
+	if (GetRootComponent() && GetRootComponent()->GetAttachParent())
+	{
+		SetActorRelativeRotation(YawOnly);
+	}
+	else
+	{
+		SetActorRotation(YawOnly);
+	}
+}
+
+void AOccupant_Troop_BaseClass::LookAtTarget(AOccupant_BaseClass* Target)
+{
+	if (!Target)
+		return;
+
+	LookAtTarget(Target->GetActorLocation());
+}
+
 void AOccupant_Troop_BaseClass::SetTroopState(ETroopState NewState)
 {
 	CurrentState = NewState;
@@ -16,18 +44,18 @@ void AOccupant_Troop_BaseClass::SetTroopState(ETroopState NewState)
 		case ETroopState::Moving:
 			break;
 		case ETroopState::Attacking:
+			TroopAttack();
 			break;
 		case ETroopState::Dead:
 			TroopDeath();
+			break;
+		case ETroopState::Damage:
+			TroopDamage();
 			break;
 		default:
 			break;
 	}
 	OnStateChanged.Broadcast(CurrentState);
-	if (CurrentState == ETroopState::Attacking)
-	{
-		SetTroopState(ETroopState::Idle);
-	}
 }
 
 void AOccupant_Troop_BaseClass::SetHealth(int32 NewHealth)
@@ -36,6 +64,11 @@ void AOccupant_Troop_BaseClass::SetHealth(int32 NewHealth)
 	if (Health <= 0)
 	{
 		SetTroopState(ETroopState::Dead);
+	}
+	else
+	{
+		LookAtTarget(InteractingTroop);
+		SetTroopState(ETroopState::Damage);
 	}
 }
 
@@ -82,6 +115,20 @@ void AOccupant_Troop_BaseClass::SetOwningPlayer(EActivePlayerSide NewPlayer)
 	SkeletalMesh->SetWorldScale3D(FVector(TeamData->Scale));
 }
 
+void AOccupant_Troop_BaseClass::TroopAttack()
+{
+	if (InteractingTroop)
+	{
+		LookAtTarget(InteractingTroop);
+		InteractingTroop->SetHealth(InteractingTroop->GetHealth() - Damage);
+	}
+}
+
+void AOccupant_Troop_BaseClass::TroopDamage()
+{
+	LookAtTarget(InteractingTroop);
+}
+
 void AOccupant_Troop_BaseClass::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -112,6 +159,7 @@ void AOccupant_Troop_BaseClass::Tick(float DeltaTime)
 
 			SetActorLocation(MoveTarget);
 			SetGridPosition(TargetTile->GetGridCoordinates());
+			SetOwningTile(TargetTile);
 			SetActorTickEnabled(false);
 			TargetTile = nullptr;
 		}
@@ -179,13 +227,16 @@ void AOccupant_Troop_BaseClass::MoveToTile(ABG_Tile* Tile)
 
 	MoveTarget = Tile->tileMesh->GetSocketLocation(MoveSocketName);
 
-	FVector ToTarget = MoveTarget - GetActorLocation();
-	ToTarget.Z = 0; // Ignore vertical difference for rotation
-	if (!ToTarget.IsNearlyZero())
-	{
-		SetActorRotation(ToTarget.Rotation());
-	}
-
+	LookAtTarget(MoveTarget);
 	SetTroopState(ETroopState::Moving);
 	SetActorTickEnabled(true);
+}
+
+void AOccupant_Troop_BaseClass::TroopDeath()
+{
+	if (OwningTile)
+	{
+		OwningTile->SetIsOccupied(false);
+	}
+	this->Destroy();
 }
