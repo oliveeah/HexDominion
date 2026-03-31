@@ -217,6 +217,12 @@ void ATileManager::OnTileClicked(ABG_Tile* Tile, bool isOccupied)
 				if (turnManager)
 				{
 					AOccupant_Troop_BaseClass* OccupyingTroop = SelectedTile->getOccupyingTroop();
+					if (OccupyingTroop->TroopAnimatingAction())
+					{
+						removeOutlineFromAllTiles();
+						break;
+					}
+
 					if (OccupyingTroop && OccupyingTroop->GetOwningPlayer() != turnManager->GetActivePlayer())
 					{
 						SelectedTile = nullptr;
@@ -275,10 +281,15 @@ void ATileManager::OnTileClicked(ABG_Tile* Tile, bool isOccupied)
 				break;
 
 			AOccupant_Troop_BaseClass* OccupyingTroop = previousTile->getOccupyingTroop();
+
+			if (OccupyingTroop->TroopAnimatingAction())
+			{
+				removeOutlineFromAllTiles();
+				break;
+			}
+
 			if (OccupyingTroop && OccupyingTroop->GetHealth() > 0)
 			{
-				if (!OccupyingTroop->CanStartAction())
-					break;
 
 				TArray<FIntPoint> adjacentTiles = GetAdjacentTiles(true, 1, previousTile);
 				bool			  canMove = OccupyingTroop->CanMoveTo(Tile->GetGridCoordinates(), adjacentTiles);
@@ -306,11 +317,15 @@ void ATileManager::OnTileClicked(ABG_Tile* Tile, bool isOccupied)
 				break;
 
 			AOccupant_Troop_BaseClass* AttackingTroop = previousTile->getOccupyingTroop();
+
+				if (AttackingTroop->TroopAnimatingAction())
+				{
+					removeOutlineFromAllTiles();
+					break;
+				}
+
 			AOccupant_Troop_BaseClass* DefendingTroop = Tile->getOccupyingTroop();
 			if (!AttackingTroop || !DefendingTroop)
-				break;
-
-			if (!AttackingTroop->CanStartAction())
 				break;
 
 			bool ff = IsFriendlyFire(AttackingTroop->GetOwningPlayer(), DefendingTroop->GetOwningPlayer());
@@ -328,6 +343,7 @@ void ATileManager::OnTileClicked(ABG_Tile* Tile, bool isOccupied)
 		default:
 			break;
 	}
+
 }
 
 void ATileManager::OnTroopDeath()

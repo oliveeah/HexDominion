@@ -28,6 +28,11 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
 	ETroopState,
 	NewState);
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
+	FOnIsAnimatingActionChanged,
+	bool,
+	bIsAnimatingAction);
+
 
 UCLASS()
 class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseClass
@@ -45,7 +50,6 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 		UPROPERTY(EditDefaultsOnly, Category = "Stats")
 		int Damage = 1;
 
-		bool animatingAction = false;
 
 		FName MoveSocketName = TEXT("TroopSpawnSocket");
 		
@@ -73,11 +77,16 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 		void LookAtTarget(AOccupant_BaseClass* Target);
 
 	public:
+		UPROPERTY(VisibleAnywhere, Category = "DEBUG")
+
+		bool animatingAction = false;
+
 		//delegates
 		UPROPERTY(BlueprintAssignable, Category = "Events")
 		FOnStateChanged OnStateChanged;
 
-		bool CanStartAction() const;
+		UPROPERTY(BlueprintAssignable, Category = "Events")
+		FOnIsAnimatingActionChanged OnIsAnimatingActionChanged;
 
 		UFUNCTION(BlueprintCallable)
 		void SetTroopState(ETroopState NewState);
@@ -118,7 +127,7 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 
 		void BeginPlay() override;
 
-
+		bool TroopAnimatingAction() const { return animatingAction; }
 
 
 

@@ -40,7 +40,7 @@ void AOccupant_Troop_BaseClass::SetTroopState(ETroopState NewState)
 		NewState == ETroopState::Attacking ||
 		NewState == ETroopState::Damage;
 
-	if ((animatingAction) || (CurrentState == NewState))
+	if (animatingAction || CurrentState == NewState)
 		return;
 
 	CurrentState = NewState;
@@ -206,8 +206,6 @@ bool AOccupant_Troop_BaseClass::CanMoveTo(const FIntPoint& Target, TArray<FIntPo
 
 void AOccupant_Troop_BaseClass::MoveToTile(ABG_Tile* Tile)
 {
-	if (!CanStartAction())
-		return;
 
 	if (!Tile || !Tile->tileMesh)
 		return;
@@ -255,14 +253,14 @@ void AOccupant_Troop_BaseClass::TroopDeath()
 void AOccupant_Troop_BaseClass::NotifyActionAnimationStarted()
 {
 	animatingAction = true;
+	OnIsAnimatingActionChanged.Broadcast(animatingAction);
 }
 
 void AOccupant_Troop_BaseClass::NotifyActionAnimationFinished()
 {
 	animatingAction = false;
+	OnIsAnimatingActionChanged.Broadcast(animatingAction);
 }
 
-bool AOccupant_Troop_BaseClass::CanStartAction() const
-{
-	return !animatingAction && CurrentState == ETroopState::Idle;
-}
+
+
