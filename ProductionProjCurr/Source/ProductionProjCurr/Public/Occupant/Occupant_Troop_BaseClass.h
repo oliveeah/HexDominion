@@ -45,6 +45,7 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 		UPROPERTY(EditDefaultsOnly, Category = "Stats")
 		int Damage = 1;
 
+		bool animatingAction = false;
 
 		FName MoveSocketName = TEXT("TroopSpawnSocket");
 		
@@ -76,6 +77,8 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 		UPROPERTY(BlueprintAssignable, Category = "Events")
 		FOnStateChanged OnStateChanged;
 
+		bool CanStartAction() const;
+
 		UFUNCTION(BlueprintCallable)
 		void SetTroopState(ETroopState NewState);
 		void SetHealth(int32 NewHealth) override;
@@ -83,6 +86,12 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 		void SetOwningPlayer(EActivePlayerSide NewPlayer) override;
 		void SetInteractingTroop(AOccupant_BaseClass* NewTarget) { InteractingTroop = NewTarget; }
 		void SetOwningTile(ABG_Tile* NewTile) { OwningTile = NewTile; }
+
+		UFUNCTION(BlueprintCallable, Category = "Troop|Animation")
+		void NotifyActionAnimationStarted();
+
+		UFUNCTION(BlueprintCallable, Category = "Troop|Animation")
+		void NotifyActionAnimationFinished();
 
 		/*Getters*/ 
 		int  GetTroopHealth() const { return Health; }

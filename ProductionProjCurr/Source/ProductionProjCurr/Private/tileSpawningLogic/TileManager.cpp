@@ -277,8 +277,11 @@ void ATileManager::OnTileClicked(ABG_Tile* Tile, bool isOccupied)
 			AOccupant_Troop_BaseClass* OccupyingTroop = previousTile->getOccupyingTroop();
 			if (OccupyingTroop && OccupyingTroop->GetHealth() > 0)
 			{
+				if (!OccupyingTroop->CanStartAction())
+					break;
+
 				TArray<FIntPoint> adjacentTiles = GetAdjacentTiles(true, 1, previousTile);
-				bool canMove = OccupyingTroop->CanMoveTo(Tile->GetGridCoordinates(), adjacentTiles);
+				bool			  canMove = OccupyingTroop->CanMoveTo(Tile->GetGridCoordinates(), adjacentTiles);
 				if (canMove)
 				{
 					OccupyingTroop->MoveToTile(Tile);
@@ -305,6 +308,9 @@ void ATileManager::OnTileClicked(ABG_Tile* Tile, bool isOccupied)
 			AOccupant_Troop_BaseClass* AttackingTroop = previousTile->getOccupyingTroop();
 			AOccupant_Troop_BaseClass* DefendingTroop = Tile->getOccupyingTroop();
 			if (!AttackingTroop || !DefendingTroop)
+				break;
+
+			if (!AttackingTroop->CanStartAction())
 				break;
 
 			bool ff = IsFriendlyFire(AttackingTroop->GetOwningPlayer(), DefendingTroop->GetOwningPlayer());

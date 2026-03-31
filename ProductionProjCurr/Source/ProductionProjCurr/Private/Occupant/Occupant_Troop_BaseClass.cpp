@@ -35,6 +35,14 @@ void AOccupant_Troop_BaseClass::LookAtTarget(AOccupant_BaseClass* Target)
 
 void AOccupant_Troop_BaseClass::SetTroopState(ETroopState NewState)
 {
+	const bool bIsActionState =
+		NewState == ETroopState::Moving ||
+		NewState == ETroopState::Attacking ||
+		NewState == ETroopState::Damage;
+
+	if ((animatingAction) || (CurrentState == NewState))
+		return;
+
 	CurrentState = NewState;
 
 	switch (CurrentState)
@@ -55,6 +63,7 @@ void AOccupant_Troop_BaseClass::SetTroopState(ETroopState NewState)
 		default:
 			break;
 	}
+
 	OnStateChanged.Broadcast(CurrentState);
 }
 
@@ -67,7 +76,6 @@ void AOccupant_Troop_BaseClass::SetHealth(int32 NewHealth)
 	}
 	else
 	{
-		LookAtTarget(InteractingTroop);
 		SetTroopState(ETroopState::Damage);
 	}
 }
@@ -198,6 +206,9 @@ bool AOccupant_Troop_BaseClass::CanMoveTo(const FIntPoint& Target, TArray<FIntPo
 
 void AOccupant_Troop_BaseClass::MoveToTile(ABG_Tile* Tile)
 {
+	if (!CanStartAction())
+		return;
+
 	if (!Tile || !Tile->tileMesh)
 		return;
 
@@ -239,4 +250,19 @@ void AOccupant_Troop_BaseClass::TroopDeath()
 		OwningTile->SetIsOccupied(false);
 	}
 	this->Destroy();
+}
+
+void AOccupant_Troop_BaseClass::NotifyActionAnimationStarted()
+{
+	animatingAction = true;
+}
+
+void AOccupant_Troop_BaseClass::NotifyActionAnimationFinished()
+{
+	animatingAction = false;
+}
+
+bool AOccupant_Troop_BaseClass::CanStartAction() const
+{
+	return !animatingAction && CurrentState == ETroopState::Idle;
 }
