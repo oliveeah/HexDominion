@@ -95,6 +95,10 @@ public:
 	void SetGridWidth(int32 Width) { GridWidth = Width; }
 	void SetGridHeight(int32 Height) { GridHeight = Height; }
 
+	void Handle_SelectTile();
+	void Handle_MoveTroop(ABG_Tile* previousTile, ABG_Tile* Tile);
+	void Handle_AttackTroop(ABG_Tile* previousTile, ABG_Tile* Tile);
+
 	protected:
 		// Called every frame
 	virtual void Tick(float DeltaTime) override;

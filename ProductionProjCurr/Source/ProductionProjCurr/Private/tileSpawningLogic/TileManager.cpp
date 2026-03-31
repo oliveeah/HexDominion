@@ -6,7 +6,7 @@
 #include "Occupant/Occupant_BaseClass.h"
 #include "Occupant/Occupant_Troop_BaseClass.h"
 #include "Occupant/Occupant_Building_BaseClass.h"
-#include "Kismet/GameplayStatics.h" // For GetActorOfClass
+#include "Kismet/GameplayStatics.h" 
 #include <gameMode/ProductionProjCurrGameMode.h>
 
 // Sets default values
@@ -212,130 +212,18 @@ void ATileManager::OnTileClicked(ABG_Tile* Tile, bool isOccupied)
 	{
 		case EPlayerIntent::SelectTile:
 		{
-			if (SelectedTile && SelectedTile->GetIsOccupied())
-			{
-				if (turnManager)
-				{
-					AOccupant_Troop_BaseClass* OccupyingTroop = SelectedTile->getOccupyingTroop();
-					if (OccupyingTroop->TroopAnimatingAction())
-					{
-						removeOutlineFromAllTiles();
-						break;
-					}
-
-					if (OccupyingTroop && OccupyingTroop->GetOwningPlayer() != turnManager->GetActivePlayer())
-					{
-						SelectedTile = nullptr;
-						return;
-					}
-				}
-			}
-
-			if (SelectedTile && !SelectedTile->GetIsOccupied()) // If the tile is empty, just highlight it as standard
-			{
-				ApplyHighlightState(ETileHighlightState::Standard, SelectedTile);
-			}
-			else if (SelectedTile && SelectedTile->GetIsOccupied()) // If the tile is occupied ...
-			{
-				TArray<FIntPoint> adjacentTiles = GetAdjacentTiles(true, 1, SelectedTile);
-
-				for (FIntPoint Coord : adjacentTiles) // for each tile adjacent to the selected tile
-				{
-					if (ABG_Tile* AdjTile = TileMap[Coord])
-					{
-						if (AdjTile->GetIsOccupied()) // If the adjacent tile is occupied
-						{
-							AOccupant_Troop_BaseClass* OccupyingTroop = AdjTile->getOccupyingTroop();
-							if (!OccupyingTroop)									 // If the occupant isn't a troop, we can't attack it, so just block the tile
-							{
-								ApplyHighlightState(ETileHighlightState::Blocked, AdjTile);
-								continue;
-							}
-
-							if (IsEnemyOccupant(OccupyingTroop->GetOwningPlayer())) // If the occupant is an enemy, they can attack it
-							{
-								ApplyHighlightState(ETileHighlightState::Attack, AdjTile);
-							}
-							else													// If the occupant is a friendly troop, we can't move there or attack it, so block the tile
-							{
-								ApplyHighlightState(ETileHighlightState::Blocked, AdjTile);
-							}
-						}
-						else if (AdjTile->getCanSpawnTroopOnTile())					// If the adjacent tile isn't occupied and is a valid tile to spawn troops on, highlight it as an adjacency option
-						{
-							ApplyHighlightState(ETileHighlightState::Adjacency, AdjTile);
-						}
-						else														// else block the tile, since we can't move there or spawn on it
-						{
-							ApplyHighlightState(ETileHighlightState::Blocked, AdjTile);
-						}
-					}
-				}
-			}
+			Handle_SelectTile();
 
 			break;
 		}
 		case EPlayerIntent::MoveTroop:
 		{
-			if (!previousTile)
-				break;
-
-			AOccupant_Troop_BaseClass* OccupyingTroop = previousTile->getOccupyingTroop();
-
-			if (OccupyingTroop->TroopAnimatingAction())
-			{
-				removeOutlineFromAllTiles();
-				break;
-			}
-
-			if (OccupyingTroop && OccupyingTroop->GetHealth() > 0)
-			{
-
-				TArray<FIntPoint> adjacentTiles = GetAdjacentTiles(true, 1, previousTile);
-				bool			  canMove = OccupyingTroop->CanMoveTo(Tile->GetGridCoordinates(), adjacentTiles);
-				if (canMove)
-				{
-					OccupyingTroop->MoveToTile(Tile);
-					Tile->SetOccupyingTroop(OccupyingTroop);
-					Tile->SetIsOccupied(true);
-
-					if (turnManager && Tile)
-					{
-						previousTile->SetOwningPlayer(EActivePlayerSide::None);
-						Tile->SetOwningPlayer(turnManager->GetActivePlayer());
-					}
-
-					previousTile->SetIsOccupied(false);
-				}
-			}
-
+			Handle_MoveTroop(previousTile, Tile);
 			break;
 		}
 		case EPlayerIntent::AttackTroop:
 		{
-			if (!previousTile)
-				break;
-
-			AOccupant_Troop_BaseClass* AttackingTroop = previousTile->getOccupyingTroop();
-
-				if (AttackingTroop->TroopAnimatingAction())
-				{
-					removeOutlineFromAllTiles();
-					break;
-				}
-
-			AOccupant_Troop_BaseClass* DefendingTroop = Tile->getOccupyingTroop();
-			if (!AttackingTroop || !DefendingTroop)
-				break;
-
-			bool ff = IsFriendlyFire(AttackingTroop->GetOwningPlayer(), DefendingTroop->GetOwningPlayer());
-			if (ff)
-				break;
-
-			AttackingTroop->SetInteractingTroop(DefendingTroop);
-			DefendingTroop->SetInteractingTroop(AttackingTroop);
-
-			AttackingTroop->SetTroopState(ETroopState::Attacking);
+			Handle_AttackTroop(previousTile, Tile);
 			break;
 		}
 		case EPlayerIntent::ReselectTile:
@@ -609,3 +497,127 @@ FLinearColor ATileManager::GetOutlineColor(ETileHighlightState highlightState) c
 	}
 }
 
+void ATileManager::Handle_SelectTile()
+{
+	if (SelectedTile && SelectedTile->GetIsOccupied())
+	{
+		if (turnManager)
+		{
+			AOccupant_Troop_BaseClass* OccupyingTroop = SelectedTile->getOccupyingTroop();
+			if (OccupyingTroop->TroopAnimatingAction())
+			{
+				removeOutlineFromAllTiles();
+				return;
+			}
+
+			if (OccupyingTroop && OccupyingTroop->GetOwningPlayer() != turnManager->GetActivePlayer())
+			{
+				SelectedTile = nullptr;
+				return;
+			}
+		}
+	}
+
+	if (SelectedTile && !SelectedTile->GetIsOccupied()) // If the tile is empty, just highlight it as standard
+	{
+		ApplyHighlightState(ETileHighlightState::Standard, SelectedTile);
+	}
+	else if (SelectedTile && SelectedTile->GetIsOccupied()) // If the tile is occupied ...
+	{
+		TArray<FIntPoint> adjacentTiles = GetAdjacentTiles(true, 1, SelectedTile);
+
+		for (FIntPoint Coord : adjacentTiles) // for each tile adjacent to the selected tile
+		{
+			if (ABG_Tile* AdjTile = TileMap[Coord])
+			{
+				if (AdjTile->GetIsOccupied()) // If the adjacent tile is occupied
+				{
+					AOccupant_Troop_BaseClass* OccupyingTroop = AdjTile->getOccupyingTroop();
+					if (!OccupyingTroop) // If the occupant isn't a troop, we can't attack it, so just block the tile
+					{
+						ApplyHighlightState(ETileHighlightState::Blocked, AdjTile);
+						continue;
+					}
+
+					if (IsEnemyOccupant(OccupyingTroop->GetOwningPlayer())) // If the occupant is an enemy, they can attack it
+					{
+						ApplyHighlightState(ETileHighlightState::Attack, AdjTile);
+					}
+					else // If the occupant is a friendly troop, we can't move there or attack it, so block the tile
+					{
+						ApplyHighlightState(ETileHighlightState::Blocked, AdjTile);
+					}
+				}
+				else if (AdjTile->getCanSpawnTroopOnTile()) // If the adjacent tile isn't occupied and is a valid tile to spawn troops on, highlight it as an adjacency option
+				{
+					ApplyHighlightState(ETileHighlightState::Adjacency, AdjTile);
+				}
+				else // else block the tile, since we can't move there or spawn on it
+				{
+					ApplyHighlightState(ETileHighlightState::Blocked, AdjTile);
+				}
+			}
+		}
+	}
+}
+
+void ATileManager::Handle_MoveTroop(ABG_Tile* previousTile, ABG_Tile* Tile)
+{
+	if (!previousTile || !Tile)
+		return;
+
+	AOccupant_Troop_BaseClass* OccupyingTroop = previousTile->getOccupyingTroop();
+
+	if (OccupyingTroop->TroopAnimatingAction())
+	{
+		removeOutlineFromAllTiles();
+		return;
+	}
+
+	if (OccupyingTroop && OccupyingTroop->GetHealth() > 0)
+	{
+
+		TArray<FIntPoint> adjacentTiles = GetAdjacentTiles(true, 1, previousTile);
+		bool			  canMove = OccupyingTroop->CanMoveTo(Tile->GetGridCoordinates(), adjacentTiles);
+		if (canMove)
+		{
+			OccupyingTroop->MoveToTile(Tile);
+			Tile->SetOccupyingTroop(OccupyingTroop);
+			Tile->SetIsOccupied(true);
+
+			if (turnManager && Tile)
+			{
+				previousTile->SetOwningPlayer(EActivePlayerSide::None);
+				Tile->SetOwningPlayer(turnManager->GetActivePlayer());
+			}
+
+			previousTile->SetIsOccupied(false);
+		}
+	}
+}
+
+void ATileManager::Handle_AttackTroop(ABG_Tile* previousTile, ABG_Tile* Tile)
+{
+	if (!previousTile)
+		return;
+
+	AOccupant_Troop_BaseClass* AttackingTroop = previousTile->getOccupyingTroop();
+
+	if (AttackingTroop->TroopAnimatingAction())
+	{
+		removeOutlineFromAllTiles();
+		return;
+	}
+
+	AOccupant_Troop_BaseClass* DefendingTroop = Tile->getOccupyingTroop();
+	if (!AttackingTroop || !DefendingTroop)
+		return;
+
+	bool ff = IsFriendlyFire(AttackingTroop->GetOwningPlayer(), DefendingTroop->GetOwningPlayer());
+	if (ff)
+		return;
+	AttackingTroop->SetInteractingTroop(DefendingTroop);
+	DefendingTroop->SetInteractingTroop(AttackingTroop);
+
+	AttackingTroop->SetTroopState(ETroopState::Attacking);
+}
