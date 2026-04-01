@@ -240,4 +240,9 @@
       <Filter>Source\ProductionProjCurr\Private\tileSpawningLogic</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\TileManagerHelpers.h">
+      <Filter>Source\ProductionProjCurr\Public\tileSpawningLogic</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>

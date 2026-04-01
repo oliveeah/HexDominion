@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "tileSpawningLogic/TileManager.h"  
+#include "tileSpawningLogic/TileManagerHelpers.h"
 #include "tileSpawningLogic/BG_TileSpawner.h"
 #include "tileSpawningLogic/BG_Tile.h"
 #include "Occupant/Occupant_BaseClass.h"
@@ -46,9 +47,7 @@ void ATileManager::HandleGridBuilt()
 	{
 		TileGrid = TileSpawner->getTileGrid();
 		spawnStartingTroops(TileSpawner->getNumberOfCols(), TileSpawner->getNumberOfRows());
-
 	}
-
 }
 
 void ATileManager::spawnStartingTroops(int cols, int rows)
@@ -171,26 +170,6 @@ void ATileManager::spawnStartingTroops(int cols, int rows)
 	}
 }
 
-// Called every frame
-void ATileManager::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
-
-FString& ATileManager::GetSelectedTileCoordinates()
-{
-	static FString coords = TEXT("N/A");
-		if (SelectedTile)
-		{
-			coords = FString::Printf(TEXT("(%d, %d)"), (int)SelectedTile->GetGridCoordinates().X, (int)SelectedTile->GetGridCoordinates().Y);
-		}
-		else
-		{
-			coords = TEXT("N/A");
-		}
-	return coords;
-}
-
 void ATileManager::OnTileClicked(ABG_Tile* Tile, bool isOccupied)
 {
 	static ABG_Tile* previousTile = nullptr;
@@ -202,9 +181,7 @@ void ATileManager::OnTileClicked(ABG_Tile* Tile, bool isOccupied)
 	previousTile = SelectedTile;
 
 	if (SelectedTile)
-	{
 		removeOutlineFromAllTiles();
-	}
 
 	SelectedTile = Tile;
 
@@ -416,29 +393,7 @@ void ATileManager::spawnTroop(TSubclassOf<AOccupant_BaseClass> Occupant, ABG_Til
 	Tile->SetOwningPlayer(OwningPlayer);
 }
 
-bool ATileManager::IsFriendlyFire(EActivePlayerSide attackingPlayerID, EActivePlayerSide targetPlayerID)
-{
-	if (attackingPlayerID == targetPlayerID)
-	{
-		return true; // Friendly fire
-	}
-	else
-	{
-		return false; // Not friendly fire
-	}
-}
 
-bool ATileManager::IsEnemyOccupant(EActivePlayerSide troopToCheck)
-{
-	if (troopToCheck != turnManager->GetActivePlayer() && troopToCheck != EActivePlayerSide::None)
-	{
-		return true; // Enemy occupant
-	}
-	else
-	{
-		return false; // Not an enemy occupant
-	}
-}
 
 void ATileManager::ApplyHighlightState(ETileHighlightState highlight, ABG_Tile* Tile)
 {
@@ -448,7 +403,7 @@ void ATileManager::ApplyHighlightState(ETileHighlightState highlight, ABG_Tile* 
 			break;
 		case ETileHighlightState::Standard:
 
-			FLinearColor color = GetOutlineColor(ETileHighlightState::Standard);
+			FLinearColor color = TileManagerHelper_Functions::GetOutlineColor(ETileHighlightState::Standard);
 			Tile->SetHighlightType(ETileHighlightState::Standard);
 			Tile->addOutlineEffect(color);
 			TilesWithOutline.Add(Tile);
@@ -456,19 +411,19 @@ void ATileManager::ApplyHighlightState(ETileHighlightState highlight, ABG_Tile* 
 			break;
 		case ETileHighlightState::Adjacency:
 			Tile->SetHighlightType(ETileHighlightState::Adjacency);
-			color = GetOutlineColor(ETileHighlightState::Adjacency);
+			color = TileManagerHelper_Functions::GetOutlineColor(ETileHighlightState::Adjacency);
 			Tile->addOutlineEffect(color);
 			TilesWithOutline.Add(Tile);
 			break;
 		case ETileHighlightState::Attack:
 			Tile->SetHighlightType(ETileHighlightState::Attack);
-			color = GetOutlineColor(ETileHighlightState::Attack);
+			color = TileManagerHelper_Functions::GetOutlineColor(ETileHighlightState::Attack);
 			Tile->addOutlineEffect(color);
 			TilesWithOutline.Add(Tile);
 			break;
 		case ETileHighlightState::Blocked:
 			Tile->SetHighlightType(ETileHighlightState::Blocked);
-			color = GetOutlineColor(ETileHighlightState::Blocked);
+			color = TileManagerHelper_Functions::GetOutlineColor(ETileHighlightState::Blocked);
 			Tile->addOutlineEffect(color);
 			TilesWithOutline.Add(Tile);
 			break;
@@ -477,25 +432,6 @@ void ATileManager::ApplyHighlightState(ETileHighlightState highlight, ABG_Tile* 
 	}
 }
 
-FLinearColor ATileManager::GetOutlineColor(ETileHighlightState highlightState) const
-{
-	switch (highlightState)
-	{
-		case ETileHighlightState::Standard:
-			return FLinearColor(0, 0, 0, 1); // black
-
-		case ETileHighlightState::Adjacency:
-			return FLinearColor(0.002000, 0.010000, 0.030000, 1.000000); // Darker Blue
-
-		case ETileHighlightState::Attack:
-			return FLinearColor(2.000000, 0, 0, 1); // Darker Red
-
-		case ETileHighlightState::Blocked:
-			return FLinearColor(5, 5, 5, 1); // White
-		default:
-			return FLinearColor(5, 5, 5, 1); // White
-	}
-}
 
 void ATileManager::Handle_SelectTile()
 {
@@ -539,7 +475,7 @@ void ATileManager::Handle_SelectTile()
 						continue;
 					}
 
-					if (IsEnemyOccupant(OccupyingTroop->GetOwningPlayer())) // If the occupant is an enemy, they can attack it
+					if (TileManagerHelper_Functions::IsEnemyOccupant(OccupyingTroop->GetOwningPlayer(), turnManager->GetActivePlayer())) // If the occupant is an enemy, they can attack it
 					{
 						ApplyHighlightState(ETileHighlightState::Attack, AdjTile);
 					}
@@ -613,7 +549,7 @@ void ATileManager::Handle_AttackTroop(ABG_Tile* previousTile, ABG_Tile* Tile)
 	if (!AttackingTroop || !DefendingTroop)
 		return;
 
-	bool ff = IsFriendlyFire(AttackingTroop->GetOwningPlayer(), DefendingTroop->GetOwningPlayer());
+	bool ff = TileManagerHelper_Functions::IsFriendlyFire(AttackingTroop->GetOwningPlayer(), DefendingTroop->GetOwningPlayer());
 	if (ff)
 		return;
 	AttackingTroop->SetInteractingTroop(DefendingTroop);

@@ -319,6 +319,7 @@
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\DevMode_Widget.h" />
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\OccupantInterface.h" />
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\Occupant_Troop_Data.h" />
+    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\TileManagerHelpers.h" />
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\Troop.h" />
     <ClCompile Include="..\..\Source\ProductionProjCurr\Public\animations\BG_CaptureActor.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
