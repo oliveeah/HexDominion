@@ -19,9 +19,6 @@ struct FTroopSFX
 	USoundBase* AttackSound = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "SFX")
-	USoundBase* HitSound = nullptr;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "SFX")
 	USoundBase* SpawnSound = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "SFX")
