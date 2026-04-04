@@ -97,16 +97,16 @@ void AOccupant_Troop_BaseClass::SetOwningPlayer(EActivePlayerSide NewPlayer)
 	switch (NewPlayer)
 	{
 		case EActivePlayerSide::PlayerA:
-			TeamData = &TroopData->PlayerA;
+			TeamData = &TroopData->FTeamVisualData_PlayerA;
 			break;
 		case EActivePlayerSide::PlayerB:
-			TeamData = &TroopData->PlayerB;
+			TeamData = &TroopData->FTeamVisualData_PlayerB;
 			break;
 		case EActivePlayerSide::PlayerC:
-			TeamData = &TroopData->PlayerC;
+			TeamData = &TroopData->FTeamVisualData_PlayerC;
 			break;
 		case EActivePlayerSide::PlayerD:
-			TeamData = &TroopData->PlayerD;
+			TeamData = &TroopData->FTeamVisualData_PlayerD;
 			break;
 		default:
 			return;

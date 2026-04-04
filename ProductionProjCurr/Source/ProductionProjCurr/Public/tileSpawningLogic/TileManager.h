@@ -7,6 +7,7 @@
 #include "tileSpawningLogic/TileHighlightState.h"
 #include "gameMode/Enum_PlayerSide.h"
 #include "gameMode/TurnManager.h"
+#include "Sound/SoundBase.h"
 #include "TileManager.generated.h"
 
 // Forward declarations to break circular includes
@@ -96,7 +97,11 @@ public:
 	void Handle_SelectTile();
 	void Handle_MoveTroop(ABG_Tile* previousTile, ABG_Tile* Tile);
 	void Handle_AttackTroop(ABG_Tile* previousTile, ABG_Tile* Tile);
+	void PlaySoundEffect(USoundBase* Sound, UWorld* World);
 
-	protected:
+	private:
+	UPROPERTY(EditAnywhere, Category = "SFX")
+	USoundBase* ClickSFX = nullptr;
+
 
 };

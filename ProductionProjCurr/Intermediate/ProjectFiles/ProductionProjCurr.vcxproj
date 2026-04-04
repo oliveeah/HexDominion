@@ -262,7 +262,6 @@
     <None Include="..\..\Config\DefaultGame.ini" />
     <None Include="..\..\Config\DefaultInput.ini" />
     <None Include="..\..\Source\ProductionProjCurr\ProductionProjCurr.Build.cs" />
-    <ClCompile Include="..\..\Source\ProductionProjCurr\Private\tileSpawningLogic\BG_Tile.cpp" />
     <ClCompile Include="..\..\Source\ProductionProjCurr\ProductionProjCurr.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -275,6 +274,9 @@
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="..\..\Source\ProductionProjCurr\Private\Occupant_Troop_Data.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ProductionProjCurr\Private\SFX_Troop_Data.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="..\..\Source\ProductionProjCurr\Private\Troop.cpp">
@@ -307,6 +309,9 @@
     <ClCompile Include="..\..\Source\ProductionProjCurr\Private\playerData\MyPlayerState.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ProductionProjCurr\Private\tileSpawningLogic\BG_Tile.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
     <ClCompile Include="..\..\Source\ProductionProjCurr\Private\tileSpawningLogic\BG_TileSpawner.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -319,7 +324,7 @@
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\DevMode_Widget.h" />
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\OccupantInterface.h" />
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\Occupant_Troop_Data.h" />
-    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\TileManagerHelpers.h" />
+    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\SFX_Troop_Data.h" />
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\Troop.h" />
     <ClCompile Include="..\..\Source\ProductionProjCurr\Public\animations\BG_CaptureActor.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -359,6 +364,7 @@
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\BG_TileSpawner.h" />
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\TileHighlightState.h" />
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\TileManager.h" />
+    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\TileManagerHelpers.h" />
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\TileSpawner_Data.h" />
   </ItemGroup>
   <PropertyGroup>

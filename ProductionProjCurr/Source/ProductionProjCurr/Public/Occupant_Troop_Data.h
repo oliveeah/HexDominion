@@ -28,14 +28,14 @@ class PRODUCTIONPROJCURR_API UOccupant_Troop_Data : public UDataAsset
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FTeamVisualData PlayerA;
+	FTeamVisualData FTeamVisualData_PlayerA;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FTeamVisualData PlayerB;
+	FTeamVisualData FTeamVisualData_PlayerB;
 	
 		UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FTeamVisualData PlayerC;
+	FTeamVisualData FTeamVisualData_PlayerC;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FTeamVisualData PlayerD;
+	FTeamVisualData FTeamVisualData_PlayerD;
 };

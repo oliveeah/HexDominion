@@ -453,6 +453,7 @@ void ATileManager::Handle_SelectTile()
 			}
 		}
 	}
+	PlaySoundEffect(ClickSFX, GetWorld());
 
 	if (SelectedTile && !SelectedTile->GetIsOccupied()) // If the tile is empty, just highlight it as standard
 	{
@@ -512,6 +513,7 @@ void ATileManager::Handle_MoveTroop(ABG_Tile* previousTile, ABG_Tile* Tile)
 
 	if (OccupyingTroop && OccupyingTroop->GetHealth() > 0)
 	{
+		PlaySoundEffect(ClickSFX, GetWorld());
 
 		TArray<FIntPoint> adjacentTiles = GetAdjacentTiles(true, 1, previousTile);
 		bool			  canMove = OccupyingTroop->CanMoveTo(Tile->GetGridCoordinates(), adjacentTiles);
@@ -534,6 +536,8 @@ void ATileManager::Handle_MoveTroop(ABG_Tile* previousTile, ABG_Tile* Tile)
 
 void ATileManager::Handle_AttackTroop(ABG_Tile* previousTile, ABG_Tile* Tile)
 {
+	PlaySoundEffect(ClickSFX, GetWorld());
+
 	if (!previousTile)
 		return;
 
@@ -556,4 +560,12 @@ void ATileManager::Handle_AttackTroop(ABG_Tile* previousTile, ABG_Tile* Tile)
 	DefendingTroop->SetInteractingTroop(AttackingTroop);
 
 	AttackingTroop->SetTroopState(ETroopState::Attacking);
+}
+
+void ATileManager::PlaySoundEffect(USoundBase* Sound, UWorld* World)
+{
+	if (Sound && World)
+	{
+		UGameplayStatics::PlaySound2D(World, Sound);
+	}
 }

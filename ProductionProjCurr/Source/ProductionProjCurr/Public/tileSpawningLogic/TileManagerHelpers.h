@@ -32,4 +32,5 @@ namespace TileManagerHelper_Functions
 				return FLinearColor(5, 5, 5, 1); // White
 		}
 	}
+
 }
