@@ -303,6 +303,9 @@
     <ClCompile Include="..\..\Source\ProductionProjCurr\Private\Occupant\Occupant_Troop_BaseClass.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ProductionProjCurr\Private\Occupant\TroopSpawner.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
     <ClCompile Include="..\..\Source\ProductionProjCurr\Private\playerData\InteractionInterface.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -313,6 +316,12 @@
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="..\..\Source\ProductionProjCurr\Private\tileSpawningLogic\BG_TileSpawner.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ProductionProjCurr\Private\tileSpawningLogic\TileHighlightSystem.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ProductionProjCurr\Private\tileSpawningLogic\TileInteractionHandler.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="..\..\Source\ProductionProjCurr\Private\tileSpawningLogic\TileManager.cpp">
@@ -346,6 +355,7 @@
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\input\ProductionProjCurrPlayerController.h" />
+    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\Occupant\TroopSpawner.h" />
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\Occupant\Occupant_BaseClass.h" />
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\Occupant\Occupant_Building_BaseClass.h" />
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\Occupant\Occupant_Troop_BaseClass.h" />
@@ -363,6 +373,8 @@
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\BG_Tile.h" />
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\BG_TileSpawner.h" />
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\TileHighlightState.h" />
+    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\TileHighlightSystem.h" />
+    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\TileInteractionHandler.h" />
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\TileManager.h" />
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\TileManagerHelpers.h" />
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\TileSpawner_Data.h" />

@@ -99,6 +99,9 @@
     <ClCompile Include="..\..\Source\ProductionProjCurr\Private\Occupant\Occupant_Troop_BaseClass.cpp">
       <Filter>Source\ProductionProjCurr\Private\Occupant</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ProductionProjCurr\Private\Occupant\TroopSpawner.cpp">
+      <Filter>Source\ProductionProjCurr\Private\Occupant</Filter>
+    </ClCompile>
     <Filter Include="Source\ProductionProjCurr\Private\playerData">
       <UniqueIdentifier>{D4B4FD6D-096B-3D52-9AE9-8AB0B397F8A6}</UniqueIdentifier>
     </Filter>
@@ -115,6 +118,12 @@
       <Filter>Source\ProductionProjCurr\Private\tileSpawningLogic</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ProductionProjCurr\Private\tileSpawningLogic\BG_TileSpawner.cpp">
+      <Filter>Source\ProductionProjCurr\Private\tileSpawningLogic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ProductionProjCurr\Private\tileSpawningLogic\TileHighlightSystem.cpp">
+      <Filter>Source\ProductionProjCurr\Private\tileSpawningLogic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ProductionProjCurr\Private\tileSpawningLogic\TileInteractionHandler.cpp">
       <Filter>Source\ProductionProjCurr\Private\tileSpawningLogic</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ProductionProjCurr\Private\tileSpawningLogic\TileManager.cpp">
@@ -192,6 +201,9 @@
     <Filter Include="Source\ProductionProjCurr\Public\Occupant">
       <UniqueIdentifier>{611608D6-1042-3130-B1E3-67127D9F5E0F}</UniqueIdentifier>
     </Filter>
+    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\Occupant\TroopSpawner.h">
+      <Filter>Source\ProductionProjCurr\Public\Occupant</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\Occupant\Occupant_BaseClass.h">
       <Filter>Source\ProductionProjCurr\Public\Occupant</Filter>
     </ClInclude>
@@ -235,6 +247,12 @@
       <Filter>Source\ProductionProjCurr\Public\tileSpawningLogic</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\TileHighlightState.h">
+      <Filter>Source\ProductionProjCurr\Public\tileSpawningLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\TileHighlightSystem.h">
+      <Filter>Source\ProductionProjCurr\Public\tileSpawningLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\TileInteractionHandler.h">
       <Filter>Source\ProductionProjCurr\Public\tileSpawningLogic</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\TileManager.h">

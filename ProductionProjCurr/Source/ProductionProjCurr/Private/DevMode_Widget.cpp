@@ -1,9 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "DevMode_Widget.h"
 #include <Kismet/GameplayStatics.h>
 #include "tileSpawningLogic/TileManager.h"
+#include "tileSpawningLogic/TileInteractionHandler.h"
+#include "Occupant/TroopSpawner.h"
 #include "Occupant/Occupant_BaseClass.h"
 #include "Occupant/Occupant_Troop_BaseClass.h"
 #include "Occupant/Occupant_Building_BaseClass.h"
@@ -110,33 +111,47 @@ void UDevMode_Widget::PassTurn_ButtonClicked()
 
 void UDevMode_Widget::SpawnTroopAtSelectedTile_ButtonClicked()
 {
-	if (DevTileManager)
+	if (!DevTileManager)
+		return;
+
+	UTileInteractionHandler* Interaction = DevTileManager->GetInteractionHandler();
+	ATroopSpawner*			 Spawner = DevTileManager->TroopSpawner;
+
+	if (!Interaction || !Spawner)
+		return;
+
+	ABG_Tile* SelectedTile = Interaction->GetSelectedTile();
+	if (SelectedTile)
 	{
-		if (DevTileManager->SelectedTile)
-		{
-			DevTileManager->spawnTroop(TroopToSpawn, DevTileManager->SelectedTile);
-			UE_LOG(LogTemp, Display, TEXT("Spawned troop at selected tile"));
-		}
-		else
-		{
-			UE_LOG(LogTemp, Warning, TEXT("No tile selected to spawn troop on!"));
-		}
+		Spawner->SpawnTroop(TroopToSpawn, SelectedTile);
+		UE_LOG(LogTemp, Display, TEXT("Spawned troop at selected tile"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No tile selected to spawn troop on!"));
 	}
 }
 
 void UDevMode_Widget::SpawnBuildingAtSelectedTile_ButtonClicked()
 {
-	if (DevTileManager)
+	if (!DevTileManager)
+		return;
+
+	UTileInteractionHandler* Interaction = DevTileManager->GetInteractionHandler();
+	ATroopSpawner*			 Spawner = DevTileManager->TroopSpawner;
+
+	if (!Interaction || !Spawner)
+		return;
+
+	ABG_Tile* SelectedTile = Interaction->GetSelectedTile();
+	if (SelectedTile)
 	{
-		if (DevTileManager->SelectedTile)
-		{
-			DevTileManager->spawnTroop(BuildingToSpawn, DevTileManager->SelectedTile);
-			UE_LOG(LogTemp, Display, TEXT("Spawned building at selected tile"));
-		}
-		else
-		{
-			UE_LOG(LogTemp, Warning, TEXT("No tile selected to spawn building on!"));
-		}
+		Spawner->SpawnTroop(BuildingToSpawn, SelectedTile);
+		UE_LOG(LogTemp, Display, TEXT("Spawned building at selected tile"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No tile selected to spawn building on!"));
 	}
 }
 
@@ -152,4 +167,3 @@ void UDevMode_Widget::HandleTurnChanged(EActivePlayerSide NewActivePlayer)
 {
 	OnDevTurnChanged.Broadcast(NewActivePlayer);
 }
-
