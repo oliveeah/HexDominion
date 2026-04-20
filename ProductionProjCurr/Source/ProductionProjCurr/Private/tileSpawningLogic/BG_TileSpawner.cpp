@@ -103,12 +103,24 @@ void ABG_TileSpawner::spawnGrid(const float& randomNum)
 			TSubclassOf<ABG_Tile> ChosenTileClass = GetTileClassForBiome(biomeType);
 
 			// Foliage chance for grassland tiles
-			if (biomeType == EBiomeType::Grassland && Data.MeadowTiles.Num() > 0)
+			if (biomeType == EBiomeType::Grassland)
 			{
-				const float SpawnChance = FMath::Clamp(Data.foliageSpawnChance, 0.0f, 1.0f);
-				if (randomStream.FRand() < SpawnChance)
+				// Teleporter chance (checked first)
+				if (Data.TeleporterTile && randomStream.FRand() < Data.teleporterSpawnChance)
 				{
-					ChosenTileClass = PickVariantFromNoise(Data.MeadowTiles, Noise, cols, rows);
+					ChosenTileClass = Data.TeleporterTile;
+				}
+				else if (Data.ObeliskTile && randomStream.FRand() < Data.obeliskSpawnChance)
+				{
+					ChosenTileClass = Data.ObeliskTile;
+				}
+				else if (Data.MeadowTiles.Num() > 0)
+				{
+					const float SpawnChance = FMath::Clamp(Data.foliageSpawnChance, 0.0f, 1.0f);
+					if (randomStream.FRand() < SpawnChance)
+					{
+						ChosenTileClass = PickVariantFromNoise(Data.MeadowTiles, Noise, cols, rows);
+					}
 				}
 			}
 			else if (biomeType == EBiomeType::Water && Data.WaterTiles.Num() > 0)
@@ -150,6 +162,18 @@ void ABG_TileSpawner::spawnGrid(const float& randomNum)
 				TileGrid[rows][cols] = NewTile;
 				NewTile->SetGridCoordinates(FIntPoint(cols, rows));
 				NewTile->ApplyHueFromNoise(HeightNoise);
+
+				// Mark teleporter tiles as special
+				if (ChosenTileClass == Data.TeleporterTile && Data.TeleporterTile)
+				{
+					NewTile->SetIsSpecialTile(true);
+					NewTile->SetIsOccupied(false);
+
+					if (TileManager)
+					{
+						TileManager->RegisterTeleporterTile(FIntPoint(cols, rows));
+					}
+				}
 
 				if (TileManager)
 				{

@@ -85,4 +85,18 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Parameters | Biomes")
 	float grasslandThreshold = 0.7f;
+
+	// Special Tiles
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Tiles | Special")
+	TSubclassOf<ABG_Tile> TeleporterTile;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Parameters | Special")
+	float teleporterSpawnChance = 0.05f;
+
+	// Obelisk Tiles
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Tiles | Special")
+	TSubclassOf<ABG_Tile> ObeliskTile;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Parameters | Special")
+	float obeliskSpawnChance = 0.05f;
 };

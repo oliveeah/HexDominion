@@ -55,7 +55,10 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Tile Properties | Spawning")
 	bool isSpawnableTile = true;
-	
+
+	UPROPERTY(VisibleAnywhere, Category = "Tile Properties | Spawning")
+	bool bIsSpecialTile = false;
+
 	UPROPERTY(VisibleAnywhere, Category = "Tile Properties | Visual")
 	ETileHighlightState currentHighlightType = ETileHighlightState::None;
 
@@ -110,7 +113,7 @@ private:
 		bool						  GetIsOccupied() const { return isOccupied; }
 		EActivePlayerSide			  GetOccupyingPlayer() const { return owningPlayer; }
 		ETileHighlightState&		  getHighlightType() { return currentHighlightType; }
-
+		bool					   getIsSpecialTile() const { return bIsSpecialTile; }
 		//getters
 
 		//setters
@@ -120,6 +123,7 @@ private:
 		void SetIsOccupied(bool occupied) { isOccupied = occupied; }
 		void setHasBuilding(bool hasBuilding) { bHasBuilding = hasBuilding; }
 		void SetGridCoordinates(const FIntPoint& coordinates) { gridCoordinates = coordinates; }
+		void SetIsSpecialTile(bool bSpecial) { bIsSpecialTile = bSpecial; }
 
 		UFUNCTION()
 		void SetOwningPlayer(EActivePlayerSide newOwner) { owningPlayer = newOwner; }

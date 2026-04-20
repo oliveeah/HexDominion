@@ -101,3 +101,9 @@ bool ATileManager::HasTile(const FIntPoint& Coords) const
 {
 	return TileMap.Contains(Coords);
 }
+
+void ATileManager::RegisterTeleporterTile(const FIntPoint& Coords)
+{
+	TeleporterTileCoords.AddUnique(Coords);
+	UE_LOG(LogTemp, Log, TEXT("Teleporter registered at (%d, %d). Total: %d"), Coords.X, Coords.Y, TeleporterTileCoords.Num());
+}

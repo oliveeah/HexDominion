@@ -52,6 +52,9 @@ public:
 	/*Getters for subsystems*/
 	UTileInteractionHandler* GetInteractionHandler() const { return InteractionHandler; }
 	UTileHighlightSystem*	 GetHighlightSystem() const { return HighlightSystem; }
+	const TArray<FIntPoint>& GetTeleporterTiles() const { return TeleporterTileCoords; }
+
+	void RegisterTeleporterTile(const FIntPoint& Coords);
 
 	/*Delegate handlers*/
 	UFUNCTION()
@@ -78,5 +81,7 @@ private:
 
 		UPROPERTY(EditAnywhere, Category = "SFX")
 	USoundBase* DeathSFX = nullptr;
+
+	TArray<FIntPoint> TeleporterTileCoords;
 };
 
