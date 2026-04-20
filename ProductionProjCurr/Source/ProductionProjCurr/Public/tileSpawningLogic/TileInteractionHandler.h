@@ -41,6 +41,7 @@ public:
 
 	ABG_Tile* GetSelectedTile() const { return SelectedTile; }
 	void	  SetClickSFX(USoundBase* InSFX) { ClickSFX = InSFX; }
+	void	  SetDeathSFX(USoundBase* InSFX) { DeathSFX = InSFX; }
 
 	TArray<FIntPoint> GetAdjacentTiles(bool bIncludeDiagonals, int32 AdjRange, ABG_Tile* Tile) const;
 	bool			  HasTile(const FIntPoint& Coords) const;
@@ -66,4 +67,7 @@ private:
 
 	UPROPERTY()
 	USoundBase* ClickSFX = nullptr;
+
+		UPROPERTY()
+	USoundBase* DeathSFX = nullptr;
 };

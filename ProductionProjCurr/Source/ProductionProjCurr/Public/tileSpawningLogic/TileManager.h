@@ -75,4 +75,8 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "SFX")
 	USoundBase* ClickSFX = nullptr;
+
+		UPROPERTY(EditAnywhere, Category = "SFX")
+	USoundBase* DeathSFX = nullptr;
 };
+

@@ -54,6 +54,7 @@ void UTileInteractionHandler::OnTroopDeath()
 {
 	if (HighlightSystem)
 		HighlightSystem->RemoveOutlineFromAllTiles();
+	PlaySoundEffect(DeathSFX);
 }
 
 void UTileInteractionHandler::OnTurnChanged(EActivePlayerSide NewActivePlayer)
@@ -219,6 +220,7 @@ void UTileInteractionHandler::Handle_MoveTroop(ABG_Tile* PreviousTile, ABG_Tile*
 		if (bCanMove)
 		{
 			OccupyingTroop->MoveToTile(Tile);
+			PlaySoundEffect(OccupyingTroop->GetMoveSound());
 			Tile->SetOccupyingTroop(OccupyingTroop);
 			Tile->SetIsOccupied(true);
 
@@ -259,6 +261,9 @@ void UTileInteractionHandler::Handle_AttackTroop(ABG_Tile* PreviousTile, ABG_Til
 	if (bFriendlyFire)
 		return;
 
+	// Play attack SFX before dealing damage (which may destroy the defender)
+	PlaySoundEffect(AttackingTroop->GetAttackSound());
+
 	AttackingTroop->SetInteractingTroop(DefendingTroop);
 	DefendingTroop->SetInteractingTroop(AttackingTroop);
 
@@ -267,9 +272,8 @@ void UTileInteractionHandler::Handle_AttackTroop(ABG_Tile* PreviousTile, ABG_Til
 
 void UTileInteractionHandler::PlaySoundEffect(USoundBase* Sound)
 {
-	UWorld* World = GetWorld();
-	if (Sound && World)
-	{
-		UGameplayStatics::PlaySound2D(World, Sound);
-	}
+	if (!Sound)
+		return;
+
+	UGameplayStatics::PlaySound2D(this, Sound);
 }

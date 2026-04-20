@@ -3,7 +3,9 @@
 
 #include "Occupant/Occupant_Troop_BaseClass.h"
 #include "Occupant_Troop_Data.h"
+#include "SFX_Troop_Data.h"
 #include "tileSpawningLogic/BG_Tile.h"
+#include "Kismet/GameplayStatics.h"
 
 void AOccupant_Troop_BaseClass::LookAtTarget(const FVector& TargetLocation)
 {
@@ -121,6 +123,9 @@ void AOccupant_Troop_BaseClass::SetOwningPlayer(EActivePlayerSide NewPlayer)
 		SkeletalMesh->SetAnimInstanceClass(TeamData->AnimClass);
 	}
 	SkeletalMesh->SetWorldScale3D(FVector(TeamData->Scale));
+
+	// Re-cache SFX now that we know the owner
+	SetSoundEffects();
 }
 
 void AOccupant_Troop_BaseClass::TroopAttack()
@@ -189,6 +194,7 @@ AOccupant_Troop_BaseClass::AOccupant_Troop_BaseClass()
 void AOccupant_Troop_BaseClass::BeginPlay()
 {
 	Super::BeginPlay();
+
 	SetTroopState(ETroopState::Idle);	
 }
 
@@ -243,11 +249,71 @@ void AOccupant_Troop_BaseClass::MoveToTile(ABG_Tile* Tile)
 
 void AOccupant_Troop_BaseClass::TroopDeath()
 {
+	PlaySoundEffect(CachedDeathSound);
+
 	if (OwningTile)
 	{
+		OwningTile->SetOccupyingTroop(nullptr);
 		OwningTile->SetIsOccupied(false);
+		OwningTile->SetOwningPlayer(EActivePlayerSide::None);
+		OwningTile->removeOutlineEffect();
+		OwningTile->SetHighlightType(ETileHighlightState::None);
+		OwningTile = nullptr;
 	}
+
 	this->Destroy();
+}
+
+void AOccupant_Troop_BaseClass::SetSoundEffects()
+{
+	if (!TroopSFXData)
+		return;
+
+	const FTroopSFX* SFX = nullptr;
+	EActivePlayerSide OwnerSide = GetOwningPlayer();
+
+	switch (OwnerSide)
+	{
+		case EActivePlayerSide::PlayerA:
+			SFX = &TroopSFXData->FTroopSFX_PlayerA;
+			break;
+		case EActivePlayerSide::PlayerB:
+			SFX = &TroopSFXData->FTroopSFX_PlayerB;
+			break;
+		case EActivePlayerSide::PlayerC:
+			SFX = &TroopSFXData->FTroopSFX_PlayerC;
+			break;
+		case EActivePlayerSide::PlayerD:
+			SFX = &TroopSFXData->FTroopSFX_PlayerD;
+			break;
+		default:
+			return;
+	}
+
+	CachedDeathSound = SFX->DeathSound;
+	CachedAttackSound = SFX->AttackSound;
+	CachedSpawnSound = SFX->SpawnSound;
+	CachedMoveSound = SFX->MoveSound;
+}
+
+USoundBase* AOccupant_Troop_BaseClass::GetMoveSound() const
+{
+	return CachedMoveSound;
+}
+
+USoundBase* AOccupant_Troop_BaseClass::GetAttackSound() const
+{
+	return CachedAttackSound;
+}
+
+USoundBase* AOccupant_Troop_BaseClass::GetDamageSound() const
+{
+	return CachedDeathSound;
+}
+
+USoundBase* AOccupant_Troop_BaseClass::GetDeathSound() const
+{
+	return CachedDeathSound;
 }
 
 void AOccupant_Troop_BaseClass::NotifyActionAnimationStarted()
@@ -262,5 +328,11 @@ void AOccupant_Troop_BaseClass::NotifyActionAnimationFinished()
 	OnIsAnimatingActionChanged.Broadcast(animatingAction);
 }
 
+void AOccupant_Troop_BaseClass::PlaySoundEffect(USoundBase* Sound)
+{
+	if (!Sound)
+		return;
 
+	UGameplayStatics::PlaySoundAtLocation(this, Sound, GetActorLocation());
+}
 

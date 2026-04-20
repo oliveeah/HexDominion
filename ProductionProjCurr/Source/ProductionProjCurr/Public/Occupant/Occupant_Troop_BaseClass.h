@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Occupant/Occupant_BaseClass.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Sound/SoundBase.h"
 #include "Occupant_Troop_BaseClass.generated.h"
 
 class USkeletalMesh;
@@ -12,6 +13,7 @@ class AOccupant_BaseClass;
 class UOccupant_Troop_Data;
 class UAnimInstance;
 class ABG_Tile;
+class USFX_Troop_Data;
 
 UENUM(BlueprintType)
 enum class ETroopState : uint8
@@ -70,8 +72,12 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 		UPROPERTY(EditDefaultsOnly, Category = "Team")
 		UOccupant_Troop_Data* TroopData;
 
+		UPROPERTY(EditDefaultsOnly, Category = "SFX")
+		USFX_Troop_Data* TroopSFXData;
+
 		UPROPERTY()
 		ABG_Tile* OwningTile = nullptr;
+
 		
 		void LookAtTarget(const FVector& TargetLocation);
 		void LookAtTarget(AOccupant_BaseClass* Target);
@@ -95,6 +101,7 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 		void SetOwningPlayer(EActivePlayerSide NewPlayer) override;
 		void SetInteractingTroop(AOccupant_BaseClass* NewTarget) { InteractingTroop = NewTarget; }
 		void SetOwningTile(ABG_Tile* NewTile) { OwningTile = NewTile; }
+		void SetSoundEffects();
 
 		UFUNCTION(BlueprintCallable, Category = "Troop|Animation")
 		void NotifyActionAnimationStarted();
@@ -107,6 +114,10 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 		int  GetTroopDamage() const { return Damage; }
 		ETroopState GetTroopState() const { return CurrentState; }
 		ABG_Tile* GetOwningTile() const { return OwningTile; }
+		USoundBase* GetMoveSound() const;
+		USoundBase* GetAttackSound() const;
+		USoundBase* GetDamageSound() const;
+		USoundBase* GetDeathSound() const;
 
 		/*Movement*/
 		virtual bool CanMoveTo(const FIntPoint& Target, TArray<FIntPoint> Neighbors) const;
@@ -129,9 +140,21 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 
 		bool TroopAnimatingAction() const { return animatingAction; }
 
+		void PlaySoundEffect(USoundBase* Sound);
 
 
 	protected:
+		UPROPERTY()
+		USoundBase* CachedDeathSound = nullptr;
+	UPROPERTY()
+		USoundBase* CachedAttackSound = nullptr;
+	UPROPERTY()
+		USoundBase* CachedSpawnSound = nullptr;
+	UPROPERTY()
+		USoundBase* CachedMoveSound = nullptr;
 };
+
+
+
 
 
