@@ -42,6 +42,9 @@ class PRODUCTIONPROJCURR_API UDevMode_Widget : public UUserWidget
 	UFUNCTION()
 	void HandleTurnChanged(EActivePlayerSide NewActivePlayer);
 
+	UFUNCTION()
+	void UseContext_ButtonClicked();
+
 	public:
 	UPROPERTY(BlueprintAssignable, Category = "TurnManager")
 	FOnDevTurnChanged OnDevTurnChanged;
@@ -60,6 +63,11 @@ class PRODUCTIONPROJCURR_API UDevMode_Widget : public UUserWidget
 	TObjectPtr<UButton> PassTurn_Button;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidgetOptional))
 	TObjectPtr<UTextBlock> PassTurn_ButtonLabel;
+
+		UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	TObjectPtr<UButton> UseContext_Button;
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidgetOptional))
+	TObjectPtr<UTextBlock> UseContext_ButtonLabel;
 
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	TObjectPtr<UTextBlock> WidgetTitle;

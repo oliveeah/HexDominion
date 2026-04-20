@@ -35,7 +35,10 @@ void UDevMode_Widget::NativeConstruct()
 	{
 		PassTurn_Button->OnClicked.AddDynamic(this, &UDevMode_Widget::PassTurn_ButtonClicked);
 	}
-
+	if (UseContext_Button)
+	{
+		UseContext_Button->OnClicked.AddDynamic(this, &UDevMode_Widget::UseContext_ButtonClicked);
+	}
 	for (TActorIterator<ATileManager> It(GetWorld()); It; ++It)
 	{
 		DevTileManager = *It;
@@ -70,19 +73,22 @@ void UDevMode_Widget::initializeButtonLabels()
 	TArray<UButton*> Buttons = {
 		SpawnTroopAtSelectedTile_Button,
 		SpawnBuildingAtSelectedTile_Button,
-		PassTurn_Button
+		PassTurn_Button,
+		UseContext_Button
 	};
 
 	TArray<UTextBlock*> Labels = {
 		SpawnTroopAtSelectedTiled_ButtonLabel,
 		SpawnBuildingAtSelectedTile_ButtonLabel,
-		PassTurn_ButtonLabel
+		PassTurn_ButtonLabel,
+		UseContext_ButtonLabel
 	};
 
 	TArray<FString> LabelTexts = {
 		TEXT("Spawn Troop At Selected Tile"),
 		TEXT("Spawn Building At Selected Tile"),
-		TEXT("Pass Turn")
+		TEXT("Pass Turn"),
+		TEXT("Use Context Action")
 	};
 
 	for (int32 i = 0; i < Buttons.Num(); ++i)
@@ -166,4 +172,9 @@ void UDevMode_Widget::generateButtonLabelText(UTextBlock* buttonLabel, const FSt
 void UDevMode_Widget::HandleTurnChanged(EActivePlayerSide NewActivePlayer)
 {
 	OnDevTurnChanged.Broadcast(NewActivePlayer);
+}
+
+void UDevMode_Widget::UseContext_ButtonClicked()
+{
+	UE_LOG(LogTemp, Display, TEXT("context clicked"));
 }
