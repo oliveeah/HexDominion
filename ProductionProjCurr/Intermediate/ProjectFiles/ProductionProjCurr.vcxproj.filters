@@ -132,6 +132,9 @@
     <ClCompile Include="..\..\Source\ProductionProjCurr\Private\tileSpawningLogic\TileSpawner_Data.cpp">
       <Filter>Source\ProductionProjCurr\Private\tileSpawningLogic</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ProductionProjCurr\Private\tileSpawningLogic\Tile_PathLogic.cpp">
+      <Filter>Source\ProductionProjCurr\Private\tileSpawningLogic</Filter>
+    </ClCompile>
     <Filter Include="Source\ProductionProjCurr\Public">
       <UniqueIdentifier>{9664A9DA-BD2D-3ABC-8239-4F68364AEA1D}</UniqueIdentifier>
     </Filter>
@@ -201,9 +204,6 @@
     <Filter Include="Source\ProductionProjCurr\Public\Occupant">
       <UniqueIdentifier>{611608D6-1042-3130-B1E3-67127D9F5E0F}</UniqueIdentifier>
     </Filter>
-    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\Occupant\TroopSpawner.h">
-      <Filter>Source\ProductionProjCurr\Public\Occupant</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\Occupant\Occupant_BaseClass.h">
       <Filter>Source\ProductionProjCurr\Public\Occupant</Filter>
     </ClInclude>
@@ -211,6 +211,9 @@
       <Filter>Source\ProductionProjCurr\Public\Occupant</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\Occupant\Occupant_Troop_BaseClass.h">
+      <Filter>Source\ProductionProjCurr\Public\Occupant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\Occupant\TroopSpawner.h">
       <Filter>Source\ProductionProjCurr\Public\Occupant</Filter>
     </ClInclude>
     <Filter Include="Source\ProductionProjCurr\Public\playerData">
@@ -262,6 +265,9 @@
       <Filter>Source\ProductionProjCurr\Public\tileSpawningLogic</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\TileSpawner_Data.h">
+      <Filter>Source\ProductionProjCurr\Public\tileSpawningLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\Tile_PathLogic.h">
       <Filter>Source\ProductionProjCurr\Public\tileSpawningLogic</Filter>
     </ClInclude>
   </ItemGroup>

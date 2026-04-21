@@ -39,9 +39,6 @@ public:
 	TSubclassOf<ABG_Tile> TileClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Tiles | Biomes")
-	TArray<TSubclassOf<ABG_Tile>> WaterTiles;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Tiles | Biomes")
 	TSubclassOf<ABG_Tile> HillTile;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Tiles | Biomes")
@@ -63,11 +60,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Parameters | Path")
 	float turnChance = 0.25f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Parameters | Path")
-	bool bUseSubdivisionGaps = true;
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Parameters | Path")
+	//bool bUseSubdivisionGaps = true;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Parameters | Path")
-	int32 subdivisionGapWidth = 1;
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Parameters | Path")
+	//int32 subdivisionGapWidth = 1;
 
 	// Bias + Foliage
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Parameters | Setup")
@@ -79,16 +76,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Parameters | Foliage")
 	float foliageSpawnChance = 0.6f;
 
-	// Biome Thresholds
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Parameters | Biomes")
-	float waterThreshold = 0.4f;
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Parameters | Biomes")
 	float grasslandThreshold = 0.7f;
 
 	// Special Tiles
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Tiles | Special")
-	TSubclassOf<ABG_Tile> TeleporterTile;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Parameters | Special")
 	float teleporterSpawnChance = 0.05f;
@@ -99,4 +90,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Parameters | Special")
 	float obeliskSpawnChance = 0.05f;
+
+	// Special Tiles - Teleporter (for paths)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Tiles | Special")
+	TSubclassOf<ABG_Tile> TeleporterTile;
 };

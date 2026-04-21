@@ -94,6 +94,9 @@ void ABG_PlayerPawn::ToggleDevMenu()
 
 void ABG_PlayerPawn::AdjustCameraZoom(float desiredOrthoWidth)
 {
-	Camera->OrthoWidth = desiredOrthoWidth;
+	if (Camera)
+	{
+		Camera->OrthoWidth = FMath::Clamp(desiredOrthoWidth, 500.0f, 10000.0f);
+	}
 }
 
