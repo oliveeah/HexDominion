@@ -330,12 +330,12 @@ void Z_Construct_UClass_ABG_Tile_Statics::NewProp_isSpawnableTile_SetBit(void* O
 {
 	((ABG_Tile*)Obj)->isSpawnableTile = 1;
 }
-const UECodeGen_Private::FBoolPropertyParams Z_Construct_UClass_ABG_Tile_Statics::NewProp_isSpawnableTile = { "isSpawnableTile", nullptr, (EPropertyFlags)0x0040000000020001, UECodeGen_Private::EPropertyGenFlags::Bool | UECodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, sizeof(bool), sizeof(ABG_Tile), &Z_Construct_UClass_ABG_Tile_Statics::NewProp_isSpawnableTile_SetBit, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_isSpawnableTile_MetaData), NewProp_isSpawnableTile_MetaData) };
+const UECodeGen_Private::FBoolPropertyParams Z_Construct_UClass_ABG_Tile_Statics::NewProp_isSpawnableTile = { "isSpawnableTile", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Bool | UECodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, sizeof(bool), sizeof(ABG_Tile), &Z_Construct_UClass_ABG_Tile_Statics::NewProp_isSpawnableTile_SetBit, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_isSpawnableTile_MetaData), NewProp_isSpawnableTile_MetaData) };
 void Z_Construct_UClass_ABG_Tile_Statics::NewProp_bIsSpecialTile_SetBit(void* Obj)
 {
 	((ABG_Tile*)Obj)->bIsSpecialTile = 1;
 }
-const UECodeGen_Private::FBoolPropertyParams Z_Construct_UClass_ABG_Tile_Statics::NewProp_bIsSpecialTile = { "bIsSpecialTile", nullptr, (EPropertyFlags)0x0040000000020001, UECodeGen_Private::EPropertyGenFlags::Bool | UECodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, sizeof(bool), sizeof(ABG_Tile), &Z_Construct_UClass_ABG_Tile_Statics::NewProp_bIsSpecialTile_SetBit, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_bIsSpecialTile_MetaData), NewProp_bIsSpecialTile_MetaData) };
+const UECodeGen_Private::FBoolPropertyParams Z_Construct_UClass_ABG_Tile_Statics::NewProp_bIsSpecialTile = { "bIsSpecialTile", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Bool | UECodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, sizeof(bool), sizeof(ABG_Tile), &Z_Construct_UClass_ABG_Tile_Statics::NewProp_bIsSpecialTile_SetBit, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_bIsSpecialTile_MetaData), NewProp_bIsSpecialTile_MetaData) };
 const UECodeGen_Private::FBytePropertyParams Z_Construct_UClass_ABG_Tile_Statics::NewProp_currentHighlightType_Underlying = { "UnderlyingType", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Byte, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, 0, nullptr, METADATA_PARAMS(0, nullptr) };
 const UECodeGen_Private::FEnumPropertyParams Z_Construct_UClass_ABG_Tile_Statics::NewProp_currentHighlightType = { "currentHighlightType", nullptr, (EPropertyFlags)0x0040000000020001, UECodeGen_Private::EPropertyGenFlags::Enum, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_Tile, currentHighlightType), Z_Construct_UEnum_ProductionProjCurr_ETileHighlightState, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_currentHighlightType_MetaData), NewProp_currentHighlightType_MetaData) }; // 1313919674
 const UECodeGen_Private::FNamePropertyParams Z_Construct_UClass_ABG_Tile_Statics::NewProp_TileHueParameterName = { "TileHueParameterName", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Name, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_Tile, TileHueParameterName), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_TileHueParameterName_MetaData), NewProp_TileHueParameterName_MetaData) };
@@ -418,10 +418,10 @@ ABG_Tile::~ABG_Tile() {}
 struct Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_Tile_h__Script_ProductionProjCurr_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_ABG_Tile, ABG_Tile::StaticClass, TEXT("ABG_Tile"), &Z_Registration_Info_UClass_ABG_Tile, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ABG_Tile), 2343544923U) },
+		{ Z_Construct_UClass_ABG_Tile, ABG_Tile::StaticClass, TEXT("ABG_Tile"), &Z_Registration_Info_UClass_ABG_Tile, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ABG_Tile), 840000896U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_Tile_h__Script_ProductionProjCurr_3960214327(TEXT("/Script/ProductionProjCurr"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_Tile_h__Script_ProductionProjCurr_3189724678(TEXT("/Script/ProductionProjCurr"),
 	Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_Tile_h__Script_ProductionProjCurr_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_Tile_h__Script_ProductionProjCurr_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);

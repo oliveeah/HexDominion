@@ -14,7 +14,6 @@
     <None Include="..\..\.clang-format" />
     <None Include="..\..\.gitignore" />
     <None Include="..\..\.vsconfig" />
-    <ClInclude Include="..\..\BG_TileSpawner.h" />
     <Filter Include="Config">
       <UniqueIdentifier>{FA535FFB-25E1-3D20-B416-52F9BE21E06E}</UniqueIdentifier>
     </Filter>
@@ -64,12 +63,6 @@
       <Filter>Source\ProductionProjCurr\Private</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ProductionProjCurr\Private\SFX_Troop_Data.cpp">
-      <Filter>Source\ProductionProjCurr\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ProductionProjCurr\Private\Troop.cpp">
-      <Filter>Source\ProductionProjCurr\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ProductionProjCurr\Private\UPlayerProfile.cpp">
       <Filter>Source\ProductionProjCurr\Private</Filter>
     </ClCompile>
     <Filter Include="Source\ProductionProjCurr\Private\Building">
@@ -148,9 +141,6 @@
       <Filter>Source\ProductionProjCurr\Public</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\SFX_Troop_Data.h">
-      <Filter>Source\ProductionProjCurr\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\Troop.h">
       <Filter>Source\ProductionProjCurr\Public</Filter>
     </ClInclude>
     <Filter Include="Source\ProductionProjCurr\Public\animations">

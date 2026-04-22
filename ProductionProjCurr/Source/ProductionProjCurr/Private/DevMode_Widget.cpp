@@ -4,6 +4,7 @@
 #include <Kismet/GameplayStatics.h>
 #include "tileSpawningLogic/TileManager.h"
 #include "tileSpawningLogic/TileInteractionHandler.h"
+#include "tileSpawningLogic/BG_Tile.h"
 #include "Occupant/TroopSpawner.h"
 #include "Occupant/Occupant_BaseClass.h"
 #include "Occupant/Occupant_Troop_BaseClass.h"
@@ -177,4 +178,29 @@ void UDevMode_Widget::HandleTurnChanged(EActivePlayerSide NewActivePlayer)
 void UDevMode_Widget::UseContext_ButtonClicked()
 {
 	UE_LOG(LogTemp, Display, TEXT("context clicked"));
+
+	if (!DevTileManager)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("DevTileManager not assigned in UseContext_ButtonClicked!"));
+		return;
+	}
+
+	UTileInteractionHandler* Interaction = DevTileManager->GetInteractionHandler();
+
+	if (!Interaction)
+		return;
+
+	ABG_Tile* SelectedTile = Interaction->GetSelectedTile();
+
+	if (SelectedTile && SelectedTile->getIsSpecialTile())
+	{
+		// Handle special tile context action
+		UE_LOG(LogTemp, Warning, TEXT("Clicked on special tile!"));
+
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Clicked on normal tile!"));
+
+	}
 }

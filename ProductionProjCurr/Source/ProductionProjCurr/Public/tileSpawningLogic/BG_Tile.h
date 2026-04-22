@@ -53,10 +53,10 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Tile Properties | Spawning")
 	bool bBuildingCanBePlacedOnTile = true;
 
-	UPROPERTY(VisibleAnywhere, Category = "Tile Properties | Spawning")
+	UPROPERTY(EditAnywhere, Category = "Tile Properties | Spawning")
 	bool isSpawnableTile = true;
 
-	UPROPERTY(VisibleAnywhere, Category = "Tile Properties | Spawning")
+	UPROPERTY(EditAnywhere, Category = "Tile Properties | Spawning")
 	bool bIsSpecialTile = false;
 
 	UPROPERTY(VisibleAnywhere, Category = "Tile Properties | Visual")
