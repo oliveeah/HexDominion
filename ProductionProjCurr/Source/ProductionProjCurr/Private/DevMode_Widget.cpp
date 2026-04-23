@@ -177,30 +177,20 @@ void UDevMode_Widget::HandleTurnChanged(EActivePlayerSide NewActivePlayer)
 
 void UDevMode_Widget::UseContext_ButtonClicked()
 {
-	UE_LOG(LogTemp, Display, TEXT("context clicked"));
-
 	if (!DevTileManager)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("DevTileManager not assigned in UseContext_ButtonClicked!"));
 		return;
-	}
 
 	UTileInteractionHandler* Interaction = DevTileManager->GetInteractionHandler();
-
 	if (!Interaction)
 		return;
 
 	ABG_Tile* SelectedTile = Interaction->GetSelectedTile();
-
-	if (SelectedTile && SelectedTile->getIsSpecialTile())
+	if (SelectedTile)
 	{
-		// Handle special tile context action
-		UE_LOG(LogTemp, Warning, TEXT("Clicked on special tile!"));
-
+		SelectedTile->UseContextAction(DevTileManager);
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Clicked on normal tile!"));
-
+		UE_LOG(LogTemp, Warning, TEXT("No tile selected for context action."));
 	}
 }

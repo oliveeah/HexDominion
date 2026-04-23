@@ -13,6 +13,7 @@ class UStaticMeshComponent;
 class UDecalComponent;
 class UMaterialInstanceDynamic;
 class USceneComponent;
+class ATileManager;
 
 class AOccupant_Troop_BaseClass;
 class AOccupant_Building_BaseClass;
@@ -141,5 +142,6 @@ private:
 
 		void ApplyHueFromNoise(float NoiseValue);
 
-		virtual void UseContextAction();
+		// Forward declaration so the base signature compiles
+		virtual void UseContextAction(ATileManager* InTileManager) {}
 };

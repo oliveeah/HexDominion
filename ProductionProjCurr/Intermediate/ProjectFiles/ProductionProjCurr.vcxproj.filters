@@ -105,9 +105,6 @@
     <Filter Include="Source\ProductionProjCurr\Private\playerData">
       <UniqueIdentifier>{D4B4FD6D-096B-3D52-9AE9-8AB0B397F8A6}</UniqueIdentifier>
     </Filter>
-    <ClCompile Include="..\..\Source\ProductionProjCurr\Private\playerData\InteractionInterface.cpp">
-      <Filter>Source\ProductionProjCurr\Private\playerData</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ProductionProjCurr\Private\playerData\MyPlayerState.cpp">
       <Filter>Source\ProductionProjCurr\Private\playerData</Filter>
     </ClCompile>
@@ -135,6 +132,9 @@
     <ClCompile Include="..\..\Source\ProductionProjCurr\Private\tileSpawningLogic\Tile_PathLogic.cpp">
       <Filter>Source\ProductionProjCurr\Private\tileSpawningLogic</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ProductionProjCurr\Private\tileSpawningLogic\Tile_Special_Obelisk.cpp">
+      <Filter>Source\ProductionProjCurr\Private\tileSpawningLogic</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\ProductionProjCurr\Private\tileSpawningLogic\Tile_Special_Teleporter.cpp">
       <Filter>Source\ProductionProjCurr\Private\tileSpawningLogic</Filter>
     </ClCompile>
@@ -151,9 +151,6 @@
       <Filter>Source\ProductionProjCurr\Public</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\SFX_Troop_Data.h">
-      <Filter>Source\ProductionProjCurr\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\Troop.h">
       <Filter>Source\ProductionProjCurr\Public</Filter>
     </ClInclude>
     <Filter Include="Source\ProductionProjCurr\Public\animations">
@@ -273,8 +270,16 @@
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\Tile_PathLogic.h">
       <Filter>Source\ProductionProjCurr\Public\tileSpawningLogic</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\Tile_Special_Obelisk.h">
+      <Filter>Source\ProductionProjCurr\Public\tileSpawningLogic</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\Tile_Special_Teleporter.h">
       <Filter>Source\ProductionProjCurr\Public\tileSpawningLogic</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Source\ProductionProjCurr\Private\playerData\InteractionInterface.cpp">
+      <Filter>Source\ProductionProjCurr\Private\playerData</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

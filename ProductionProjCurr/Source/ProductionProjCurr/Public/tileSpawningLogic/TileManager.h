@@ -82,6 +82,9 @@ private:
 		UPROPERTY(EditAnywhere, Category = "SFX")
 	USoundBase* DeathSFX = nullptr;
 
+	UPROPERTY(EditAnywhere, Category = "SFX")
+	USoundBase* TeleportSFX = nullptr;
+
 	TArray<FIntPoint> TeleporterTileCoords;
 };
 

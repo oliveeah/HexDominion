@@ -23,8 +23,8 @@ void ATileManager::BeginPlay()
 	InteractionHandler = NewObject<UTileInteractionHandler>(this);
 
 	InteractionHandler->Initialize(TurnManager, HighlightSystem, &TileMap);
-	InteractionHandler->SetClickSFX(ClickSFX);
 	InteractionHandler->SetDeathSFX(DeathSFX);
+	InteractionHandler->SetTeleportSFX(TeleportSFX);
 
 	if (TroopSpawner)
 	{

@@ -21,6 +21,7 @@ enum class EPlayerIntent : uint8
 	MoveTroop,
 	AttackTroop,
 	ReselectTile,
+	UseContextAction,
 	Cancel
 };
 
@@ -31,8 +32,8 @@ class PRODUCTIONPROJCURR_API UTileInteractionHandler : public UObject
 
 public:
 	void Initialize(
-		ATurnManager*				InTurnManager,
-		UTileHighlightSystem*		InHighlightSystem,
+		ATurnManager*               InTurnManager,
+		UTileHighlightSystem*       InHighlightSystem,
 		TMap<FIntPoint, ABG_Tile*>* InTileMap);
 
 	void OnTileClicked(ABG_Tile* Tile, bool bIsOccupied);
@@ -40,11 +41,13 @@ public:
 	void OnTurnChanged(EActivePlayerSide NewActivePlayer);
 
 	ABG_Tile* GetSelectedTile() const { return SelectedTile; }
-	void	  SetClickSFX(USoundBase* InSFX) { ClickSFX = InSFX; }
-	void	  SetDeathSFX(USoundBase* InSFX) { DeathSFX = InSFX; }
+	void      SetDeathSFX(USoundBase* InSFX)    { DeathSFX = InSFX; }
+	void      SetTeleportSFX(USoundBase* InSFX) { TeleportSFX = InSFX; }
 
 	TArray<FIntPoint> GetAdjacentTiles(bool bIncludeDiagonals, int32 AdjRange, ABG_Tile* Tile) const;
-	bool			  HasTile(const FIntPoint& Coords) const;
+	bool              HasTile(const FIntPoint& Coords) const;
+
+	void BeginTeleportSelection(ABG_Tile* SourceTile, const TArray<FIntPoint>& TeleporterCoords, const TMap<FIntPoint, ABG_Tile*>& TileMap);
 
 private:
 	EPlayerIntent DeterminePlayerIntent(ABG_Tile* ClickedTile) const;
@@ -52,10 +55,14 @@ private:
 	void Handle_SelectTile();
 	void Handle_MoveTroop(ABG_Tile* PreviousTile, ABG_Tile* Tile);
 	void Handle_AttackTroop(ABG_Tile* PreviousTile, ABG_Tile* Tile);
+	void Handle_TeleportTroop(ABG_Tile* SourceTile, ABG_Tile* DestinationTile);
 	void PlaySoundEffect(USoundBase* Sound);
 
 	UPROPERTY()
 	ABG_Tile* SelectedTile = nullptr;
+
+	UPROPERTY()
+	ABG_Tile* PendingTeleportSource = nullptr;
 
 	UPROPERTY()
 	ATurnManager* TurnManager = nullptr;
@@ -66,8 +73,8 @@ private:
 	TMap<FIntPoint, ABG_Tile*>* TileMapPtr = nullptr;
 
 	UPROPERTY()
-	USoundBase* ClickSFX = nullptr;
-
-		UPROPERTY()
 	USoundBase* DeathSFX = nullptr;
+
+	UPROPERTY()
+	USoundBase* TeleportSFX = nullptr;
 };

@@ -28,6 +28,8 @@ namespace TileManagerHelper_Functions
 				return FLinearColor(2.000000, 0, 0, 1); // Darker Red
 			case ETileHighlightState::Blocked:
 				return FLinearColor(5, 5, 5, 1); // White
+			case ETileHighlightState::Teleporter:
+				return FLinearColor(0.002000, 0.010000, 0.030000, 1.000000); // Darker Blue
 			default:
 				return FLinearColor(5, 5, 5, 1); // White
 		}
