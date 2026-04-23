@@ -59,6 +59,7 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Tile Properties | Spawning")
 	bool bIsSpecialTile = false;
 
+
 	UPROPERTY(VisibleAnywhere, Category = "Tile Properties | Visual")
 	ETileHighlightState currentHighlightType = ETileHighlightState::None;
 
@@ -139,4 +140,6 @@ private:
 		UMaterialInstanceDynamic* TileMeshMID;
 
 		void ApplyHueFromNoise(float NoiseValue);
+
+		virtual void UseContextAction();
 };
