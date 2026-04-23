@@ -29,11 +29,22 @@ void ATurnManager::PassTurn()
 		case EActivePlayerSide::PlayerD:
 		default:
 			activePlayer = EActivePlayerSide::PlayerA;
+			AllPlayersTakeTurn();
 			UE_LOG(LogTemp, Display, TEXT("Player A is active"));
 			break;
 	}
 
 	OnTurnChanged.Broadcast(activePlayer);
+}
+
+void ATurnManager::AllPlayersTakeTurn()
+{
+	currentTurn++;
+	if (currentTurn <= MaxTurns)
+	{
+		UE_LOG(LogTemp, Display, TEXT("current turn: %d"), currentTurn);
+	}
+
 }
 
 // Called when the game starts or when spawned

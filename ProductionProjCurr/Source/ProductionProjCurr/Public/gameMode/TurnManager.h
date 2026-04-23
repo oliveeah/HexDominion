@@ -18,10 +18,15 @@ class PRODUCTIONPROJCURR_API ATurnManager : public AActor
 private:	
 	UPROPERTY()
 	EActivePlayerSide activePlayer = EActivePlayerSide::PlayerA;
+
+	static constexpr int MaxTurns = 10;
 	
 public:
 	UPROPERTY(BlueprintAssignable, Category = "TurnManager")
 	FOnTurnChanged OnTurnChanged;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "TurnManager")
+	int currentTurn = 1;
 
 protected:
 	// Called when the game starts or when spawned
@@ -35,6 +40,8 @@ public:
 	void PassTurn();
 
 	EActivePlayerSide GetActivePlayer() const { return activePlayer; }
+
+	void AllPlayersTakeTurn();
 
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	//UUIManager* UIManager;
