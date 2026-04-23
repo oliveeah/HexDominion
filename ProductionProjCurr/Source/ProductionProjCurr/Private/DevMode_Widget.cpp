@@ -22,6 +22,8 @@ void UDevMode_Widget::NativeConstruct()
 		WidgetTitle->SetText(FText::FromString(TEXT("Developer Widget")));
 	}
 
+
+
 	initializeButtonLabels();
 
 	if (SpawnTroopAtSelectedTile_Button)
@@ -66,6 +68,7 @@ void UDevMode_Widget::NativeConstruct()
 	else
 	{
 		turnManager->OnTurnChanged.AddUniqueDynamic(this, &UDevMode_Widget::HandleTurnChanged);
+		turnManager->OnAllPlayersTakenTurn.AddUniqueDynamic(this, &UDevMode_Widget::HandleAllPlayersTakenTurn);
 	}
 }
 
@@ -193,4 +196,9 @@ void UDevMode_Widget::UseContext_ButtonClicked()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("No tile selected for context action."));
 	}
+}
+
+void UDevMode_Widget::HandleAllPlayersTakenTurn(int32 CurrentTurn)
+{
+	OnRoundCompleted(CurrentTurn);
 }

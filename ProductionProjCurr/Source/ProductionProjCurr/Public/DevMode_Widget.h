@@ -83,4 +83,10 @@ class PRODUCTIONPROJCURR_API UDevMode_Widget : public UUserWidget
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TurnManager")
 	ATurnManager* turnManager;
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "TurnManager")
+	void OnRoundCompleted(int32 CurrentTurn);
+
+	UFUNCTION()
+	void HandleAllPlayersTakenTurn(int32 CurrentTurn);
 };

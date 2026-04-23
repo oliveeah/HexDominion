@@ -40,6 +40,9 @@ void ATurnManager::PassTurn()
 void ATurnManager::AllPlayersTakeTurn()
 {
 	currentTurn++;
+
+	OnAllPlayersTakenTurn.Broadcast(currentTurn);
+
 	if (currentTurn <= MaxTurns)
 	{
 		UE_LOG(LogTemp, Display, TEXT("current turn: %d"), currentTurn);
