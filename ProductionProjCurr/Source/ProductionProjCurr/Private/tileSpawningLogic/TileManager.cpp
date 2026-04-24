@@ -7,6 +7,7 @@
 #include "tileSpawningLogic/BG_Tile.h"
 #include "Occupant/TroopSpawner.h"
 #include "gameMode/TurnManager.h"
+#include "gameMode/EndGameLogic.h"
 #include "Kismet/GameplayStatics.h"
 
 ATileManager::ATileManager()
@@ -21,6 +22,7 @@ void ATileManager::BeginPlay()
 	// Create subsystems
 	HighlightSystem = NewObject<UTileHighlightSystem>(this);
 	InteractionHandler = NewObject<UTileInteractionHandler>(this);
+	EndGameLogic = NewObject<UEndGameLogic>(this);
 
 	InteractionHandler->Initialize(TurnManager, HighlightSystem, &TileMap);
 	InteractionHandler->SetDeathSFX(DeathSFX);
@@ -50,6 +52,8 @@ void ATileManager::BeginPlay()
 	if (TurnManager)
 	{
 		TurnManager->OnTurnChanged.AddDynamic(this, &ATileManager::HandleTurnChanged);
+		TurnManager->OnEndPhaseStarted.AddDynamic(this, &ATileManager::HandleEndPhaseStarted);
+		TurnManager->OnEndPhaseTurn.AddDynamic(this, &ATileManager::HandleEndPhaseTurn);
 	}
 	else
 	{
@@ -63,6 +67,13 @@ void ATileManager::HandleGridBuilt()
 			UGameplayStatics::GetActorOfClass(this, ABG_TileSpawner::StaticClass())))
 	{
 		TileGrid = TileSpawner->getTileGrid();
+
+		// Initialize EndGameLogic now that the grid and SpawnerData are available
+		if (EndGameLogic)
+		{
+			UTileSpawner_Data* SpawnerData = TileSpawner->GetTileSpawnerData();
+			EndGameLogic->Initialize(this, TurnManager, SpawnerData);
+		}
 
 		if (TroopSpawner)
 		{
@@ -106,4 +117,16 @@ void ATileManager::RegisterTeleporterTile(const FIntPoint& Coords)
 {
 	TeleporterTileCoords.AddUnique(Coords);
 	UE_LOG(LogTemp, Log, TEXT("Teleporter registered at (%d, %d). Total: %d"), Coords.X, Coords.Y, TeleporterTileCoords.Num());
+}
+
+void ATileManager::HandleEndPhaseStarted()
+{
+	if (EndGameLogic)
+		EndGameLogic->SpawnCornucopia();
+}
+
+void ATileManager::HandleEndPhaseTurn(int32 CurrentTurn)
+{
+	if (EndGameLogic)
+		EndGameLogic->EvaluateHoldCondition(CurrentTurn);
 }

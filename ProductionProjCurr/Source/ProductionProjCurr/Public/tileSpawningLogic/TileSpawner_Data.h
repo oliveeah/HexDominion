@@ -101,4 +101,7 @@ public:
 	// Special Tiles - Teleporter (for paths)
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Tiles | Special")
 	TSubclassOf<ABG_Tile> TeleporterTile;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Tiles | Special")
+	TSubclassOf<ABG_Tile> CornucopiaTile;
 };

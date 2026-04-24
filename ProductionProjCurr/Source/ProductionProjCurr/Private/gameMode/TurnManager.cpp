@@ -40,14 +40,23 @@ void ATurnManager::PassTurn()
 void ATurnManager::AllPlayersTakeTurn()
 {
 	currentTurn++;
+	UE_LOG(LogTemp, Display, TEXT("Round complete. Current turn: %d"), currentTurn);
 
-	OnAllPlayersTakenTurn.Broadcast(currentTurn);
-
-	if (currentTurn <= MaxTurns)
+	if (currentTurn == MaxTurns)
 	{
-		UE_LOG(LogTemp, Display, TEXT("current turn: %d"), currentTurn);
+		// Last normal turn — broadcast regular delegate then trigger end phase
+		OnAllPlayersTakenTurn.Broadcast(currentTurn);
+		OnEndPhaseStarted.Broadcast();
 	}
-
+	else if (currentTurn > MaxTurns)
+	{
+		// End phase — one broadcast per full round for hold tracking
+		OnEndPhaseTurn.Broadcast(currentTurn);
+	}
+	else
+	{
+		OnAllPlayersTakenTurn.Broadcast(currentTurn);
+	}
 }
 
 // Called when the game starts or when spawned

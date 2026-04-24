@@ -9,8 +9,11 @@
 
 class UUIManager;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTurnChanged, EActivePlayerSide, activePlayer);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAllPlayersTakenTurn,int, currentTurn);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTurnChanged, EActivePlayerSide, NewActivePlayer);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAllPlayersTakenTurn, int32, CurrentTurn);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnEndPhaseStarted);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEndPhaseTurn, int32, CurrentTurn);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerWon, EActivePlayerSide, WinningPlayer);
 
 UCLASS()
 class PRODUCTIONPROJCURR_API ATurnManager : public AActor
@@ -28,6 +31,15 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "TurnManager")
 	FOnAllPlayersTakenTurn OnAllPlayersTakenTurn;
+
+	UPROPERTY(BlueprintAssignable, Category = "TurnManager")
+	FOnEndPhaseStarted OnEndPhaseStarted;
+
+	UPROPERTY(BlueprintAssignable, Category = "TurnManager")
+	FOnEndPhaseTurn OnEndPhaseTurn;
+
+	UPROPERTY(BlueprintAssignable, Category = "TurnManager")
+	FOnPlayerWon OnPlayerWon;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "TurnManager")
 	int currentTurn = 1;

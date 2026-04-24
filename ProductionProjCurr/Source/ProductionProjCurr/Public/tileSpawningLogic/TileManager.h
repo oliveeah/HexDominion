@@ -13,6 +13,7 @@ class ATurnManager;
 class ATroopSpawner;
 class UTileHighlightSystem;
 class UTileInteractionHandler;
+class UEndGameLogic;
 
 UCLASS()
 class PRODUCTIONPROJCURR_API ATileManager : public AActor
@@ -69,6 +70,12 @@ public:
 	UFUNCTION()
 	void HandleGridBuilt();
 
+	UFUNCTION()
+	void HandleEndPhaseStarted();
+
+	UFUNCTION()
+	void HandleEndPhaseTurn(int32 CurrentTurn);
+
 private:
 	UPROPERTY()
 	UTileHighlightSystem* HighlightSystem;
@@ -86,5 +93,8 @@ private:
 	USoundBase* TeleportSFX = nullptr;
 
 	TArray<FIntPoint> TeleporterTileCoords;
+
+	UPROPERTY()
+	UEndGameLogic* EndGameLogic;
 };
 
