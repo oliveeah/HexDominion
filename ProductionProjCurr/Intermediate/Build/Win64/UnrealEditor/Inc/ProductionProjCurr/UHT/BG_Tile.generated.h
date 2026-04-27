@@ -18,6 +18,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 
 class ABG_Tile;
 enum class EActivePlayerSide : uint8;
+struct FLinearColor;
 
 // ********** Begin Delegate FOnTileSelected *******************************************************
 #define FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_Tile_h_26_DELEGATE \
@@ -31,6 +32,7 @@ PRODUCTIONPROJCURR_API void FOnTileSelected_DelegateWrapper(const FMulticastScri
 	DECLARE_FUNCTION(execSetOwningPlayer);
 
 
+#define FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_Tile_h_32_CALLBACK_WRAPPERS
 PRODUCTIONPROJCURR_API UClass* Z_Construct_UClass_ABG_Tile_NoRegister();
 
 #define FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_Tile_h_32_INCLASS_NO_PURE_DECLS \
@@ -60,6 +62,7 @@ public: \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
 	FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_Tile_h_32_RPC_WRAPPERS_NO_PURE_DECLS \
+	FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_Tile_h_32_CALLBACK_WRAPPERS \
 	FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_Tile_h_32_INCLASS_NO_PURE_DECLS \
 	FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_Tile_h_32_ENHANCED_CONSTRUCTORS \
 private: \

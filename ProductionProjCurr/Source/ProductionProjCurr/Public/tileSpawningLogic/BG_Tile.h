@@ -74,6 +74,12 @@ private:
 	float TileHueValue = 1.0f;
 
 	UPROPERTY(EditAnywhere, Category = "Tile Properties | Visual")
+	float FoliageHueSaturation = 0.8f;
+
+	UPROPERTY(EditAnywhere, Category = "Tile Properties | Visual")
+	float FoliageHueValue = 1.0f;
+
+	UPROPERTY(EditAnywhere, Category = "Tile Properties | Visual")
 	bool bUseHueFromNoise = true;
 
 	UPROPERTY(VisibleAnywhere, Category = "Tile | Info")
@@ -144,4 +150,7 @@ private:
 
 		// Forward declaration so the base signature compiles
 		virtual void UseContextAction(ATileManager* InTileManager) {}
+
+		UFUNCTION(BlueprintImplementableEvent, Category = "Tile Properties | Visual")
+		void ApplyFoliageHue(const FLinearColor& HueTint);
 };

@@ -92,15 +92,91 @@ void ABG_Tile::ApplyHueFromNoise(float NoiseValue)
 
 	const float Normalized = (NoiseValue + 1.0f) * 0.5f;
 	const float Hue = FMath::Clamp(Normalized, 0.0f, 1.0f);
-
 	const uint8 HueByte = static_cast<uint8>(Hue * 255.0f);
+
+	// Tile tint
 	const uint8 SatByte = static_cast<uint8>(FMath::Clamp(TileHueSaturation, 0.0f, 1.0f) * 255.0f);
 	const uint8 ValByte = static_cast<uint8>(FMath::Clamp(TileHueValue, 0.0f, 1.0f) * 255.0f);
+	const FLinearColor TileTint = FLinearColor::MakeFromHSV8(HueByte, SatByte, ValByte);
+	TileMeshMID->SetVectorParameterValue(TileHueParameterName, TileTint);
 
-	const FLinearColor Tint = FLinearColor::MakeFromHSV8(HueByte, SatByte, ValByte);
-
-	TileMeshMID->SetVectorParameterValue(TileHueParameterName, Tint);
+	// Foliage tint — same hue, independent saturation and value
+	const uint8 FolSatByte = static_cast<uint8>(FMath::Clamp(FoliageHueSaturation, 0.0f, 1.0f) * 255.0f);
+	const uint8 FolValByte = static_cast<uint8>(FMath::Clamp(FoliageHueValue, 0.0f, 1.0f) * 255.0f);
+	const FLinearColor FoliageTint = FLinearColor::MakeFromHSV8(HueByte, FolSatByte, FolValByte);
+	ApplyFoliageHue(FoliageTint);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

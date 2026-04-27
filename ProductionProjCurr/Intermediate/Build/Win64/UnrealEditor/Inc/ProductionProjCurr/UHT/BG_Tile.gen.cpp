@@ -13,6 +13,7 @@ void EmptyLinkFunctionForGeneratedCodeBG_Tile() {}
 
 // ********** Begin Cross Module References ********************************************************
 COREUOBJECT_API UScriptStruct* Z_Construct_UScriptStruct_FIntPoint();
+COREUOBJECT_API UScriptStruct* Z_Construct_UScriptStruct_FLinearColor();
 ENGINE_API UClass* Z_Construct_UClass_AActor();
 ENGINE_API UClass* Z_Construct_UClass_UDecalComponent_NoRegister();
 ENGINE_API UClass* Z_Construct_UClass_UMaterialInstanceDynamic_NoRegister();
@@ -83,6 +84,52 @@ void FOnTileSelected_DelegateWrapper(const FMulticastScriptDelegate& OnTileSelec
 	OnTileSelected.ProcessMulticastDelegate<UObject>(&Parms);
 }
 // ********** End Delegate FOnTileSelected *********************************************************
+
+// ********** Begin Class ABG_Tile Function ApplyFoliageHue ****************************************
+struct BG_Tile_eventApplyFoliageHue_Parms
+{
+	FLinearColor HueTint;
+};
+static FName NAME_ABG_Tile_ApplyFoliageHue = FName(TEXT("ApplyFoliageHue"));
+void ABG_Tile::ApplyFoliageHue(FLinearColor const& HueTint)
+{
+	BG_Tile_eventApplyFoliageHue_Parms Parms;
+	Parms.HueTint=HueTint;
+	UFunction* Func = FindFunctionChecked(NAME_ABG_Tile_ApplyFoliageHue);
+	ProcessEvent(Func,&Parms);
+}
+struct Z_Construct_UFunction_ABG_Tile_ApplyFoliageHue_Statics
+{
+#if WITH_METADATA
+	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
+		{ "Category", "Tile Properties | Visual" },
+		{ "ModuleRelativePath", "Public/tileSpawningLogic/BG_Tile.h" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_HueTint_MetaData[] = {
+		{ "NativeConst", "" },
+	};
+#endif // WITH_METADATA
+	static const UECodeGen_Private::FStructPropertyParams NewProp_HueTint;
+	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
+	static const UECodeGen_Private::FFunctionParams FuncParams;
+};
+const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_ABG_Tile_ApplyFoliageHue_Statics::NewProp_HueTint = { "HueTint", nullptr, (EPropertyFlags)0x0010000008000182, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(BG_Tile_eventApplyFoliageHue_Parms, HueTint), Z_Construct_UScriptStruct_FLinearColor, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_HueTint_MetaData), NewProp_HueTint_MetaData) };
+const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_ABG_Tile_ApplyFoliageHue_Statics::PropPointers[] = {
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_ABG_Tile_ApplyFoliageHue_Statics::NewProp_HueTint,
+};
+static_assert(UE_ARRAY_COUNT(Z_Construct_UFunction_ABG_Tile_ApplyFoliageHue_Statics::PropPointers) < 2048);
+const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_ABG_Tile_ApplyFoliageHue_Statics::FuncParams = { { (UObject*(*)())Z_Construct_UClass_ABG_Tile, nullptr, "ApplyFoliageHue", Z_Construct_UFunction_ABG_Tile_ApplyFoliageHue_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_ABG_Tile_ApplyFoliageHue_Statics::PropPointers), sizeof(BG_Tile_eventApplyFoliageHue_Parms), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x08C20800, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UFunction_ABG_Tile_ApplyFoliageHue_Statics::Function_MetaDataParams), Z_Construct_UFunction_ABG_Tile_ApplyFoliageHue_Statics::Function_MetaDataParams)},  };
+static_assert(sizeof(BG_Tile_eventApplyFoliageHue_Parms) < MAX_uint16);
+UFunction* Z_Construct_UFunction_ABG_Tile_ApplyFoliageHue()
+{
+	static UFunction* ReturnFunction = nullptr;
+	if (!ReturnFunction)
+	{
+		UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_ABG_Tile_ApplyFoliageHue_Statics::FuncParams);
+	}
+	return ReturnFunction;
+}
+// ********** End Class ABG_Tile Function ApplyFoliageHue ******************************************
 
 // ********** Begin Class ABG_Tile Function SetOwningPlayer ****************************************
 struct Z_Construct_UFunction_ABG_Tile_SetOwningPlayer_Statics
@@ -293,6 +340,7 @@ struct Z_Construct_UClass_ABG_Tile_Statics
 	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
 	static UObject* (*const DependentSingletons[])();
 	static constexpr FClassFunctionLinkInfo FuncInfo[] = {
+		{ &Z_Construct_UFunction_ABG_Tile_ApplyFoliageHue, "ApplyFoliageHue" }, // 737005144
 		{ &Z_Construct_UFunction_ABG_Tile_SetOwningPlayer, "SetOwningPlayer" }, // 2190297953
 	};
 	static_assert(UE_ARRAY_COUNT(FuncInfo) < 2048);
@@ -418,10 +466,10 @@ ABG_Tile::~ABG_Tile() {}
 struct Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_Tile_h__Script_ProductionProjCurr_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_ABG_Tile, ABG_Tile::StaticClass, TEXT("ABG_Tile"), &Z_Registration_Info_UClass_ABG_Tile, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ABG_Tile), 3551868406U) },
+		{ Z_Construct_UClass_ABG_Tile, ABG_Tile::StaticClass, TEXT("ABG_Tile"), &Z_Registration_Info_UClass_ABG_Tile, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ABG_Tile), 3773574326U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_Tile_h__Script_ProductionProjCurr_834153291(TEXT("/Script/ProductionProjCurr"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_Tile_h__Script_ProductionProjCurr_935818671(TEXT("/Script/ProductionProjCurr"),
 	Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_Tile_h__Script_ProductionProjCurr_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_Tile_h__Script_ProductionProjCurr_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);
