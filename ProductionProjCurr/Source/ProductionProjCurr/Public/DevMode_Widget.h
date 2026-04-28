@@ -15,21 +15,18 @@ class AOccupant_Building_BaseClass;
 class AOccupant_BaseClass;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDevTurnChanged, EActivePlayerSide, NewActivePlayer);
-/**
- * 
- */
+
 UCLASS()
 class PRODUCTIONPROJCURR_API UDevMode_Widget : public UUserWidget
 {
 	GENERATED_BODY()
 
-	protected:
+protected:
 	virtual void NativeConstruct() override;
 
 	void generateButtonLabelText(UTextBlock* buttonLabel, const FString& labelText);
 	void initializeButtonLabels();
 
-	// callbacks
 	UFUNCTION()
 	void SpawnTroopAtSelectedTile_ButtonClicked();
 
@@ -45,7 +42,10 @@ class PRODUCTIONPROJCURR_API UDevMode_Widget : public UUserWidget
 	UFUNCTION()
 	void UseContext_ButtonClicked();
 
-	public:
+	UFUNCTION()
+	void OpenSkillTree_ButtonClicked();
+
+public:
 	UPROPERTY(BlueprintAssignable, Category = "TurnManager")
 	FOnDevTurnChanged OnDevTurnChanged;
 
@@ -64,10 +64,21 @@ class PRODUCTIONPROJCURR_API UDevMode_Widget : public UUserWidget
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidgetOptional))
 	TObjectPtr<UTextBlock> PassTurn_ButtonLabel;
 
-		UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	TObjectPtr<UButton> UseContext_Button;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidgetOptional))
 	TObjectPtr<UTextBlock> UseContext_ButtonLabel;
+
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	TObjectPtr<UButton> OpenSkillTree_Button;
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidgetOptional))
+	TObjectPtr<UTextBlock> OpenSkillTree_ButtonLabel;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SkillTree")
+	TSubclassOf<UUserWidget> SkillTreeWidgetClass;
+
+	UPROPERTY(BlueprintReadWrite, Category = "SkillTree")
+	TObjectPtr<UUserWidget> SkillTreeWidgetInstance;
 
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	TObjectPtr<UTextBlock> WidgetTitle;
@@ -96,6 +107,6 @@ class PRODUCTIONPROJCURR_API UDevMode_Widget : public UUserWidget
 	UFUNCTION(BlueprintPure, Category = "Animation")
 	bool GetIsAnimating() const { return bIsAnimating; }
 
-	private:
+private:
 	bool bIsAnimating = false;
 };

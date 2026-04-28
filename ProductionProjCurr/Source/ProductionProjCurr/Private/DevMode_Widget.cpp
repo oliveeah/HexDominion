@@ -42,6 +42,10 @@ void UDevMode_Widget::NativeConstruct()
 	{
 		UseContext_Button->OnClicked.AddDynamic(this, &UDevMode_Widget::UseContext_ButtonClicked);
 	}
+	if (OpenSkillTree_Button)
+	{
+		OpenSkillTree_Button->OnClicked.AddDynamic(this, &UDevMode_Widget::OpenSkillTree_ButtonClicked);
+	}
 	for (TActorIterator<ATileManager> It(GetWorld()); It; ++It)
 	{
 		DevTileManager = *It;
@@ -79,21 +83,24 @@ void UDevMode_Widget::initializeButtonLabels()
 		SpawnTroopAtSelectedTile_Button,
 		SpawnBuildingAtSelectedTile_Button,
 		PassTurn_Button,
-		UseContext_Button
+		UseContext_Button,
+		OpenSkillTree_Button
 	};
 
 	TArray<UTextBlock*> Labels = {
 		SpawnTroopAtSelectedTiled_ButtonLabel,
 		SpawnBuildingAtSelectedTile_ButtonLabel,
 		PassTurn_ButtonLabel,
-		UseContext_ButtonLabel
+		UseContext_ButtonLabel,
+		OpenSkillTree_ButtonLabel
 	};
 
 	TArray<FString> LabelTexts = {
 		TEXT("Spawn Troop At Selected Tile"),
 		TEXT("Spawn Building At Selected Tile"),
 		TEXT("Pass Turn"),
-		TEXT("Use Context Action")
+		TEXT("Use Context Action"),
+		TEXT("Open Skill Tree")
 	};
 
 	for (int32 i = 0; i < Buttons.Num(); ++i)
@@ -203,4 +210,23 @@ void UDevMode_Widget::UseContext_ButtonClicked()
 void UDevMode_Widget::HandleAllPlayersTakenTurn(int32 CurrentTurn)
 {
 	OnRoundCompleted(CurrentTurn);
+}
+
+void UDevMode_Widget::OpenSkillTree_ButtonClicked()
+{
+    if (!SkillTreeWidgetClass)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("SkillTreeWidgetClass not assigned in DevMode_Widget!"));
+        return;
+    }
+
+    if (!SkillTreeWidgetInstance)
+    {
+        SkillTreeWidgetInstance = CreateWidget<UUserWidget>(GetWorld(), SkillTreeWidgetClass);
+    }
+
+    if (SkillTreeWidgetInstance)
+    {
+        SkillTreeWidgetInstance->AddToViewport();
+    }
 }
