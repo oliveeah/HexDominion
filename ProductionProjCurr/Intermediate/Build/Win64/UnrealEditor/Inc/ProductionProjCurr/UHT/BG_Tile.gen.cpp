@@ -273,6 +273,14 @@ struct Z_Construct_UClass_ABG_Tile_Statics
 		{ "Category", "Tile Properties | Visual" },
 		{ "ModuleRelativePath", "Public/tileSpawningLogic/BG_Tile.h" },
 	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_FoliageHueSaturation_MetaData[] = {
+		{ "Category", "Tile Properties | Visual" },
+		{ "ModuleRelativePath", "Public/tileSpawningLogic/BG_Tile.h" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_FoliageHueValue_MetaData[] = {
+		{ "Category", "Tile Properties | Visual" },
+		{ "ModuleRelativePath", "Public/tileSpawningLogic/BG_Tile.h" },
+	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_bUseHueFromNoise_MetaData[] = {
 		{ "Category", "Tile Properties | Visual" },
 		{ "ModuleRelativePath", "Public/tileSpawningLogic/BG_Tile.h" },
@@ -328,6 +336,8 @@ struct Z_Construct_UClass_ABG_Tile_Statics
 	static const UECodeGen_Private::FNamePropertyParams NewProp_TileHueParameterName;
 	static const UECodeGen_Private::FFloatPropertyParams NewProp_TileHueSaturation;
 	static const UECodeGen_Private::FFloatPropertyParams NewProp_TileHueValue;
+	static const UECodeGen_Private::FFloatPropertyParams NewProp_FoliageHueSaturation;
+	static const UECodeGen_Private::FFloatPropertyParams NewProp_FoliageHueValue;
 	static void NewProp_bUseHueFromNoise_SetBit(void* Obj);
 	static const UECodeGen_Private::FBoolPropertyParams NewProp_bUseHueFromNoise;
 	static const UECodeGen_Private::FStructPropertyParams NewProp_gridCoordinates;
@@ -389,6 +399,8 @@ const UECodeGen_Private::FEnumPropertyParams Z_Construct_UClass_ABG_Tile_Statics
 const UECodeGen_Private::FNamePropertyParams Z_Construct_UClass_ABG_Tile_Statics::NewProp_TileHueParameterName = { "TileHueParameterName", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Name, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_Tile, TileHueParameterName), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_TileHueParameterName_MetaData), NewProp_TileHueParameterName_MetaData) };
 const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_ABG_Tile_Statics::NewProp_TileHueSaturation = { "TileHueSaturation", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_Tile, TileHueSaturation), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_TileHueSaturation_MetaData), NewProp_TileHueSaturation_MetaData) };
 const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_ABG_Tile_Statics::NewProp_TileHueValue = { "TileHueValue", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_Tile, TileHueValue), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_TileHueValue_MetaData), NewProp_TileHueValue_MetaData) };
+const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_ABG_Tile_Statics::NewProp_FoliageHueSaturation = { "FoliageHueSaturation", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_Tile, FoliageHueSaturation), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_FoliageHueSaturation_MetaData), NewProp_FoliageHueSaturation_MetaData) };
+const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_ABG_Tile_Statics::NewProp_FoliageHueValue = { "FoliageHueValue", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABG_Tile, FoliageHueValue), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_FoliageHueValue_MetaData), NewProp_FoliageHueValue_MetaData) };
 void Z_Construct_UClass_ABG_Tile_Statics::NewProp_bUseHueFromNoise_SetBit(void* Obj)
 {
 	((ABG_Tile*)Obj)->bUseHueFromNoise = 1;
@@ -417,6 +429,8 @@ const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_ABG_Tile_
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_Tile_Statics::NewProp_TileHueParameterName,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_Tile_Statics::NewProp_TileHueSaturation,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_Tile_Statics::NewProp_TileHueValue,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_Tile_Statics::NewProp_FoliageHueSaturation,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_Tile_Statics::NewProp_FoliageHueValue,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_Tile_Statics::NewProp_bUseHueFromNoise,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_Tile_Statics::NewProp_gridCoordinates,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABG_Tile_Statics::NewProp_sceneComponent,
@@ -466,10 +480,10 @@ ABG_Tile::~ABG_Tile() {}
 struct Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_Tile_h__Script_ProductionProjCurr_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_ABG_Tile, ABG_Tile::StaticClass, TEXT("ABG_Tile"), &Z_Registration_Info_UClass_ABG_Tile, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ABG_Tile), 3773574326U) },
+		{ Z_Construct_UClass_ABG_Tile, ABG_Tile::StaticClass, TEXT("ABG_Tile"), &Z_Registration_Info_UClass_ABG_Tile, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ABG_Tile), 523035133U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_Tile_h__Script_ProductionProjCurr_935818671(TEXT("/Script/ProductionProjCurr"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_Tile_h__Script_ProductionProjCurr_1587261862(TEXT("/Script/ProductionProjCurr"),
 	Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_Tile_h__Script_ProductionProjCurr_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_tileSpawningLogic_BG_Tile_h__Script_ProductionProjCurr_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);
