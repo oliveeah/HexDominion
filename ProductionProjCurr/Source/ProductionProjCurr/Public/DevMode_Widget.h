@@ -89,4 +89,13 @@ class PRODUCTIONPROJCURR_API UDevMode_Widget : public UUserWidget
 
 	UFUNCTION()
 	void HandleAllPlayersTakenTurn(int32 CurrentTurn);
+
+	UFUNCTION(BlueprintCallable, Category = "Animation")
+	void SetIsAnimating(bool bAnimating) { bIsAnimating = bAnimating; }
+
+	UFUNCTION(BlueprintPure, Category = "Animation")
+	bool GetIsAnimating() const { return bIsAnimating; }
+
+	private:
+	bool bIsAnimating = false;
 };

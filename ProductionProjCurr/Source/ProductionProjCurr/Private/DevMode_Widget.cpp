@@ -111,12 +111,13 @@ void UDevMode_Widget::initializeButtonLabels()
 
 void UDevMode_Widget::PassTurn_ButtonClicked()
 {
-	UE_LOG(LogTemp, Display, TEXT("pass turn button clicked"));
 	if (!turnManager)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("TurnManager not assigned in DevMode_Widget!"));
 		return;
 	}
+
+
 	turnManager->PassTurn();
 }
 
