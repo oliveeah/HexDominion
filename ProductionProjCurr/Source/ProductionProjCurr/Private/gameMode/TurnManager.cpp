@@ -2,36 +2,58 @@
 
 #include "gameMode/TurnManager.h"
 #include "playerData/ResourceManager.h"
-// Sets default values
+#include "Data_PlayerSetUp.h"
+
 ATurnManager::ATurnManager()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+}
 
+void ATurnManager::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// Build the turn order from whoever was set up on the Title Screen
+	UData_PlayerSetUp* Setup = UData_PlayerSetUp::Get(this);
+	if (Setup && Setup->GetActivePlayers().Num() > 0)
+	{
+		for (const FPlayerEntry& Entry : Setup->GetActivePlayers())
+		{
+			ActivePlayerOrder.Add(Entry.PlayerSide);
+		}
+		UE_LOG(LogTemp, Display, TEXT("TurnManager: %d players in turn order."), ActivePlayerOrder.Num());
+	}
+	else
+	{
+		// Fallback: all 4 players (e.g. playing without a Title Screen)
+		ActivePlayerOrder = {
+			EActivePlayerSide::PlayerA,
+			EActivePlayerSide::PlayerB,
+			EActivePlayerSide::PlayerC,
+			EActivePlayerSide::PlayerD
+		};
+		UE_LOG(LogTemp, Warning, TEXT("TurnManager: No setup data found — defaulting to 4 players."));
+	}
+
+	CurrentPlayerIndex = 0;
+	activePlayer       = ActivePlayerOrder[0];
 }
 
 void ATurnManager::PassTurn()
 {
-	switch (activePlayer)
+	if (ActivePlayerOrder.Num() == 0)
+		return;
+
+	CurrentPlayerIndex = (CurrentPlayerIndex + 1) % ActivePlayerOrder.Num();
+	activePlayer       = ActivePlayerOrder[CurrentPlayerIndex];
+
+	UE_LOG(LogTemp, Display, TEXT("Turn passed — now: %d (index %d of %d)"),
+		(int32)activePlayer, CurrentPlayerIndex, ActivePlayerOrder.Num());
+
+	// Completed a full round when we wrap back to the first player
+	if (CurrentPlayerIndex == 0)
 	{
-		case EActivePlayerSide::PlayerA:
-			activePlayer = EActivePlayerSide::PlayerB;
-			UE_LOG(LogTemp, Display, TEXT("Player B is active"));
-			break;
-		case EActivePlayerSide::PlayerB:
-			activePlayer = EActivePlayerSide::PlayerC;
-			UE_LOG(LogTemp, Display, TEXT("Player C is active"));
-			break;
-		case EActivePlayerSide::PlayerC:
-			activePlayer = EActivePlayerSide::PlayerD;
-			UE_LOG(LogTemp, Display, TEXT("Player D is active"));
-			break;
-		case EActivePlayerSide::PlayerD:
-		default:
-			activePlayer = EActivePlayerSide::PlayerA;
-			AllPlayersTakeTurn();
-			UE_LOG(LogTemp, Display, TEXT("Player A is active"));
-			break;
+		AllPlayersTakeTurn();
 	}
 
 	OnTurnChanged.Broadcast(activePlayer);
@@ -44,13 +66,11 @@ void ATurnManager::AllPlayersTakeTurn()
 
 	if (currentTurn == MaxTurns)
 	{
-		// Last normal turn — broadcast regular delegate then trigger end phase
 		OnAllPlayersTakenTurn.Broadcast(currentTurn);
 		OnEndPhaseStarted.Broadcast();
 	}
 	else if (currentTurn > MaxTurns)
 	{
-		// End phase — one broadcast per full round for hold tracking
 		OnEndPhaseTurn.Broadcast(currentTurn);
 	}
 	else
@@ -59,33 +79,19 @@ void ATurnManager::AllPlayersTakeTurn()
 	}
 
 	GiveAllPlayersResourcesForNewTurn();
-
 }
 
 void ATurnManager::GiveAllPlayersResourcesForNewTurn()
 {
-	if (ResourceManager)
+	if (!ResourceManager)
+		return;
+
+	// Only give resources to players actually in this game
+	for (const EActivePlayerSide& Player : ActivePlayerOrder)
 	{
-		const TArray<EActivePlayerSide> Players = {
-			EActivePlayerSide::PlayerA,
-			EActivePlayerSide::PlayerB,
-			EActivePlayerSide::PlayerC,
-			EActivePlayerSide::PlayerD
-		};
-
-		for (const EActivePlayerSide& Player : Players)
-		{
-			ResourceManager->AddBuildingMaterial(Player, 1);
-			ResourceManager->AddSkillTreeCurrency(Player, currentTurn);
-		}
+		ResourceManager->AddBuildingMaterial(Player, 1);
+		ResourceManager->AddSkillTreeCurrency(Player, currentTurn);
 	}
-}
-
-// Called when the game starts or when spawned
-void ATurnManager::BeginPlay()
-{
-	Super::BeginPlay();
-	
 }
 
 

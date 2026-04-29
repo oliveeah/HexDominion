@@ -19,12 +19,19 @@ UCLASS()
 class PRODUCTIONPROJCURR_API ATurnManager : public AActor
 {
 	GENERATED_BODY()
-private:	
+
+private:
 	UPROPERTY()
 	EActivePlayerSide activePlayer = EActivePlayerSide::PlayerA;
 
 	static constexpr int MaxTurns = 10;
-	
+
+	// Built from UData_PlayerSetUp at BeginPlay — drives turn cycling
+	TArray<EActivePlayerSide> ActivePlayerOrder;
+
+	// Index into ActivePlayerOrder for the current turn
+	int32 CurrentPlayerIndex = 0;
+
 public:
 	UPROPERTY(BlueprintAssignable, Category = "TurnManager")
 	FOnTurnChanged OnTurnChanged;
@@ -44,12 +51,13 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "TurnManager")
 	int currentTurn = 1;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	AResourceManager* ResourceManager;
+
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Sets default values for this actor's properties
+public:
 	ATurnManager();
 
 	UFUNCTION()
@@ -61,7 +69,4 @@ public:
 	void AllPlayersTakeTurn();
 
 	void GiveAllPlayersResourcesForNewTurn();
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
-	AResourceManager* ResourceManager;
 };
