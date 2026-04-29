@@ -7,7 +7,7 @@
 #include "gameMode/Enum_PlayerSide.h"
 #include "TurnManager.generated.h"
 
-class UUIManager;
+class AResourceManager;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTurnChanged, EActivePlayerSide, NewActivePlayer);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAllPlayersTakenTurn, int32, CurrentTurn);
@@ -60,6 +60,8 @@ public:
 	UFUNCTION()
 	void AllPlayersTakeTurn();
 
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
-	//UUIManager* UIManager;
+	void GiveAllPlayersResourcesForNewTurn();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	AResourceManager* ResourceManager;
 };

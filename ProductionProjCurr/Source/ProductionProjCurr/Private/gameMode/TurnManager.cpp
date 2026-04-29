@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "gameMode/TurnManager.h"
-#include "gameMode/UIManager.h"
+#include "playerData/ResourceManager.h"
 // Sets default values
 ATurnManager::ATurnManager()
 {
@@ -56,6 +56,28 @@ void ATurnManager::AllPlayersTakeTurn()
 	else
 	{
 		OnAllPlayersTakenTurn.Broadcast(currentTurn);
+	}
+
+	GiveAllPlayersResourcesForNewTurn();
+
+}
+
+void ATurnManager::GiveAllPlayersResourcesForNewTurn()
+{
+	if (ResourceManager)
+	{
+		const TArray<EActivePlayerSide> Players = {
+			EActivePlayerSide::PlayerA,
+			EActivePlayerSide::PlayerB,
+			EActivePlayerSide::PlayerC,
+			EActivePlayerSide::PlayerD
+		};
+
+		for (const EActivePlayerSide& Player : Players)
+		{
+			ResourceManager->AddBuildingMaterial(Player, 1);
+			ResourceManager->AddSkillTreeCurrency(Player, currentTurn);
+		}
 	}
 }
 

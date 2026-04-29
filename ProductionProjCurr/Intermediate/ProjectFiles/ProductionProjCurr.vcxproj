@@ -267,6 +267,9 @@
     </ClCompile>
     <ClInclude Include="..\..\Source\ProductionProjCurr\ProductionProjCurr.h"/>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Noise\FastNoiseLite.h"/>
+    <ClCompile Include="..\..\Source\ProductionProjCurr\Private\Data_PlayerSetUp.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
     <ClCompile Include="..\..\Source\ProductionProjCurr\Private\DevMode_Widget.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -283,6 +286,9 @@
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="..\..\Source\ProductionProjCurr\Private\UPlayerProfile.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ProductionProjCurr\Private\Widget_TitleScreen.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="..\..\Source\ProductionProjCurr\Private\Building\Building.cpp">
@@ -315,6 +321,9 @@
     <ClCompile Include="..\..\Source\ProductionProjCurr\Private\playerData\MyPlayerState.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ProductionProjCurr\Private\playerData\ResourceManager.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
     <ClCompile Include="..\..\Source\ProductionProjCurr\Private\tileSpawningLogic\BG_Tile.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -345,11 +354,13 @@
     <ClCompile Include="..\..\Source\ProductionProjCurr\Private\tileSpawningLogic\Tile_Special_Teleporter.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\Data_PlayerSetUp.h"/>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\DevMode_Widget.h"/>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\OccupantInterface.h"/>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\Occupant_Troop_Data.h"/>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\SFX_Troop_Data.h"/>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\Troop.h"/>
+    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\Widget_TitleScreen.h"/>
     <ClCompile Include="..\..\Source\ProductionProjCurr\Public\animations\BG_CaptureActor.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -362,6 +373,7 @@
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\gameMode\ProductionProjCurrGameMode.h"/>
+    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\gameMode\ResourceManager.h"/>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\gameMode\TurnManager.h"/>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\gameMode\UIManager.h"/>
     <ClCompile Include="..\..\Source\ProductionProjCurr\Public\input\BG_AC_MouseOverlapReciever.cpp">
@@ -386,6 +398,7 @@
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\playerData\ProductionProjCurrCharacter.h"/>
+    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\playerData\ResourceManager.h"/>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\playerData\UPlayerProfile.h"/>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\BG_Tile.h"/>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\BG_TileSpawner.h"/>
