@@ -1,14 +1,40 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "playerData/ResourceManager.h"
+#include "Data_PlayerSetUp.h"
 
 // Sets default values
 AResourceManager::AResourceManager()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
+}
+
+void AResourceManager::BeginPlay()
+{
+	Super::BeginPlay();
+
+	//getting player data from game instance
+	UData_PlayerSetUp* Setup = UData_PlayerSetUp::Get(this);
+	if (Setup && Setup->GetActivePlayers().Num() > 0)
+	{
+		// range for loop to add player resources for each active player in the setup data
+		for (const FPlayerEntry& Entry : Setup->GetActivePlayers()) 
+		{
+			PlayerResources.Add(Entry.PlayerSide, FPlayerResources());
+		}
+		UE_LOG(LogTemp, Display, TEXT("ResourceManager: Initialised %d player resource slots."), PlayerResources.Num());
+	}
+	else
+	{
+		// Fallback for direct level launch without Title Screen
+		PlayerResources.Add(EActivePlayerSide::PlayerA, FPlayerResources());
+		PlayerResources.Add(EActivePlayerSide::PlayerB, FPlayerResources());
+		PlayerResources.Add(EActivePlayerSide::PlayerC, FPlayerResources());
+		PlayerResources.Add(EActivePlayerSide::PlayerD, FPlayerResources());
+		UE_LOG(LogTemp, Warning, TEXT("ResourceManager: No setup data found — defaulting to 4 player slots."));
+	}
 }
 
 void AResourceManager::AddBuildingMaterial(EActivePlayerSide Player, int32 BuildingMaterials)
@@ -68,19 +94,6 @@ FPlayerResources AResourceManager::GetResources(EActivePlayerSide Player) const
 		return *Resources;
 	}
 	return FPlayerResources();
-}
-
-// Called when the game starts or when spawned
-void AResourceManager::BeginPlay()
-{
-	Super::BeginPlay();
-
-	PlayerResources.Add(EActivePlayerSide::PlayerA, FPlayerResources());
-	PlayerResources.Add(EActivePlayerSide::PlayerB, FPlayerResources());
-	PlayerResources.Add(EActivePlayerSide::PlayerC, FPlayerResources());
-	PlayerResources.Add(EActivePlayerSide::PlayerD, FPlayerResources());
-
-	UE_LOG(LogTemp, Display, TEXT("ResourceManager: PlayerResources initialized for all 4 players."));
 }
 
 

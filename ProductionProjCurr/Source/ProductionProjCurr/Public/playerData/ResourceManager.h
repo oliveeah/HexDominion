@@ -3,8 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h" 
+#include "GameFramework/Actor.h"
 #include "gameMode/Enum_PlayerSide.h"
+#include "Data_PlayerSetUp.h"
 #include "ResourceManager.generated.h"
 
 USTRUCT(BlueprintType)
@@ -23,12 +24,11 @@ UCLASS()
 class PRODUCTIONPROJCURR_API AResourceManager : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
-	// Sets default values for this actor's properties
+
+public:
 	AResourceManager();
 
-	    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
 	TMap<EActivePlayerSide, FPlayerResources> PlayerResources;
 
 	UFUNCTION(BlueprintCallable, Category = "Resources")
@@ -39,7 +39,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Resources")
 	void AddSkillTreeCurrency(EActivePlayerSide Player, int32 SkillTreeCurrency);
-		
+
 	UFUNCTION(BlueprintCallable, Category = "Resources")
 	bool SpendSkillTreeCurrency(EActivePlayerSide Player, int32 SkillTreeCurrency);
 
@@ -47,10 +47,5 @@ public:
 	FPlayerResources GetResources(EActivePlayerSide Player) const;
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-public:	
-
-
 };

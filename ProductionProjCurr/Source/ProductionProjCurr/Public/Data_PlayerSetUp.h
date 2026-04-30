@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/NoExportTypes.h"
+#include "Subsystems/GameInstanceSubsystem.h"
 #include "gameMode/Enum_PlayerSide.h"
 #include "Data_PlayerSetUp.generated.h"
 
@@ -18,15 +18,17 @@ struct FPlayerEntry
 	UPROPERTY(BlueprintReadWrite, Category = "Player")
 	EActivePlayerSide PlayerSide = EActivePlayerSide::None;
 
+
 	UPROPERTY(BlueprintReadWrite, Category = "Player")
 	bool bIsActive = false;
 };
 
+
 UCLASS()
-class PRODUCTIONPROJCURR_API UData_PlayerSetUp : public UObject
+class PRODUCTIONPROJCURR_API UData_PlayerSetUp : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
-
+	
 public:
 	UFUNCTION(BlueprintPure, Category = "PlayerSetup")
 	static UData_PlayerSetUp* Get(const UObject* WorldContext);

@@ -47,7 +47,7 @@ void ATurnManager::PassTurn()
 	CurrentPlayerIndex = (CurrentPlayerIndex + 1) % ActivePlayerOrder.Num();
 	activePlayer       = ActivePlayerOrder[CurrentPlayerIndex];
 
-	UE_LOG(LogTemp, Display, TEXT("Turn passed — now: %d (index %d of %d)"),
+	UE_LOG(LogTemp, Display, TEXT("Turn passed - now: %d (index %d of %d)"),
 		(int32)activePlayer, CurrentPlayerIndex, ActivePlayerOrder.Num());
 
 	// Completed a full round when we wrap back to the first player

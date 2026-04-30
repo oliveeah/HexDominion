@@ -14,15 +14,10 @@ UData_PlayerSetUp* UData_PlayerSetUp::Get(const UObject* WorldContext)
 	if (!GI)
 		return nullptr;
 
-	UData_PlayerSetUp* Data = Cast <UData_PlayerSetUp>(GI->GetSubsystemBase(UData_PlayerSetUp::StaticClass()));
-	if (!Data)
-	{
-		// Fallback: store directly on the GameInstance object
-		Data = NewObject<UData_PlayerSetUp>(GI);
-		GI->RegisterReferencedObject(Data);
-	}
-	return Data;
+	// Correct subsystem access - no Cast required, type is guaranteed
+	return GI->GetSubsystem<UData_PlayerSetUp>();
 }
+
 void UData_PlayerSetUp::SetupPlayers(int32 NumPlayers, const TArray<FString>& Names)
 {
 	Players.Empty();
@@ -40,8 +35,10 @@ void UData_PlayerSetUp::SetupPlayers(int32 NumPlayers, const TArray<FString>& Na
 	{
 		FPlayerEntry Entry;
 		Entry.PlayerSide = Sides[i];
-		Entry.bIsActive = true;
-		Entry.PlayerName = Names.IsValidIndex(i) ? Names[i] : FString::Printf(TEXT("Player %d"), i + 1);
+		Entry.bIsActive  = true;
+		Entry.PlayerName = Names.IsValidIndex(i)
+			? Names[i]
+			: FString::Printf(TEXT("Player %d"), i + 1);
 		Players.Add(Entry);
 	}
 }
@@ -64,5 +61,5 @@ FString UData_PlayerSetUp::GetPlayerName(EActivePlayerSide Side) const
 		if (E.PlayerSide == Side)
 			return E.PlayerName;
 	}
-	return TEXT("name not found");
+	return TEXT("Unknown");
 }

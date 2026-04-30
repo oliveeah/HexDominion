@@ -27,6 +27,9 @@ protected:
 	void generateButtonLabelText(UTextBlock* buttonLabel, const FString& labelText);
 	void initializeButtonLabels();
 
+	// Populates PlayerNames from UData_PlayerSetUp at construction time
+	void CachePlayerNames();
+
 	UFUNCTION()
 	void SpawnTroopAtSelectedTile_ButtonClicked();
 
@@ -94,6 +97,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TurnManager")
 	ATurnManager* turnManager;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerData")
+	TMap<EActivePlayerSide, FString> PlayerNames;
+
+	UFUNCTION(BlueprintPure, Category = "PlayerData")
+	FString GetCachedPlayerName(EActivePlayerSide Side) const;
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "TurnManager")
 	void OnRoundCompleted(int32 CurrentTurn);

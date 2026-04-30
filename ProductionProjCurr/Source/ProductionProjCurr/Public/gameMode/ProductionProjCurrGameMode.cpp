@@ -6,6 +6,11 @@
 #include "GameFramework/Actor.h"
 #include "tileSpawningLogic/TileManager.h"
 #include "tileSpawningLogic/BG_TileSpawner.h"
+#include "Data_PlayerSetUp.h"
+
+AProductionProjCurrGameMode::AProductionProjCurrGameMode()
+{
+}
 
 void AProductionProjCurrGameMode::BeginPlay()
 {
@@ -57,31 +62,25 @@ void AProductionProjCurrGameMode::BeginPlay()
 	TurnLoop();
 }
 
-
-
-AProductionProjCurrGameMode::AProductionProjCurrGameMode()
-{
-
-}
-
 void AProductionProjCurrGameMode::TurnLoop()
 {
 	if (!turnManager)
 		return;
 
-	EActivePlayerSide activePlayer = turnManager->GetActivePlayer();
+	EActivePlayerSide ActivePlayer = turnManager->GetActivePlayer();
 
-	if (activePlayer == EActivePlayerSide::PlayerA)
+	FString PlayerName;
+	UData_PlayerSetUp* Setup = UData_PlayerSetUp::Get(this);
+
+	if (Setup && Setup->GetActivePlayers().Num() > 0)
 	{
-		UE_LOG(LogTemp, Display, TEXT("Player A's turn"));
+		PlayerName = Setup->GetPlayerName(ActivePlayer);
 	}
-	else if (activePlayer == EActivePlayerSide::PlayerB)
+	else
 	{
-		UE_LOG(LogTemp, Display, TEXT("Player B's turn"));
+		// No Title Screen data — use the enum slot name as fallback
+		PlayerName = FString::Printf(TEXT("Player %d"), (int32)ActivePlayer + 1);
 	}
 
-//	while (activePlayer == turnManager->GetActivePlayer())
-//	{
-		// Wait for turn to end
-//	}
+	UE_LOG(LogTemp, Display, TEXT("It is %s's turn."), *PlayerName);
 }
