@@ -40,6 +40,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	ATileManager* GetTileManager() const { return TileManagerInstance; }
 
+	UFUNCTION(BlueprintImplementableEvent, Category = "UI")
+	void InitialisePlayerUI();
+
+
 	void TurnLoop();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TurnManager")

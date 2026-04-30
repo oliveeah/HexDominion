@@ -60,6 +60,8 @@ void AProductionProjCurrGameMode::BeginPlay()
 	bGameActive = true;
 
 	TurnLoop();
+
+	InitialisePlayerUI();
 }
 
 void AProductionProjCurrGameMode::TurnLoop()

@@ -4,6 +4,7 @@
 #include "tileSpawningLogic/BG_Tile.h"
 #include "Occupant/Occupant_BaseClass.h"
 #include "Occupant/Occupant_Troop_BaseClass.h"
+#include "Data_PlayerSetUp.h"
 #include "Occupant/Occupant_Building_BaseClass.h"
 #include "gameMode/TurnManager.h"
 
@@ -94,7 +95,17 @@ void ATroopSpawner::SpawnTroop(TSubclassOf<AOccupant_BaseClass> Occupant, ABG_Ti
 
 void ATroopSpawner::SpawnStartingTroops(const TArray<TArray<ABG_Tile*>>& TileGrid, int32 Cols, int32 Rows)
 {
-	int32 NumPlayers = 4;
+	int32			   NumPlayers;
+	UData_PlayerSetUp* PlayerSetup = UData_PlayerSetUp::Get(this);
+	if (PlayerSetup && PlayerSetup->GetActivePlayers().Num() > 0)
+	{
+		 NumPlayers = PlayerSetup->GetActivePlayers().Num();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("PlayerSetup not found or has no active players; defaulting to 4 players."));
+		NumPlayers = 4;
+	}
 	if (!StartingTroopClass)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("StartingTroopClass not set in TroopSpawner!"));

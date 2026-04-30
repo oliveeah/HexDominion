@@ -88,6 +88,35 @@ DEFINE_FUNCTION(AProductionProjCurrGameMode::execGetTileManager)
 }
 // ********** End Class AProductionProjCurrGameMode Function GetTileManager ************************
 
+// ********** Begin Class AProductionProjCurrGameMode Function InitialisePlayerUI ******************
+static FName NAME_AProductionProjCurrGameMode_InitialisePlayerUI = FName(TEXT("InitialisePlayerUI"));
+void AProductionProjCurrGameMode::InitialisePlayerUI()
+{
+	UFunction* Func = FindFunctionChecked(NAME_AProductionProjCurrGameMode_InitialisePlayerUI);
+	ProcessEvent(Func,NULL);
+}
+struct Z_Construct_UFunction_AProductionProjCurrGameMode_InitialisePlayerUI_Statics
+{
+#if WITH_METADATA
+	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
+		{ "Category", "UI" },
+		{ "ModuleRelativePath", "Public/gameMode/ProductionProjCurrGameMode.h" },
+	};
+#endif // WITH_METADATA
+	static const UECodeGen_Private::FFunctionParams FuncParams;
+};
+const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_AProductionProjCurrGameMode_InitialisePlayerUI_Statics::FuncParams = { { (UObject*(*)())Z_Construct_UClass_AProductionProjCurrGameMode, nullptr, "InitialisePlayerUI", nullptr, 0, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x08020800, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UFunction_AProductionProjCurrGameMode_InitialisePlayerUI_Statics::Function_MetaDataParams), Z_Construct_UFunction_AProductionProjCurrGameMode_InitialisePlayerUI_Statics::Function_MetaDataParams)},  };
+UFunction* Z_Construct_UFunction_AProductionProjCurrGameMode_InitialisePlayerUI()
+{
+	static UFunction* ReturnFunction = nullptr;
+	if (!ReturnFunction)
+	{
+		UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_AProductionProjCurrGameMode_InitialisePlayerUI_Statics::FuncParams);
+	}
+	return ReturnFunction;
+}
+// ********** End Class AProductionProjCurrGameMode Function InitialisePlayerUI ********************
+
 // ********** Begin Class AProductionProjCurrGameMode Function ToggleTileDebugCoordinates **********
 struct Z_Construct_UFunction_AProductionProjCurrGameMode_ToggleTileDebugCoordinates_Statics
 {
@@ -197,6 +226,7 @@ struct Z_Construct_UClass_AProductionProjCurrGameMode_Statics
 	static UObject* (*const DependentSingletons[])();
 	static constexpr FClassFunctionLinkInfo FuncInfo[] = {
 		{ &Z_Construct_UFunction_AProductionProjCurrGameMode_GetTileManager, "GetTileManager" }, // 4157999206
+		{ &Z_Construct_UFunction_AProductionProjCurrGameMode_InitialisePlayerUI, "InitialisePlayerUI" }, // 2935113545
 		{ &Z_Construct_UFunction_AProductionProjCurrGameMode_ToggleTileDebugCoordinates, "ToggleTileDebugCoordinates" }, // 4021073362
 	};
 	static_assert(UE_ARRAY_COUNT(FuncInfo) < 2048);
@@ -256,10 +286,10 @@ AProductionProjCurrGameMode::~AProductionProjCurrGameMode() {}
 struct Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_gameMode_ProductionProjCurrGameMode_h__Script_ProductionProjCurr_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_AProductionProjCurrGameMode, AProductionProjCurrGameMode::StaticClass, TEXT("AProductionProjCurrGameMode"), &Z_Registration_Info_UClass_AProductionProjCurrGameMode, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(AProductionProjCurrGameMode), 962836241U) },
+		{ Z_Construct_UClass_AProductionProjCurrGameMode, AProductionProjCurrGameMode::StaticClass, TEXT("AProductionProjCurrGameMode"), &Z_Registration_Info_UClass_AProductionProjCurrGameMode, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(AProductionProjCurrGameMode), 33518942U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_gameMode_ProductionProjCurrGameMode_h__Script_ProductionProjCurr_4065559744(TEXT("/Script/ProductionProjCurr"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_gameMode_ProductionProjCurrGameMode_h__Script_ProductionProjCurr_1932574846(TEXT("/Script/ProductionProjCurr"),
 	Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_gameMode_ProductionProjCurrGameMode_h__Script_ProductionProjCurr_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_gameMode_ProductionProjCurrGameMode_h__Script_ProductionProjCurr_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);

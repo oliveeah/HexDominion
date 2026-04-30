@@ -8,6 +8,7 @@
 #include "TroopSpawner.generated.h"
 
 class ABG_Tile;
+class UData_PlayerSetUp;
 class AOccupant_BaseClass;
 class ATurnManager;
 
