@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "InputActionValue.h"
 #include "playerData/InteractionInterface.h"
+#include "Sound/SoundBase.h"
 #include "ProductionProjCurrPlayerController.generated.h"
 
 class UInputMappingContext;
@@ -46,9 +47,11 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Actions")
 	UInputAction* openDevMenu;
 
-	// Input Mapping Context
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Contexts")
 	TArray<UInputMappingContext*> DefaultMappingContexts;
+
+	UPROPERTY(EditAnywhere, Category = "SFX")
+	USoundBase* ClickSFX = nullptr;
 
 	// ========== INPUT CALLBACKS (MOVED FROM PAWN) ==========
 	void MoveCallback(const FInputActionValue& Value);

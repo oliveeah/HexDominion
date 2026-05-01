@@ -4,10 +4,12 @@
 #include <Kismet/GameplayStatics.h>
 #include "tileSpawningLogic/TileManager.h"
 #include "tileSpawningLogic/TileInteractionHandler.h"
+#include "tileSpawningLogic/BG_Tile.h"
 #include "Occupant/TroopSpawner.h"
 #include "Occupant/Occupant_BaseClass.h"
 #include "Occupant/Occupant_Troop_BaseClass.h"
 #include "Occupant/Occupant_Building_BaseClass.h"
+#include "Data_PlayerSetUp.h"
 #include "Engine/World.h"
 #include "EngineUtils.h"
 #include <vector>
@@ -20,6 +22,8 @@ void UDevMode_Widget::NativeConstruct()
 	{
 		WidgetTitle->SetText(FText::FromString(TEXT("Developer Widget")));
 	}
+
+	CachePlayerNames();
 
 	initializeButtonLabels();
 
@@ -39,6 +43,11 @@ void UDevMode_Widget::NativeConstruct()
 	{
 		UseContext_Button->OnClicked.AddDynamic(this, &UDevMode_Widget::UseContext_ButtonClicked);
 	}
+	if (OpenSkillTree_Button)
+	{
+		OpenSkillTree_Button->OnClicked.AddDynamic(this, &UDevMode_Widget::OpenSkillTree_ButtonClicked);
+	}
+
 	for (TActorIterator<ATileManager> It(GetWorld()); It; ++It)
 	{
 		DevTileManager = *It;
@@ -65,7 +74,43 @@ void UDevMode_Widget::NativeConstruct()
 	else
 	{
 		turnManager->OnTurnChanged.AddUniqueDynamic(this, &UDevMode_Widget::HandleTurnChanged);
+		turnManager->OnAllPlayersTakenTurn.AddUniqueDynamic(this, &UDevMode_Widget::HandleAllPlayersTakenTurn);
+		turnManager->OnEndPhaseTurn.AddUniqueDynamic(this, &UDevMode_Widget::HandleAllPlayersTakenTurn);
 	}
+}
+
+void UDevMode_Widget::CachePlayerNames()
+{
+	PlayerNames.Empty();
+
+	UData_PlayerSetUp* Setup = UData_PlayerSetUp::Get(this);
+	if (Setup && Setup->GetActivePlayers().Num() > 0)
+	{
+		for (const FPlayerEntry& Entry : Setup->GetActivePlayers())
+		{
+			PlayerNames.Add(Entry.PlayerSide, Entry.PlayerName);
+			UE_LOG(LogTemp, Display, TEXT("Cached name: %s for player %d"),
+				*Entry.PlayerName, (int32)Entry.PlayerSide);
+		}
+	}
+	else
+	{
+		// Fallback: default names when launched without Title Screen
+		PlayerNames.Add(EActivePlayerSide::PlayerA, TEXT("Player A"));
+		PlayerNames.Add(EActivePlayerSide::PlayerB, TEXT("Player B"));
+		PlayerNames.Add(EActivePlayerSide::PlayerC, TEXT("Player C"));
+		PlayerNames.Add(EActivePlayerSide::PlayerD, TEXT("Player D"));
+		UE_LOG(LogTemp, Warning, TEXT("DevMode_Widget: No setup data found - using default player names."));
+	}
+}
+
+FString UDevMode_Widget::GetCachedPlayerName(EActivePlayerSide Side) const
+{
+	if (const FString* Name = PlayerNames.Find(Side))
+	{
+		return *Name;
+	}
+	return TEXT("Unknown");
 }
 
 void UDevMode_Widget::initializeButtonLabels()
@@ -74,21 +119,24 @@ void UDevMode_Widget::initializeButtonLabels()
 		SpawnTroopAtSelectedTile_Button,
 		SpawnBuildingAtSelectedTile_Button,
 		PassTurn_Button,
-		UseContext_Button
+		UseContext_Button,
+		OpenSkillTree_Button
 	};
 
 	TArray<UTextBlock*> Labels = {
 		SpawnTroopAtSelectedTiled_ButtonLabel,
 		SpawnBuildingAtSelectedTile_ButtonLabel,
 		PassTurn_ButtonLabel,
-		UseContext_ButtonLabel
+		UseContext_ButtonLabel,
+		OpenSkillTree_ButtonLabel
 	};
 
 	TArray<FString> LabelTexts = {
 		TEXT("Spawn Troop At Selected Tile"),
 		TEXT("Spawn Building At Selected Tile"),
 		TEXT("Pass Turn"),
-		TEXT("Use Context Action")
+		TEXT("Use Context Action"),
+		TEXT("Open Skill Tree")
 	};
 
 	for (int32 i = 0; i < Buttons.Num(); ++i)
@@ -106,12 +154,12 @@ void UDevMode_Widget::initializeButtonLabels()
 
 void UDevMode_Widget::PassTurn_ButtonClicked()
 {
-	UE_LOG(LogTemp, Display, TEXT("pass turn button clicked"));
 	if (!turnManager)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("TurnManager not assigned in DevMode_Widget!"));
 		return;
 	}
+
 	turnManager->PassTurn();
 }
 
@@ -121,7 +169,7 @@ void UDevMode_Widget::SpawnTroopAtSelectedTile_ButtonClicked()
 		return;
 
 	UTileInteractionHandler* Interaction = DevTileManager->GetInteractionHandler();
-	ATroopSpawner*			 Spawner = DevTileManager->TroopSpawner;
+	ATroopSpawner*           Spawner     = DevTileManager->TroopSpawner;
 
 	if (!Interaction || !Spawner)
 		return;
@@ -144,7 +192,7 @@ void UDevMode_Widget::SpawnBuildingAtSelectedTile_ButtonClicked()
 		return;
 
 	UTileInteractionHandler* Interaction = DevTileManager->GetInteractionHandler();
-	ATroopSpawner*			 Spawner = DevTileManager->TroopSpawner;
+	ATroopSpawner*           Spawner     = DevTileManager->TroopSpawner;
 
 	if (!Interaction || !Spawner)
 		return;
@@ -176,5 +224,44 @@ void UDevMode_Widget::HandleTurnChanged(EActivePlayerSide NewActivePlayer)
 
 void UDevMode_Widget::UseContext_ButtonClicked()
 {
-	UE_LOG(LogTemp, Display, TEXT("context clicked"));
+	if (!DevTileManager)
+		return;
+
+	UTileInteractionHandler* Interaction = DevTileManager->GetInteractionHandler();
+	if (!Interaction)
+		return;
+
+	ABG_Tile* SelectedTile = Interaction->GetSelectedTile();
+	if (SelectedTile)
+	{
+		SelectedTile->UseContextAction(DevTileManager);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No tile selected for context action."));
+	}
+}
+
+void UDevMode_Widget::HandleAllPlayersTakenTurn(int32 CurrentTurn)
+{
+	OnRoundCompleted(CurrentTurn);
+}
+
+void UDevMode_Widget::OpenSkillTree_ButtonClicked()
+{
+	if (!SkillTreeWidgetClass)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("SkillTreeWidgetClass not assigned in DevMode_Widget!"));
+		return;
+	}
+
+	if (!SkillTreeWidgetInstance)
+	{
+		SkillTreeWidgetInstance = CreateWidget<UUserWidget>(GetWorld(), SkillTreeWidgetClass);
+	}
+
+	if (SkillTreeWidgetInstance)
+	{
+		SkillTreeWidgetInstance->AddToViewport();
+	}
 }

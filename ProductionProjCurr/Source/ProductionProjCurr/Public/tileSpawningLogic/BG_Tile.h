@@ -13,6 +13,7 @@ class UStaticMeshComponent;
 class UDecalComponent;
 class UMaterialInstanceDynamic;
 class USceneComponent;
+class ATileManager;
 
 class AOccupant_Troop_BaseClass;
 class AOccupant_Building_BaseClass;
@@ -53,11 +54,12 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Tile Properties | Spawning")
 	bool bBuildingCanBePlacedOnTile = true;
 
-	UPROPERTY(VisibleAnywhere, Category = "Tile Properties | Spawning")
+	UPROPERTY(EditAnywhere, Category = "Tile Properties | Spawning")
 	bool isSpawnableTile = true;
 
-	UPROPERTY(VisibleAnywhere, Category = "Tile Properties | Spawning")
+	UPROPERTY(EditAnywhere, Category = "Tile Properties | Spawning")
 	bool bIsSpecialTile = false;
+
 
 	UPROPERTY(VisibleAnywhere, Category = "Tile Properties | Visual")
 	ETileHighlightState currentHighlightType = ETileHighlightState::None;
@@ -70,6 +72,12 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Tile Properties | Visual")
 	float TileHueValue = 1.0f;
+
+	UPROPERTY(EditAnywhere, Category = "Tile Properties | Visual")
+	float FoliageHueSaturation = 0.8f;
+
+	UPROPERTY(EditAnywhere, Category = "Tile Properties | Visual")
+	float FoliageHueValue = 1.0f;
 
 	UPROPERTY(EditAnywhere, Category = "Tile Properties | Visual")
 	bool bUseHueFromNoise = true;
@@ -139,4 +147,10 @@ private:
 		UMaterialInstanceDynamic* TileMeshMID;
 
 		void ApplyHueFromNoise(float NoiseValue);
+
+		// Forward declaration so the base signature compiles
+		virtual void UseContextAction(ATileManager* InTileManager) {}
+
+		UFUNCTION(BlueprintImplementableEvent, Category = "Tile Properties | Visual")
+		void ApplyFoliageHue(const FLinearColor& HueTint);
 };

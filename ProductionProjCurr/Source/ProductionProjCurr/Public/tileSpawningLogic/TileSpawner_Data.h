@@ -34,6 +34,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Parameters | Noise")
 	float noiseFrequency = 0.0f;
 
+	// Height Settings
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Parameters | Height")
+	float hillHeightScale = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Parameters | Height")
+	float grasslandHeightScale = 0.0f;
+
 	// Tile Classes
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Tiles | Biomes")
 	TSubclassOf<ABG_Tile> TileClass;
@@ -94,4 +101,7 @@ public:
 	// Special Tiles - Teleporter (for paths)
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Tiles | Special")
 	TSubclassOf<ABG_Tile> TeleporterTile;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Tiles | Special")
+	TSubclassOf<ABG_Tile> CornucopiaTile;
 };

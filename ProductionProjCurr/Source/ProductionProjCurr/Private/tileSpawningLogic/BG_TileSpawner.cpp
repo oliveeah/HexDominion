@@ -116,7 +116,11 @@ void ABG_TileSpawner::spawnGrid(const float& randomNum)
 			// Only hills have height variation
 			if (biomeType == EBiomeType::Hill)
 			{
-				Height = FMath::Abs(Height);
+				Height = FMath::Abs(HeightNoise) * Data.hillHeightScale;
+			}
+			if (biomeType == EBiomeType::Grassland)
+			{
+				Height = FMath::Abs(HeightNoise) * Data.grasslandHeightScale;
 			}
 			else
 			{

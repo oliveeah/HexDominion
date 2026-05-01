@@ -54,6 +54,9 @@
     <Filter Include="Source\ProductionProjCurr\Private">
       <UniqueIdentifier>{6C7AB881-23CC-3AC1-95A1-ECF84B730CC2}</UniqueIdentifier>
     </Filter>
+    <ClCompile Include="..\..\Source\ProductionProjCurr\Private\Data_PlayerSetUp.cpp">
+      <Filter>Source\ProductionProjCurr\Private</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\ProductionProjCurr\Private\DevMode_Widget.cpp">
       <Filter>Source\ProductionProjCurr\Private</Filter>
     </ClCompile>
@@ -72,6 +75,9 @@
     <ClCompile Include="..\..\Source\ProductionProjCurr\Private\UPlayerProfile.cpp">
       <Filter>Source\ProductionProjCurr\Private</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ProductionProjCurr\Private\Widget_TitleScreen.cpp">
+      <Filter>Source\ProductionProjCurr\Private</Filter>
+    </ClCompile>
     <Filter Include="Source\ProductionProjCurr\Private\Building">
       <UniqueIdentifier>{2469FFA3-3704-3E02-B7E8-CF8DF6E4B9E2}</UniqueIdentifier>
     </Filter>
@@ -81,6 +87,9 @@
     <Filter Include="Source\ProductionProjCurr\Private\gameMode">
       <UniqueIdentifier>{563C9B27-01D4-3A3D-8497-94FD4EEB1337}</UniqueIdentifier>
     </Filter>
+    <ClCompile Include="..\..\Source\ProductionProjCurr\Private\gameMode\EndGameLogic.cpp">
+      <Filter>Source\ProductionProjCurr\Private\gameMode</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\ProductionProjCurr\Private\gameMode\TurnManager.cpp">
       <Filter>Source\ProductionProjCurr\Private\gameMode</Filter>
     </ClCompile>
@@ -111,6 +120,9 @@
     <ClCompile Include="..\..\Source\ProductionProjCurr\Private\playerData\MyPlayerState.cpp">
       <Filter>Source\ProductionProjCurr\Private\playerData</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ProductionProjCurr\Private\playerData\ResourceManager.cpp">
+      <Filter>Source\ProductionProjCurr\Private\playerData</Filter>
+    </ClCompile>
     <Filter Include="Source\ProductionProjCurr\Private\tileSpawningLogic">
       <UniqueIdentifier>{FCDAFDBD-806D-3FA3-BDEB-39AFCD5BEA69}</UniqueIdentifier>
     </Filter>
@@ -135,9 +147,21 @@
     <ClCompile Include="..\..\Source\ProductionProjCurr\Private\tileSpawningLogic\Tile_PathLogic.cpp">
       <Filter>Source\ProductionProjCurr\Private\tileSpawningLogic</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ProductionProjCurr\Private\tileSpawningLogic\Tile_Special_Cornucopia.cpp">
+      <Filter>Source\ProductionProjCurr\Private\tileSpawningLogic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ProductionProjCurr\Private\tileSpawningLogic\Tile_Special_Obelisk.cpp">
+      <Filter>Source\ProductionProjCurr\Private\tileSpawningLogic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ProductionProjCurr\Private\tileSpawningLogic\Tile_Special_Teleporter.cpp">
+      <Filter>Source\ProductionProjCurr\Private\tileSpawningLogic</Filter>
+    </ClCompile>
     <Filter Include="Source\ProductionProjCurr\Public">
       <UniqueIdentifier>{9664A9DA-BD2D-3ABC-8239-4F68364AEA1D}</UniqueIdentifier>
     </Filter>
+    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\Data_PlayerSetUp.h">
+      <Filter>Source\ProductionProjCurr\Public</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\DevMode_Widget.h">
       <Filter>Source\ProductionProjCurr\Public</Filter>
     </ClInclude>
@@ -151,6 +175,9 @@
       <Filter>Source\ProductionProjCurr\Public</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\Troop.h">
+      <Filter>Source\ProductionProjCurr\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\Widget_TitleScreen.h">
       <Filter>Source\ProductionProjCurr\Public</Filter>
     </ClInclude>
     <Filter Include="Source\ProductionProjCurr\Public\animations">
@@ -171,6 +198,12 @@
     <Filter Include="Source\ProductionProjCurr\Public\gameMode">
       <UniqueIdentifier>{D8DE4CA4-6E41-3184-AC2A-24695D66E0D4}</UniqueIdentifier>
     </Filter>
+    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\gameMode\EndGameLogic.h">
+      <Filter>Source\ProductionProjCurr\Public\gameMode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\gameMode\EndGame_Logic.h">
+      <Filter>Source\ProductionProjCurr\Public\gameMode</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\gameMode\Enum_PlayerSide.h">
       <Filter>Source\ProductionProjCurr\Public\gameMode</Filter>
     </ClInclude>
@@ -178,6 +211,9 @@
       <Filter>Source\ProductionProjCurr\Public\gameMode</Filter>
     </ClCompile>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\gameMode\ProductionProjCurrGameMode.h">
+      <Filter>Source\ProductionProjCurr\Public\gameMode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\gameMode\ResourceManager.h">
       <Filter>Source\ProductionProjCurr\Public\gameMode</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\gameMode\TurnManager.h">
@@ -237,6 +273,9 @@
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\playerData\ProductionProjCurrCharacter.h">
       <Filter>Source\ProductionProjCurr\Public\playerData</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\playerData\ResourceManager.h">
+      <Filter>Source\ProductionProjCurr\Public\playerData</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\playerData\UPlayerProfile.h">
       <Filter>Source\ProductionProjCurr\Public\playerData</Filter>
     </ClInclude>
@@ -268,6 +307,15 @@
       <Filter>Source\ProductionProjCurr\Public\tileSpawningLogic</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\Tile_PathLogic.h">
+      <Filter>Source\ProductionProjCurr\Public\tileSpawningLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\Tile_Special_Cornucopia.h">
+      <Filter>Source\ProductionProjCurr\Public\tileSpawningLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\Tile_Special_Obelisk.h">
+      <Filter>Source\ProductionProjCurr\Public\tileSpawningLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\tileSpawningLogic\Tile_Special_Teleporter.h">
       <Filter>Source\ProductionProjCurr\Public\tileSpawningLogic</Filter>
     </ClInclude>
   </ItemGroup>

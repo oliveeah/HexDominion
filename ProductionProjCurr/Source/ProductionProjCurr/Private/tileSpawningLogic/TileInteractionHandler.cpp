@@ -43,9 +43,14 @@ void UTileInteractionHandler::OnTileClicked(ABG_Tile* Tile, bool bIsOccupied)
 		case EPlayerIntent::AttackTroop:
 			Handle_AttackTroop(PreviousTile, Tile);
 			break;
+		case EPlayerIntent::UseContextAction:
+			Handle_TeleportTroop(PendingTeleportSource, Tile);
+			break;
 		case EPlayerIntent::ReselectTile:
 		case EPlayerIntent::Cancel:
 		default:
+			PendingTeleportSource = nullptr;
+			SelectedTile = nullptr;
 			break;
 	}
 }
@@ -61,6 +66,7 @@ void UTileInteractionHandler::OnTurnChanged(EActivePlayerSide NewActivePlayer)
 {
 	if (HighlightSystem)
 		HighlightSystem->RemoveOutlineFromAllTiles();
+	PendingTeleportSource = nullptr; 
 	SelectedTile = nullptr;
 }
 
@@ -78,6 +84,9 @@ EPlayerIntent UTileInteractionHandler::DeterminePlayerIntent(ABG_Tile* ClickedTi
 		case ETileHighlightState::Attack:
 			return EPlayerIntent::AttackTroop;
 		case ETileHighlightState::Standard:
+			return EPlayerIntent::ReselectTile;
+		case ETileHighlightState::Teleporter:
+			return EPlayerIntent::UseContextAction;
 		default:
 			return EPlayerIntent::SelectTile;
 	}
@@ -147,8 +156,6 @@ void UTileInteractionHandler::Handle_SelectTile()
 		}
 	}
 
-	PlaySoundEffect(ClickSFX);
-
 	if (SelectedTile && !SelectedTile->GetIsOccupied())
 	{
 		HighlightSystem->ApplyHighlightState(ETileHighlightState::Standard, SelectedTile);
@@ -213,10 +220,8 @@ void UTileInteractionHandler::Handle_MoveTroop(ABG_Tile* PreviousTile, ABG_Tile*
 
 	if (OccupyingTroop->GetHealth() > 0)
 	{
-		PlaySoundEffect(ClickSFX);
-
 		TArray<FIntPoint> AdjacentTiles = GetAdjacentTiles(true, 1, PreviousTile);
-		bool			  bCanMove = OccupyingTroop->CanMoveTo(Tile->GetGridCoordinates(), AdjacentTiles);
+		bool bCanMove = OccupyingTroop->CanMoveTo(Tile->GetGridCoordinates(), AdjacentTiles);
 		if (bCanMove)
 		{
 			OccupyingTroop->MoveToTile(Tile);
@@ -237,8 +242,6 @@ void UTileInteractionHandler::Handle_MoveTroop(ABG_Tile* PreviousTile, ABG_Tile*
 
 void UTileInteractionHandler::Handle_AttackTroop(ABG_Tile* PreviousTile, ABG_Tile* Tile)
 {
-	PlaySoundEffect(ClickSFX);
-
 	if (!PreviousTile || !Tile || !HighlightSystem)
 		return;
 
@@ -261,13 +264,62 @@ void UTileInteractionHandler::Handle_AttackTroop(ABG_Tile* PreviousTile, ABG_Til
 	if (bFriendlyFire)
 		return;
 
-	// Play attack SFX before dealing damage (which may destroy the defender)
 	PlaySoundEffect(AttackingTroop->GetAttackSound());
 
 	AttackingTroop->SetInteractingTroop(DefendingTroop);
 	DefendingTroop->SetInteractingTroop(AttackingTroop);
 
 	AttackingTroop->SetTroopState(ETroopState::Attacking);
+}
+
+void UTileInteractionHandler::Handle_TeleportTroop(ABG_Tile* SourceTile, ABG_Tile* DestinationTile)
+{
+	if (!SourceTile || !DestinationTile || !HighlightSystem)
+		return;
+
+	AOccupant_Troop_BaseClass* Troop = SourceTile->getOccupyingTroop();
+	if (!Troop || Troop->TroopAnimatingAction())
+		return;
+
+	PlaySoundEffect(TeleportSFX);
+
+	Troop->MoveToTile(DestinationTile);
+	DestinationTile->SetOccupyingTroop(Troop);
+	DestinationTile->SetIsOccupied(true);
+
+	if (TurnManager)
+	{
+		SourceTile->SetOwningPlayer(EActivePlayerSide::None);
+		DestinationTile->SetOwningPlayer(TurnManager->GetActivePlayer());
+	}
+
+	SourceTile->SetIsOccupied(false);
+	SourceTile->SetOccupyingTroop(nullptr);
+
+	PendingTeleportSource = nullptr;
+	HighlightSystem->RemoveOutlineFromAllTiles();
+}
+
+void UTileInteractionHandler::BeginTeleportSelection(ABG_Tile* SourceTile, const TArray<FIntPoint>& TeleporterCoords, const TMap<FIntPoint, ABG_Tile*>& TileMap)
+{
+	if (!SourceTile || !HighlightSystem)
+		return;
+
+	HighlightSystem->RemoveOutlineFromAllTiles();
+	PendingTeleportSource = SourceTile; 
+
+	for (int32 i = 0; i < TeleporterCoords.Num(); ++i)
+	{
+		if (SourceTile->GetGridCoordinates() == TeleporterCoords[i])
+			continue;
+
+		const FIntPoint& Coords = TeleporterCoords[i];
+		ABG_Tile* const* Found = TileMap.Find(Coords);
+		if (Found && *Found && !(*Found)->GetIsOccupied())
+		{
+			HighlightSystem->ApplyHighlightState(ETileHighlightState::Teleporter, *Found);
+		}
+	}
 }
 
 void UTileInteractionHandler::PlaySoundEffect(USoundBase* Sound)

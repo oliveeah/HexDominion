@@ -6,6 +6,7 @@
 #include "EnhancedInputComponent.h"
 #include "Engine/LocalPlayer.h"
 #include "InputMappingContext.h"
+#include "Kismet/GameplayStatics.h"
 #include "playerData/BG_PlayerPawn.h"
 
 AProductionProjCurrPlayerController::AProductionProjCurrPlayerController()
@@ -134,6 +135,12 @@ void AProductionProjCurrPlayerController::LookCallback(const FInputActionValue& 
 
 void AProductionProjCurrPlayerController::ClickCallback()
 {
+	// Play click SFX unconditionally on every click
+	if (ClickSFX)
+	{
+		UGameplayStatics::PlaySound2D(this, ClickSFX);
+	}
+
 	FHitResult HitResult;
 	bool bHit = GetHitResultUnderCursor(ECC_Visibility, false, HitResult);
 
@@ -142,10 +149,8 @@ void AProductionProjCurrPlayerController::ClickCallback()
 		AActor* HitActor = HitResult.GetActor();
 		if (HitActor && HitActor->GetClass()->ImplementsInterface(UInteractionInterface::StaticClass()))
 		{
-			IInteractionInterface::Execute_ReactToPlayerInteraction(HitActor); // This is the Execute_* function. The asterisk means your function name. :)
+			IInteractionInterface::Execute_ReactToPlayerInteraction(HitActor);
 		}
-		
-		// Add your tile interaction logic here
 	}
 }
 

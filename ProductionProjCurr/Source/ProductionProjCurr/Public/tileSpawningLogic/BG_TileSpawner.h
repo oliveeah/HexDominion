@@ -42,6 +42,8 @@ public:
 	int getNumberOfCols();
 	int getNumberOfRows();
 
+	UTileSpawner_Data* GetTileSpawnerData() const { return TileSpawnerData; }
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Tile Spawner", meta = (AllowPrivateAccess = "true"))
 	UTileSpawner_Data* TileSpawnerData;
@@ -56,12 +58,10 @@ private:
 
 	FRandomStream randomStream;
 
-	// Grid Generation
 	void spawnGrid(const float& randomNum);
 	void clearGrid();
 	ABG_Tile* spawnTile(TSubclassOf<ABG_Tile> _ChosenTileClass, const FTransform& _instanceTransform);
 
-	// Biome Selection
 	TSubclassOf<ABG_Tile> GetTileClassForBiome(EBiomeType Biome) const;
 	EBiomeType generateBiomeTypeBasedOnNoise(int32 rows, int32 cols, FastNoiseLite& _Noise);
 	TSubclassOf<ABG_Tile> PickVariantFromNoise(
