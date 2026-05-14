@@ -43,11 +43,12 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "UI")
 	void InitialisePlayerUI();
 
-
 	void TurnLoop();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TurnManager")
 	ATurnManager* turnManager;
+
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bGameActive;
@@ -58,6 +59,11 @@ private:
 	UPROPERTY()
 	ATileManager* TileManagerInstance;
 };
+
+
+
+
+
 
 
 
