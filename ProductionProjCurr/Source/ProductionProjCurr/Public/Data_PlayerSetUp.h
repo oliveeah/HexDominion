@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -18,11 +16,9 @@ struct FPlayerEntry
 	UPROPERTY(BlueprintReadWrite, Category = "Player")
 	EActivePlayerSide PlayerSide = EActivePlayerSide::None;
 
-
 	UPROPERTY(BlueprintReadWrite, Category = "Player")
 	bool bIsActive = false;
 };
-
 
 UCLASS()
 class PRODUCTIONPROJCURR_API UData_PlayerSetUp : public UGameInstanceSubsystem

@@ -1,5 +1,3 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
 #include "ProductionProjCurr.h"
 #include "Modules/ModuleManager.h"
 

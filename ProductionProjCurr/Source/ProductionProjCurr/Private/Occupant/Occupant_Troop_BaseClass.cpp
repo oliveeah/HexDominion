@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "Occupant/Occupant_Troop_BaseClass.h"
 #include "Occupant_Troop_Data.h"
 #include "SFX_Troop_Data.h"
@@ -124,7 +121,6 @@ void AOccupant_Troop_BaseClass::SetOwningPlayer(EActivePlayerSide NewPlayer)
 	}
 	SkeletalMesh->SetWorldScale3D(FVector(TeamData->Scale));
 
-	// Re-cache SFX now that we know the owner
 	SetSoundEffects();
 }
 
@@ -146,7 +142,7 @@ void AOccupant_Troop_BaseClass::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (CurrentState == ETroopState::Moving)//moveToTile in world space, attach to new socket
+	if (CurrentState == ETroopState::Moving)
 	{
 		FVector TargetLocation = MoveTarget;
 		FVector CurrentLocation = GetActorLocation();
@@ -335,4 +331,3 @@ void AOccupant_Troop_BaseClass::PlaySoundEffect(USoundBase* Sound)
 
 	UGameplayStatics::PlaySoundAtLocation(this, Sound, GetActorLocation());
 }
-

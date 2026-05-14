@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -35,7 +33,6 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
 	bool,
 	bIsAnimatingAction);
 
-
 UCLASS()
 class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseClass
 {
@@ -52,7 +49,6 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 		UPROPERTY(EditDefaultsOnly, Category = "Stats")
 		int Damage = 1;
 
-
 		FName MoveSocketName = TEXT("TroopSpawnSocket");
 		
 		UPROPERTY(EditDefaultsOnly, Category = "Stats | Debug")
@@ -64,7 +60,6 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 		ABG_Tile* TargetTile = nullptr;
 
 		FVector	  MoveTarget;
-
 
 		UPROPERTY(EditDefaultsOnly, Category = "Components")
 		USkeletalMeshComponent* SkeletalMesh;
@@ -78,7 +73,6 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 		UPROPERTY()
 		ABG_Tile* OwningTile = nullptr;
 
-		
 		void LookAtTarget(const FVector& TargetLocation);
 		void LookAtTarget(AOccupant_BaseClass* Target);
 
@@ -87,7 +81,6 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 
 		bool animatingAction = false;
 
-		//delegates
 		UPROPERTY(BlueprintAssignable, Category = "Events")
 		FOnStateChanged OnStateChanged;
 
@@ -109,7 +102,6 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 		UFUNCTION(BlueprintCallable, Category = "Troop|Animation")
 		void NotifyActionAnimationFinished();
 
-		/*Getters*/ 
 		int  GetTroopHealth() const { return Health; }
 		int  GetTroopDamage() const { return Damage; }
 		ETroopState GetTroopState() const { return CurrentState; }
@@ -119,7 +111,6 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 		USoundBase* GetDamageSound() const;
 		USoundBase* GetDeathSound() const;
 
-		/*Movement*/
 		virtual bool CanMoveTo(const FIntPoint& Target, TArray<FIntPoint> Neighbors) const;
 		virtual void MoveToTile(class ABG_Tile* Tile);
 
@@ -129,7 +120,6 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 
 		void TroopDamage();
 
-		/*Overrides*/
 		bool		 IsTroop() const override { return true; }
 
 		virtual void Tick(float DeltaTime) override;
@@ -142,7 +132,6 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 
 		void PlaySoundEffect(USoundBase* Sound);
 
-
 	protected:
 		UPROPERTY()
 		USoundBase* CachedDeathSound = nullptr;
@@ -153,8 +142,3 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 	UPROPERTY()
 		USoundBase* CachedMoveSound = nullptr;
 };
-
-
-
-
-

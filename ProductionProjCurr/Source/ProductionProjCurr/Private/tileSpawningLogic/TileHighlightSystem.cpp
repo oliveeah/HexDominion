@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #include "tileSpawningLogic/TileHighlightSystem.h"
 #include "tileSpawningLogic/TileManagerHelpers.h"
 #include "tileSpawningLogic/BG_Tile.h"

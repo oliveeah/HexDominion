@@ -1,11 +1,8 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "BG_AC_MouseOverlapReciever.generated.h"
-
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PRODUCTIONPROJCURR_API UBG_AC_MouseOverlapReciever : public UActorComponent
@@ -13,16 +10,15 @@ class PRODUCTIONPROJCURR_API UBG_AC_MouseOverlapReciever : public UActorComponen
 	GENERATED_BODY()
 
 public:	
-	// Sets default values for this component's properties
+	
 	UBG_AC_MouseOverlapReciever();
 
 protected:
-	// Called when the game starts
+	
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
+	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
 };

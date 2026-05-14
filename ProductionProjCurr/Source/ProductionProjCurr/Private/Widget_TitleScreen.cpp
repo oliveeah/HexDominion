@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "Widget_TitleScreen.h"
 #include "Data_PlayerSetUp.h"
 #include "Kismet/GameplayStatics.h"
@@ -16,7 +13,6 @@ void UWidget_TitleScreen::NativeConstruct()
 	if (NumPlayers_Text)
 		NumPlayers_Text->SetText(FText::AsNumber(NumPlayers));
 
-	// Hide name entry until player count is confirmed
 	if (EnterPlayerName_SB)
 		EnterPlayerName_SB->SetVisibility(ESlateVisibility::Collapsed);
 
@@ -52,7 +48,7 @@ void UWidget_TitleScreen::OnRightArrowClicked()
 
 void UWidget_TitleScreen::OnConfirmNumPlayersClicked()
 {
-	// Reset and begin sequential name collection
+	
 	CurrentEntry = 0;
 	CollectedNames.Empty();
 
@@ -79,7 +75,7 @@ void UWidget_TitleScreen::PromptForNextPlayer()
 
 void UWidget_TitleScreen::OnNameCommitted(const FText& Text, ETextCommit::Type CommitMethod)
 {
-	// Only accept Enter key or clicking away — ignore focus loss from other causes
+	
 	if (CommitMethod != ETextCommit::OnEnter && CommitMethod != ETextCommit::OnUserMovedFocus)
 		return;
 
@@ -92,12 +88,12 @@ void UWidget_TitleScreen::OnNameCommitted(const FText& Text, ETextCommit::Type C
 
 	if (CurrentEntry < NumPlayers)
 	{
-		// More players to name
+		
 		PromptForNextPlayer();
 	}
 	else
 	{
-		// All names collected — hide input, show start button
+		
 		if (EnterPlayerName_SB)
 			EnterPlayerName_SB->SetVisibility(ESlateVisibility::Collapsed);
 

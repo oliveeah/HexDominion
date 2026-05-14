@@ -1,5 +1,3 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -11,9 +9,7 @@
 class ATileManager;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnToggleTileDebugCoordinates);
-/**
- *  Simple GameMode for a third person game
- */
+
 UCLASS(abstract)
 class AProductionProjCurrGameMode : public AGameModeBase
 {
@@ -25,7 +21,6 @@ protected:
 
 public:
 	
-	/** Constructor */
 	AProductionProjCurrGameMode();
 
 	UPROPERTY(BlueprintAssignable, Category = "Tile Debug")
@@ -43,7 +38,6 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "UI")
 	void InitialisePlayerUI();
 
-
 	void TurnLoop();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TurnManager")
@@ -58,6 +52,3 @@ private:
 	UPROPERTY()
 	ATileManager* TileManagerInstance;
 };
-
-
-

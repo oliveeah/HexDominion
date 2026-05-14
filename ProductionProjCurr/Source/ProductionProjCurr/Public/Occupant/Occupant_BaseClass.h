@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -20,8 +18,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
 	USceneComponent* RootComp;
 
-
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats")
 	int32 Health = 3;
 
@@ -41,13 +37,11 @@ protected:
 
 public:
 
-	/*Setters*/
 	virtual void SetHealth(int32 NewHealth);
 	virtual void SetGridPosition(const FIntPoint& NewPos);
 	virtual void SetOwningPlayer(EActivePlayerSide NewPlayer);
 	virtual void SetTeamColor(const FLinearColor& NewColor);
 
-	/*Getters*/
 	virtual int				  GetHealth() const;
 	virtual FIntPoint		  GetGridPosition() const;
 	virtual EActivePlayerSide GetOwningPlayer() const;

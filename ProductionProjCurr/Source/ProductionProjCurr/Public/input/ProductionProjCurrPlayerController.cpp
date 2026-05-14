@@ -1,6 +1,3 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
-
 #include "ProductionProjCurrPlayerController.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
@@ -14,13 +11,10 @@ AProductionProjCurrPlayerController::AProductionProjCurrPlayerController()
 	PrimaryActorTick.bCanEverTick = true;
 }
 
-
-
 void AProductionProjCurrPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// Setup mouse and input mode
 	bShowMouseCursor = true;
 	bEnableClickEvents = true;
 	bEnableMouseOverEvents = true;
@@ -29,14 +23,12 @@ void AProductionProjCurrPlayerController::BeginPlay()
 	InputMode.SetHideCursorDuringCapture(false);
 	SetInputMode(InputMode);
 
-
 }
 
 void AProductionProjCurrPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
-	// Add Input Mapping Contexts
 	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
 	{
 		for (UInputMappingContext* CurrentContext : DefaultMappingContexts)
@@ -48,7 +40,6 @@ void AProductionProjCurrPlayerController::SetupInputComponent()
 		}
 	}
 
-	// Bind Enhanced Input Actions
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent))
 	{
 		if (moveAction)
@@ -113,15 +104,12 @@ void AProductionProjCurrPlayerController::MoveCallback(const FInputActionValue& 
 
 	const FVector2D MovementVector = Value.Get<FVector2D>();
 	
-	// Get controller rotation
 	const FRotator Rotation = GetControlRotation();
 	const FRotator YawRotation(0, Rotation.Yaw, 0);
 
-	// Get forward and right vectors
 	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
-	// Add movement input to pawn
 	ControlledPawn->AddMovementInput(ForwardDirection, MovementVector.Y);
 	ControlledPawn->AddMovementInput(RightDirection, MovementVector.X);
 }
@@ -135,7 +123,7 @@ void AProductionProjCurrPlayerController::LookCallback(const FInputActionValue& 
 
 void AProductionProjCurrPlayerController::ClickCallback()
 {
-	// Play click SFX unconditionally on every click
+	
 	if (ClickSFX)
 	{
 		UGameplayStatics::PlaySound2D(this, ClickSFX);
@@ -177,4 +165,3 @@ void AProductionProjCurrPlayerController::OpenDevMenuCallback(const FInputAction
 
 	_ControlledPawn->ToggleDevMenu();
 }
-

@@ -1,13 +1,9 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "tileSpawningLogic/BG_Tile.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/DecalComponent.h"
 #include "Materials/MaterialInstanceDynamic.h"
 #include <Kismet/GameplayStatics.h>
 #include "Materials/MaterialInstance.h"
-
 
 ABG_Tile::ABG_Tile()
 {
@@ -19,7 +15,7 @@ ABG_Tile::ABG_Tile()
 	tileMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("tile mesh"));
 	tileMesh->SetupAttachment(sceneComponent);
 
-	tileMesh->SetBoundsScale(1000.0f); // stop occlusion culling from hiding the tile when the player is close to it
+	tileMesh->SetBoundsScale(1000.0f); 
 	tileMesh->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	tileMesh->SetCollisionResponseToAllChannels(ECR_Ignore);
 	tileMesh->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
@@ -51,7 +47,6 @@ void ABG_Tile::BeginPlay()
 
 void ABG_Tile::ReactToPlayerInteraction_Implementation()
 {
-//	drawDebugPointer(FColor::Yellow);
 
 	setSelectedTile();
 }
@@ -94,158 +89,13 @@ void ABG_Tile::ApplyHueFromNoise(float NoiseValue)
 	const float Hue = FMath::Clamp(Normalized, 0.0f, 1.0f);
 	const uint8 HueByte = static_cast<uint8>(Hue * 255.0f);
 
-	// Tile tint
 	const uint8 SatByte = static_cast<uint8>(FMath::Clamp(TileHueSaturation, 0.0f, 1.0f) * 255.0f);
 	const uint8 ValByte = static_cast<uint8>(FMath::Clamp(TileHueValue, 0.0f, 1.0f) * 255.0f);
 	const FLinearColor TileTint = FLinearColor::MakeFromHSV8(HueByte, SatByte, ValByte);
 	TileMeshMID->SetVectorParameterValue(TileHueParameterName, TileTint);
 
-	// Foliage tint — same hue, independent saturation and value
 	const uint8 FolSatByte = static_cast<uint8>(FMath::Clamp(FoliageHueSaturation, 0.0f, 1.0f) * 255.0f);
 	const uint8 FolValByte = static_cast<uint8>(FMath::Clamp(FoliageHueValue, 0.0f, 1.0f) * 255.0f);
 	const FLinearColor FoliageTint = FLinearColor::MakeFromHSV8(HueByte, FolSatByte, FolValByte);
 	ApplyFoliageHue(FoliageTint);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,5 +1,3 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
 #include "ProductionProjCurrGameMode.h"
 #include "UObject/ConstructorHelpers.h"
 #include "EngineUtils.h"
@@ -80,7 +78,7 @@ void AProductionProjCurrGameMode::TurnLoop()
 	}
 	else
 	{
-		// No Title Screen data — use the enum slot name as fallback
+		
 		PlayerName = FString::Printf(TEXT("Player %d"), (int32)ActivePlayer + 1);
 	}
 

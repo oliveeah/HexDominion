@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -24,7 +22,6 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
 	Tile,
 	bool,
 	isOccupied);
-
 
 UCLASS()
 class PRODUCTIONPROJCURR_API ABG_Tile : public AActor, public IInteractionInterface
@@ -60,7 +57,6 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Tile Properties | Spawning")
 	bool bIsSpecialTile = false;
 
-
 	UPROPERTY(VisibleAnywhere, Category = "Tile Properties | Visual")
 	ETileHighlightState currentHighlightType = ETileHighlightState::None;
 
@@ -88,7 +84,6 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	USceneComponent* sceneComponent;
 
-
 	public:
 
 		ABG_Tile();
@@ -109,8 +104,6 @@ private:
 		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 		UDecalComponent* decalComponent;
 
-
-		//getters
 		FIntPoint GetGridCoordinates() const { return gridCoordinates; }
 		AOccupant_Troop_BaseClass* getOccupyingTroop() const { return occupyingTroopClass; }
 		bool					   getIsPlayingEffect() const { return isPlayingEffect; }
@@ -122,9 +115,7 @@ private:
 		EActivePlayerSide			  GetOccupyingPlayer() const { return owningPlayer; }
 		ETileHighlightState&		  getHighlightType() { return currentHighlightType; }
 		bool					   getIsSpecialTile() const { return bIsSpecialTile; }
-		//getters
-
-		//setters
+		
 		void SetOccupyingTroop(AOccupant_Troop_BaseClass* Troop) { occupyingTroopClass = Troop; }
 		void SetHighlightType(ETileHighlightState newType) { currentHighlightType = newType; }
 		void SetOccupyingBuilding(AOccupant_Building_BaseClass* Building) { occupyingBuildingClass = Building; }
@@ -135,8 +126,7 @@ private:
 
 		UFUNCTION()
 		void SetOwningPlayer(EActivePlayerSide newOwner) { owningPlayer = newOwner; }
-		//setters
-
+		
 		void removeOutlineEffect();
 		void addOutlineEffect(const FLinearColor& color);
 
@@ -148,7 +138,6 @@ private:
 
 		void ApplyHueFromNoise(float NoiseValue);
 
-		// Forward declaration so the base signature compiles
 		virtual void UseContextAction(ATileManager* InTileManager) {}
 
 		UFUNCTION(BlueprintImplementableEvent, Category = "Tile Properties | Visual")

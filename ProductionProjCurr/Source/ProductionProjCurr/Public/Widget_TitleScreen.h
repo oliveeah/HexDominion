@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -27,14 +25,12 @@ protected:
 	UFUNCTION()
 	void OnConfirmNumPlayersClicked();
 
-	// Called when the player submits their name and moves to the next
 	UFUNCTION()
 	void OnNameCommitted(const FText& Text, ETextCommit::Type CommitMethod);
 
 	UFUNCTION()
 	void OnStartGameClicked();
 
-	// Updates the prompt text to ask for the current player's name
 	void PromptForNextPlayer();
 
 public:
@@ -50,18 +46,15 @@ public:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	TObjectPtr<UTextBlock> NumPlayers_Text;
 
-	// The single reused name input box
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	TObjectPtr<UEditableTextBox> EditableTextBox;
 
-	// Shows instructions e.g. "Enter name for Player 1:"
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidgetOptional))
 	TObjectPtr<UTextBlock> Text_EnterPlayerName;
 
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidgetOptional))
 	TObjectPtr<UButton> StartGame_Button;
 
-	// The SizeBox containing the name entry section — hidden until player count confirmed
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	TObjectPtr<USizeBox> EnterPlayerName_SB;
 
@@ -70,6 +63,6 @@ public:
 
 private:
 	int32 NumPlayers    = 2;
-	int32 CurrentEntry  = 0;        // Which player we are currently naming
-	TArray<FString> CollectedNames; // Names gathered so far
+	int32 CurrentEntry  = 0;        
+	TArray<FString> CollectedNames; 
 };

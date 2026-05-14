@@ -1,5 +1,3 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -13,10 +11,6 @@ class UInputMappingContext;
 class UInputAction;
 class ABG_PlayerPawn;
 
-/**
- *  Basic PlayerController class for a third person game
- *  Manages input mappings
- */
 UCLASS()
 class PRODUCTIONPROJCURR_API AProductionProjCurrPlayerController : public APlayerController, public IInteractionInterface
 {
@@ -25,8 +19,6 @@ class PRODUCTIONPROJCURR_API AProductionProjCurrPlayerController : public APlaye
 public:
 	AProductionProjCurrPlayerController();
 
-
-	
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
@@ -53,19 +45,16 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "SFX")
 	USoundBase* ClickSFX = nullptr;
 
-	// ========== INPUT CALLBACKS (MOVED FROM PAWN) ==========
 	void MoveCallback(const FInputActionValue& Value);
 	void LookCallback(const FInputActionValue& Value);
 	void ClickCallback();
 	void ScrollCallback(const FInputActionValue& Value);
 	void OpenDevMenuCallback(const FInputActionValue& Value);
 
-
 private:
-	// Cache reference to controlled pawn
+	
 	UPROPERTY()
 	ABG_PlayerPawn* ControlledPawn;
 
-	// Helper function to get controlled pawn
 	ABG_PlayerPawn* GetControlledPawn() const;
 };

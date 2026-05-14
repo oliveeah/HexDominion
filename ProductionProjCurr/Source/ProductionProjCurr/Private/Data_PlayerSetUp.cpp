@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "Data_PlayerSetUp.h"
 #include "Engine/GameInstance.h"
 #include "Kismet/GameplayStatics.h"
@@ -14,7 +11,6 @@ UData_PlayerSetUp* UData_PlayerSetUp::Get(const UObject* WorldContext)
 	if (!GI)
 		return nullptr;
 
-	// Correct subsystem access - no Cast required, type is guaranteed
 	return GI->GetSubsystem<UData_PlayerSetUp>();
 }
 

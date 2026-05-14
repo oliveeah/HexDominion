@@ -21,17 +21,17 @@ namespace TileManagerHelper_Functions
 		switch (HighlightState)
 		{
 			case ETileHighlightState::Standard:
-				return FLinearColor(0, 0, 0, 1); // black
+				return FLinearColor(0, 0, 0, 1); 
 			case ETileHighlightState::Adjacency:
-				return FLinearColor(0.002000, 0.010000, 0.030000, 1.000000); // Darker Blue
+				return FLinearColor(0.002000, 0.010000, 0.030000, 1.000000); 
 			case ETileHighlightState::Attack:
-				return FLinearColor(2.000000, 0, 0, 1); // Darker Red
+				return FLinearColor(2.000000, 0, 0, 1); 
 			case ETileHighlightState::Blocked:
-				return FLinearColor(5, 5, 5, 1); // White
+				return FLinearColor(5, 5, 5, 1); 
 			case ETileHighlightState::Teleporter:
-				return FLinearColor(0.002000, 0.010000, 0.030000, 1.000000); // Darker Blue
+				return FLinearColor(0.002000, 0.010000, 0.030000, 1.000000); 
 			default:
-				return FLinearColor(5, 5, 5, 1); // White
+				return FLinearColor(5, 5, 5, 1); 
 		}
 	}
 
