@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #include "gameMode/TurnManager.h"
 #include "playerData/ResourceManager.h"
 #include "Data_PlayerSetUp.h"
@@ -13,7 +11,6 @@ void ATurnManager::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// Build the turn order from whoever was set up on the Title Screen
 	UData_PlayerSetUp* Setup = UData_PlayerSetUp::Get(this);
 	if (Setup && Setup->GetActivePlayers().Num() > 0)
 	{
@@ -25,14 +22,14 @@ void ATurnManager::BeginPlay()
 	}
 	else
 	{
-		// Fallback: all 4 players (e.g. playing without a Title Screen)
+		
 		ActivePlayerOrder = {
 			EActivePlayerSide::PlayerA,
 			EActivePlayerSide::PlayerB,
 			EActivePlayerSide::PlayerC,
 			EActivePlayerSide::PlayerD
 		};
-		UE_LOG(LogTemp, Warning, TEXT("TurnManager: No setup data found — defaulting to 4 players."));
+		UE_LOG(LogTemp, Warning, TEXT("TurnManager: No setup data found ï¿½ defaulting to 4 players."));
 	}
 
 	CurrentPlayerIndex = 0;
@@ -50,7 +47,6 @@ void ATurnManager::PassTurn()
 	UE_LOG(LogTemp, Display, TEXT("Turn passed - now: %d (index %d of %d)"),
 		(int32)activePlayer, CurrentPlayerIndex, ActivePlayerOrder.Num());
 
-	// Completed a full round when we wrap back to the first player
 	if (CurrentPlayerIndex == 0)
 	{
 		AllPlayersTakeTurn();
@@ -86,15 +82,9 @@ void ATurnManager::GiveAllPlayersResourcesForNewTurn()
 	if (!ResourceManager)
 		return;
 
-	// Only give resources to players actually in this game
 	for (const EActivePlayerSide& Player : ActivePlayerOrder)
 	{
 		ResourceManager->AddBuildingMaterial(Player, 1);
 		ResourceManager->AddSkillTreeCurrency(Player, currentTurn);
 	}
 }
-
-
-
-
-

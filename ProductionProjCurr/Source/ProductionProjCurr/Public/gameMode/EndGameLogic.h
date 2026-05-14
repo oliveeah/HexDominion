@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -23,10 +21,8 @@ public:
 		ATurnManager*	   InTurnManager,
 		UTileSpawner_Data* InSpawnerData);
 
-	// Called when end phase begins — spawns the cornucopia tile at grid centre
 	void SpawnCornucopia();
 
-	// Called each end-phase round — checks who holds the cornucopia
 	void EvaluateHoldCondition(int32 CurrentTurn);
 
 	UPROPERTY(EditAnywhere, Category = "End Game")

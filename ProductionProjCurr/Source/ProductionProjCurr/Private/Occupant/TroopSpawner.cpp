@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #include "Occupant/TroopSpawner.h"
 #include "tileSpawningLogic/BG_Tile.h"
 #include "Occupant/Occupant_BaseClass.h"

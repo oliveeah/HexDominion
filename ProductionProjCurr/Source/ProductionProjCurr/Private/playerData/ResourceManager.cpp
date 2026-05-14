@@ -1,12 +1,9 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #include "playerData/ResourceManager.h"
 #include "Data_PlayerSetUp.h"
 
-// Sets default values
 AResourceManager::AResourceManager()
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	
 	PrimaryActorTick.bCanEverTick = false;
 
 }
@@ -15,11 +12,10 @@ void AResourceManager::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//getting player data from game instance
 	UData_PlayerSetUp* Setup = UData_PlayerSetUp::Get(this);
 	if (Setup && Setup->GetActivePlayers().Num() > 0)
 	{
-		// range for loop to add player resources for each active player in the setup data
+		
 		for (const FPlayerEntry& Entry : Setup->GetActivePlayers()) 
 		{
 			PlayerResources.Add(Entry.PlayerSide, FPlayerResources());
@@ -28,12 +24,12 @@ void AResourceManager::BeginPlay()
 	}
 	else
 	{
-		// Fallback for direct level launch without Title Screen
+		
 		PlayerResources.Add(EActivePlayerSide::PlayerA, FPlayerResources());
 		PlayerResources.Add(EActivePlayerSide::PlayerB, FPlayerResources());
 		PlayerResources.Add(EActivePlayerSide::PlayerC, FPlayerResources());
 		PlayerResources.Add(EActivePlayerSide::PlayerD, FPlayerResources());
-		UE_LOG(LogTemp, Warning, TEXT("ResourceManager: No setup data found — defaulting to 4 player slots."));
+		UE_LOG(LogTemp, Warning, TEXT("ResourceManager: No setup data found ï¿½ defaulting to 4 player slots."));
 	}
 }
 
@@ -45,7 +41,7 @@ void AResourceManager::AddBuildingMaterial(EActivePlayerSide Player, int32 Build
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("AddBuildingMaterial: No entry found for player %d — was BeginPlay called?"), (int32)Player);
+		UE_LOG(LogTemp, Warning, TEXT("AddBuildingMaterial: No entry found for player %d ï¿½ was BeginPlay called?"), (int32)Player);
 	}
 }
 
@@ -70,7 +66,7 @@ void AResourceManager::AddSkillTreeCurrency(EActivePlayerSide Player, int32 Skil
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("AddSkillTreeCurrency: No entry found for player %d — was BeginPlay called?"), (int32)Player);
+		UE_LOG(LogTemp, Warning, TEXT("AddSkillTreeCurrency: No entry found for player %d ï¿½ was BeginPlay called?"), (int32)Player);
 	}
 }
 
@@ -95,7 +91,3 @@ FPlayerResources AResourceManager::GetResources(EActivePlayerSide Player) const
 	}
 	return FPlayerResources();
 }
-
-
-
-

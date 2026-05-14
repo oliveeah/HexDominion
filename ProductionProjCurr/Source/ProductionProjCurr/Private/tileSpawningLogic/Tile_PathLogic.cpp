@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #include "tileSpawningLogic/Tile_PathLogic.h"
 #include "tileSpawningLogic/BG_Tile.h"
 #include "tileSpawningLogic/TileManager.h"
@@ -20,10 +18,6 @@ void UTile_PathLogic::Initialize(
 	World           = InWorld;
 	Owner           = InOwner;
 }
-
-// ============================================================================
-// PATH GENERATION
-// ============================================================================
 
 void UTile_PathLogic::SpawnPaths()
 {
@@ -204,10 +198,6 @@ void UTile_PathLogic::ChangeTileToPath(const FIntPoint& Coords)
 	}
 }
 
-// ============================================================================
-// TELEPORTER PLACEMENT
-// ============================================================================
-
 void UTile_PathLogic::PlacePlayerSpawnTeleporters()
 {
 	if (!TileSpawnerData || !TileSpawnerData->TeleporterTile)
@@ -277,10 +267,6 @@ void UTile_PathLogic::PlaceTeleporter(const FIntPoint& Coords)
 		TileManager->RegisterTeleporterTile(Coords);
 	}
 }
-
-// ============================================================================
-// HELPERS
-// ============================================================================
 
 ABG_Tile* UTile_PathLogic::SpawnTile(TSubclassOf<ABG_Tile> TileClass, const FTransform& Transform)
 {

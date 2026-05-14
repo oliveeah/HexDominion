@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -36,15 +34,12 @@ private:
 	UWorld*                     World          = nullptr;
 	AActor*                     Owner          = nullptr;
 
-	// Path generation
 	bool TryBuildRandomPath(TArray<FIntPoint>& OutPath);
 	void ChangeTileToPath(const FIntPoint& Coords);
 	bool WouldIsolateTile(const FIntPoint& CandidatePathTile, const TSet<FIntPoint>& CurrentPathSet) const;
 
-	// Teleporter placement
 	void PlaceTeleporter(const FIntPoint& Coords);
 
-	// Shared helpers
 	ABG_Tile* SpawnTile(TSubclassOf<ABG_Tile> TileClass, const FTransform& Transform);
 	void      ApplyNoiseHue(ABG_Tile* Tile, const FIntPoint& Coords) const;
 	void      GetNeighborCoords(const FIntPoint& Coords, TArray<FIntPoint>& OutNeighbors) const;

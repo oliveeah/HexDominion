@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -14,7 +12,7 @@ class PRODUCTIONPROJCURR_API UTileSpawner_Data : public UDataAsset
 	GENERATED_BODY()
 
 public:
-	// Grid Setup
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Parameters | Setup")
 	float tileWidth = 0.0f;
 
@@ -30,18 +28,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Parameters | Setup")
 	float ySpawnOffset = 0.0f;
 
-	// Noise Settings
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Parameters | Noise")
 	float noiseFrequency = 0.0f;
 
-	// Height Settings
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Parameters | Height")
 	float hillHeightScale = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Parameters | Height")
 	float grasslandHeightScale = 0.0f;
 
-	// Tile Classes
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Tiles | Biomes")
 	TSubclassOf<ABG_Tile> TileClass;
 
@@ -57,7 +52,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Tiles | Biomes")
 	TSubclassOf<ABG_Tile> MeadowDefaultTile;
 
-	// Path Settings
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Parameters | Path")
 	int32 numberOfPaths = 1;
 
@@ -67,13 +61,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Parameters | Path")
 	float turnChance = 0.25f;
 
-	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Parameters | Path")
-	//bool bUseSubdivisionGaps = true;
-
-	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Parameters | Path")
-	//int32 subdivisionGapWidth = 1;
-
-	// Bias + Foliage
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Parameters | Setup")
 	float centerBiasStrength = 0.35f;
 
@@ -86,19 +73,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Parameters | Biomes")
 	float grasslandThreshold = 0.7f;
 
-	// Special Tiles
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Parameters | Special")
 	float teleporterSpawnChance = 0.05f;
 
-	// Obelisk Tiles
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Tiles | Special")
 	TSubclassOf<ABG_Tile> ObeliskTile;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Parameters | Special")
 	float obeliskSpawnChance = 0.05f;
 
-	// Special Tiles - Teleporter (for paths)
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hex | Tiles | Special")
 	TSubclassOf<ABG_Tile> TeleporterTile;
 

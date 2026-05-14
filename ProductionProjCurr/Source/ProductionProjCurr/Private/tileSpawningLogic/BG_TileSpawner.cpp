@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #include "tileSpawningLogic/BG_TileSpawner.h"
 #include "tileSpawningLogic/BG_Tile.h"
 #include "tileSpawningLogic/TileManager.h"
@@ -93,7 +91,6 @@ void ABG_TileSpawner::spawnGrid(const float& randomNum)
 			const EBiomeType biomeType = generateBiomeTypeBasedOnNoise(rows, cols, Noise);
 			TSubclassOf<ABG_Tile> ChosenTileClass = GetTileClassForBiome(biomeType);
 
-			// Apply foliage/special tiles only to grassland
 			if (biomeType == EBiomeType::Grassland)
 			{
 				if (Data.ObeliskTile && randomStream.FRand() < Data.obeliskSpawnChance)
@@ -106,14 +103,12 @@ void ABG_TileSpawner::spawnGrid(const float& randomNum)
 				}
 			}
 
-			// Calculate position
 			const float xOffset = (rows % 2 == 0) ? 0.0f : (hexWidth * 0.5f);
 			float Nx = cols + (rows % 2) * 0.5f;
 			float Ny = rows * 0.8660254f;
 			float HeightNoise = Noise.GetNoise(Nx, Ny);
 			float Height = HeightNoise * Data.ySpawnOffset;
 
-			// Only hills have height variation
 			if (biomeType == EBiomeType::Hill)
 			{
 				Height = FMath::Abs(HeightNoise) * Data.hillHeightScale;
@@ -166,7 +161,6 @@ EBiomeType ABG_TileSpawner::generateBiomeTypeBasedOnNoise(int32 rows, int32 cols
 	float Ny = rows * 0.8660254f;
 	float Value = (_Noise.GetNoise(Nx, Ny) + 1.f) * 0.5f;
 
-	// Apply center bias
 	const FVector2D Center((TileSpawnerData->numberOfColumns - 1) * 0.5f, (TileSpawnerData->numberOfRows - 1) * 0.5f);
 	const FVector2D Pos(cols, rows);
 	const float MaxRadius = FMath::Max(Center.X, Center.Y);
@@ -206,11 +200,6 @@ TSubclassOf<ABG_Tile> ABG_TileSpawner::PickVariantFromNoise(
 	const int32 Index = randomStream.RandRange(0, Variants.Num() - 1);
 	return Variants[Index];
 }
-
-// ============================================================================
-// PATH GENERATION (Just normal paths, not teleporters)
-// ============================================================================
-
 
 int ABG_TileSpawner::getNumberOfCols()
 {

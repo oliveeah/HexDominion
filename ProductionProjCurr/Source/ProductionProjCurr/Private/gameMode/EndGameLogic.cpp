@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #include "gameMode/EndGameLogic.h"
 #include "tileSpawningLogic/TileManager.h"
 #include "tileSpawningLogic/TileSpawner_Data.h"
@@ -20,7 +18,7 @@ void UEndGameLogic::SpawnCornucopia()
 {
 	if (!TileManager || !SpawnerData || !SpawnerData->CornucopiaTile)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("EndGameLogic: Cannot spawn cornucopia — missing references."));
+		UE_LOG(LogTemp, Warning, TEXT("EndGameLogic: Cannot spawn cornucopia ï¿½ missing references."));
 		return;
 	}
 
@@ -44,14 +42,12 @@ void UEndGameLogic::SpawnCornucopia()
 
 	ABG_Tile* OldTile = *Found;
 
-	// Preserve scale and transform before destroying
 	const FVector	 ActorScale = OldTile->GetActorScale3D();
 	const FVector	 MeshScale = OldTile->tileMesh ? OldTile->tileMesh->GetRelativeScale3D() : FVector::OneVector;
 	const FTransform Transform = OldTile->GetActorTransform();
 
 	OldTile->Destroy();
 
-	// Spawn the cornucopia tile in its place
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = TileManager;
 
@@ -71,7 +67,6 @@ void UEndGameLogic::SpawnCornucopia()
 	NewTile->SetGridCoordinates(CentreCoords);
 	NewTile->SetIsSpecialTile(true);
 
-	// Register with TileManager so interaction and highlighting work
 	TileManager->TileMap.Add(CentreCoords, NewTile);
 	NewTile->OnTileSelectedDelegate.AddDynamic(TileManager, &ATileManager::OnTileClicked);
 	TileManager->RegisterTile(CentreCoords, NewTile);

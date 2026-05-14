@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -26,10 +24,8 @@ private:
 
 	static constexpr int MaxTurns = 10;
 
-	// Built from UData_PlayerSetUp at BeginPlay — drives turn cycling
 	TArray<EActivePlayerSide> ActivePlayerOrder;
 
-	// Index into ActivePlayerOrder for the current turn
 	int32 CurrentPlayerIndex = 0;
 
 public:

@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -26,7 +24,6 @@ protected:
 public:
 	ATileManager();
 
-	/*Grid Data*/
 	TArray<TArray<ABG_Tile*>> TileGrid;
 
 	UPROPERTY()
@@ -35,29 +32,24 @@ public:
 	int32 GridWidth;
 	int32 GridHeight;
 
-	/*References — assign in editor*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TurnManager")
 	ATurnManager* TurnManager;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Troop | Spawning")
 	ATroopSpawner* TroopSpawner;
 
-	/*Grid helpers*/
 	void RegisterTile(const FIntPoint& Coords, ABG_Tile* Tile);
 	bool HasTile(const FIntPoint& Coords) const;
 
-	/*Setters*/
 	void SetGridWidth(int32 Width) { GridWidth = Width; }
 	void SetGridHeight(int32 Height) { GridHeight = Height; }
 
-	/*Getters for subsystems*/
 	UTileInteractionHandler* GetInteractionHandler() const { return InteractionHandler; }
 	UTileHighlightSystem*	 GetHighlightSystem() const { return HighlightSystem; }
 	const TArray<FIntPoint>& GetTeleporterCoords() const { return TeleporterTileCoords; }
 
 	void RegisterTeleporterTile(const FIntPoint& Coords);
 
-	/*Delegate handlers*/
 	UFUNCTION()
 	void OnTileClicked(ABG_Tile* Tile, bool bIsOccupied);
 
@@ -97,4 +89,3 @@ private:
 	UPROPERTY()
 	UEndGameLogic* EndGameLogic;
 };
-

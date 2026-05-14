@@ -13,8 +13,6 @@ void AOccupant_BaseClass::BeginPlay()
 	}
 }
 
-/* -------- SETTERS -------- */
-
 void AOccupant_BaseClass::SetHealth(int32 NewHealth)
 {
 	Health = NewHealth;
@@ -39,8 +37,6 @@ void AOccupant_BaseClass::SetTeamColor(const FLinearColor& NewColor)
 		TeamMID->SetVectorParameterValue(TEXT("TeamColor"), NewColor);
 	}
 }
-
-/* -------- GETTERS -------- */
 
 int32 AOccupant_BaseClass::GetHealth() const
 {

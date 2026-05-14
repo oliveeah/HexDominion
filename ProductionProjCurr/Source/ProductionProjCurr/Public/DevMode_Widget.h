@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -27,7 +25,6 @@ protected:
 	void generateButtonLabelText(UTextBlock* buttonLabel, const FString& labelText);
 	void initializeButtonLabels();
 
-	// Populates PlayerNames from UData_PlayerSetUp at construction time
 	void CachePlayerNames();
 
 	UFUNCTION()

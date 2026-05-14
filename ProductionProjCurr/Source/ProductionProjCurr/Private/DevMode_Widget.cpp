@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #include "DevMode_Widget.h"
 #include <Kismet/GameplayStatics.h>
 #include "tileSpawningLogic/TileManager.h"
@@ -95,7 +93,7 @@ void UDevMode_Widget::CachePlayerNames()
 	}
 	else
 	{
-		// Fallback: default names when launched without Title Screen
+		
 		PlayerNames.Add(EActivePlayerSide::PlayerA, TEXT("Player A"));
 		PlayerNames.Add(EActivePlayerSide::PlayerB, TEXT("Player B"));
 		PlayerNames.Add(EActivePlayerSide::PlayerC, TEXT("Player C"));

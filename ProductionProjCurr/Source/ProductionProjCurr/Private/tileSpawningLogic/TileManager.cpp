@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #include "tileSpawningLogic/TileManager.h"
 #include "tileSpawningLogic/TileHighlightSystem.h"
 #include "tileSpawningLogic/TileInteractionHandler.h"
@@ -19,7 +17,6 @@ void ATileManager::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// Create subsystems
 	HighlightSystem = NewObject<UTileHighlightSystem>(this);
 	InteractionHandler = NewObject<UTileInteractionHandler>(this);
 	EndGameLogic = NewObject<UEndGameLogic>(this);
@@ -37,7 +34,6 @@ void ATileManager::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("TroopSpawner not assigned in TileManager!"));
 	}
 
-	// Bind grid-built delegate
 	if (ABG_TileSpawner* TileSpawner = Cast<ABG_TileSpawner>(
 			UGameplayStatics::GetActorOfClass(this, ABG_TileSpawner::StaticClass())))
 	{
@@ -48,7 +44,6 @@ void ATileManager::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("TileSpawner not found for grid binding!"));
 	}
 
-	// Bind turn-changed delegate
 	if (TurnManager)
 	{
 		TurnManager->OnTurnChanged.AddDynamic(this, &ATileManager::HandleTurnChanged);
@@ -68,7 +63,6 @@ void ATileManager::HandleGridBuilt()
 	{
 		TileGrid = TileSpawner->getTileGrid();
 
-		// Initialize EndGameLogic now that the grid and SpawnerData are available
 		if (EndGameLogic)
 		{
 			UTileSpawner_Data* SpawnerData = TileSpawner->GetTileSpawnerData();
