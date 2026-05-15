@@ -124,6 +124,14 @@ void AOccupant_Troop_BaseClass::SetOwningPlayer(EActivePlayerSide NewPlayer)
 	SetSoundEffects();
 }
 
+void AOccupant_Troop_BaseClass::SetMeshVisibility(bool bVisible)
+{
+	if (SkeletalMesh)
+	{
+		SkeletalMesh->SetVisibility(bVisible);
+	}
+}
+
 void AOccupant_Troop_BaseClass::TroopAttack()
 {
 	if (InteractingTroop)
@@ -171,6 +179,12 @@ void AOccupant_Troop_BaseClass::Tick(float DeltaTime)
 			SetOwningTile(TargetTile);
 			SetActorTickEnabled(false);
 			TargetTile = nullptr;
+
+			if (bIsTeleporting)
+			{
+				SetMeshVisibility(true);
+				bIsTeleporting = false;
+			}
 		}
 	}
 }

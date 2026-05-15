@@ -59,7 +59,7 @@ public:
 	TObjectPtr<USizeBox> EnterPlayerName_SB;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TitleScreen")
-	FName GameLevelName = TEXT("GameLevel");
+	FName GameLevelName = TEXT("Lvl_ThirdPerson");
 
 private:
 	int32 NumPlayers    = 2;

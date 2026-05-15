@@ -68,14 +68,8 @@ struct Z_Construct_UClass_ABG_PlayerPawn_Statics
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_Camera_MetaData[] = {
 		{ "AllowPrivateAccess", "true" },
 		{ "Category", "Camera" },
-#if !UE_BUILD_SHIPPING
-		{ "Comment", "/** components  */" },
-#endif
 		{ "EditInline", "true" },
 		{ "ModuleRelativePath", "Public/playerData/BG_PlayerPawn.h" },
-#if !UE_BUILD_SHIPPING
-		{ "ToolTip", "components" },
-#endif
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_springArm_MetaData[] = {
 		{ "AllowPrivateAccess", "true" },
@@ -90,24 +84,12 @@ struct Z_Construct_UClass_ABG_PlayerPawn_Statics
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_UI_FactionCharacter_MetaData[] = {
 		{ "Category", "3D UI" },
-#if !UE_BUILD_SHIPPING
-		{ "Comment", "//UI\n" },
-#endif
 		{ "EditInline", "true" },
 		{ "ModuleRelativePath", "Public/playerData/BG_PlayerPawn.h" },
-#if !UE_BUILD_SHIPPING
-		{ "ToolTip", "UI" },
-#endif
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_devMenuWidgetRef_MetaData[] = {
 		{ "Category", "UI" },
-#if !UE_BUILD_SHIPPING
-		{ "Comment", "//developer\n" },
-#endif
 		{ "ModuleRelativePath", "Public/playerData/BG_PlayerPawn.h" },
-#if !UE_BUILD_SHIPPING
-		{ "ToolTip", "developer" },
-#endif
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_devMenuWidgetInstance_MetaData[] = {
 		{ "EditInline", "true" },
@@ -185,10 +167,10 @@ ABG_PlayerPawn::~ABG_PlayerPawn() {}
 struct Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_playerData_BG_PlayerPawn_h__Script_ProductionProjCurr_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_ABG_PlayerPawn, ABG_PlayerPawn::StaticClass, TEXT("ABG_PlayerPawn"), &Z_Registration_Info_UClass_ABG_PlayerPawn, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ABG_PlayerPawn), 4107992578U) },
+		{ Z_Construct_UClass_ABG_PlayerPawn, ABG_PlayerPawn::StaticClass, TEXT("ABG_PlayerPawn"), &Z_Registration_Info_UClass_ABG_PlayerPawn, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ABG_PlayerPawn), 4112098612U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_playerData_BG_PlayerPawn_h__Script_ProductionProjCurr_2055888348(TEXT("/Script/ProductionProjCurr"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_playerData_BG_PlayerPawn_h__Script_ProductionProjCurr_903001100(TEXT("/Script/ProductionProjCurr"),
 	Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_playerData_BG_PlayerPawn_h__Script_ProductionProjCurr_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_linda_Documents_GitHub_Production_Project_2_ProductionProjCurr_Source_ProductionProjCurr_Public_playerData_BG_PlayerPawn_h__Script_ProductionProjCurr_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);

@@ -281,6 +281,8 @@ void UTileInteractionHandler::Handle_TeleportTroop(ABG_Tile* SourceTile, ABG_Til
 
 	PlaySoundEffect(TeleportSFX);
 
+	Troop->SetMeshVisibility(false);
+	Troop->SetIsTeleporting(true);
 	Troop->MoveToTile(DestinationTile);
 	DestinationTile->SetOccupyingTroop(Troop);
 	DestinationTile->SetIsOccupied(true);

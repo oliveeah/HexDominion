@@ -52,6 +52,9 @@ void UWidget_TitleScreen::OnConfirmNumPlayersClicked()
 	CurrentEntry = 0;
 	CollectedNames.Empty();
 
+	if (Button_PlayerSelect_ConfirmNumPlayers)
+		Button_PlayerSelect_ConfirmNumPlayers->SetVisibility(ESlateVisibility::Collapsed);
+
 	if (EnterPlayerName_SB)
 		EnterPlayerName_SB->SetVisibility(ESlateVisibility::Visible);
 

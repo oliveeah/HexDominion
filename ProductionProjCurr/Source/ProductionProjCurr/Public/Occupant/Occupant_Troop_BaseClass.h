@@ -73,6 +73,8 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 		UPROPERTY()
 		ABG_Tile* OwningTile = nullptr;
 
+		bool bIsTeleporting = false;
+
 		void LookAtTarget(const FVector& TargetLocation);
 		void LookAtTarget(AOccupant_BaseClass* Target);
 
@@ -95,6 +97,8 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 		void SetInteractingTroop(AOccupant_BaseClass* NewTarget) { InteractingTroop = NewTarget; }
 		void SetOwningTile(ABG_Tile* NewTile) { OwningTile = NewTile; }
 		void SetSoundEffects();
+		void SetMeshVisibility(bool bVisible);
+		void SetIsTeleporting(bool bTeleporting) { bIsTeleporting = bTeleporting; }
 
 		UFUNCTION(BlueprintCallable, Category = "Troop|Animation")
 		void NotifyActionAnimationStarted();
