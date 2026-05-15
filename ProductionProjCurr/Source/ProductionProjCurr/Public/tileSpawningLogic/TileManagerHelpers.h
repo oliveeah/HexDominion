@@ -23,13 +23,13 @@ namespace TileManagerHelper_Functions
 			case ETileHighlightState::Standard:
 				return FLinearColor(0, 0, 0, 1); 
 			case ETileHighlightState::Adjacency:
-				return FLinearColor(0.002000, 0.010000, 0.030000, 1.000000); 
+				return FLinearColor(0.0f, 0.5f, 10.0f, 1.0f);
 			case ETileHighlightState::Attack:
 				return FLinearColor(2.000000, 0, 0, 1); 
 			case ETileHighlightState::Blocked:
 				return FLinearColor(5, 5, 5, 1); 
 			case ETileHighlightState::Teleporter:
-				return FLinearColor(0.002000, 0.010000, 0.030000, 1.000000); 
+				return FLinearColor(0.0f, 0.5f, 10.0f, 1.0f); 
 			default:
 				return FLinearColor(5, 5, 5, 1); 
 		}

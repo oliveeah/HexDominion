@@ -52,14 +52,14 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 		FName MoveSocketName = TEXT("TroopSpawnSocket");
 		
 		UPROPERTY(EditDefaultsOnly, Category = "Stats | Debug")
-		 float MoveInterpSpeed = 6.f;
+		float MoveInterpSpeed = 6.f;
 
 		UPROPERTY(EditDefaultsOnly, Category = "Stats | Debug")
-		 float SnapDistance = 5.f;
+		float SnapDistance = 5.f;
 
 		ABG_Tile* TargetTile = nullptr;
 
-		FVector	  MoveTarget;
+		FVector MoveTarget;
 
 		UPROPERTY(EditDefaultsOnly, Category = "Components")
 		USkeletalMeshComponent* SkeletalMesh;
@@ -73,14 +73,11 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 		UPROPERTY()
 		ABG_Tile* OwningTile = nullptr;
 
-		bool bIsTeleporting = false;
-
 		void LookAtTarget(const FVector& TargetLocation);
 		void LookAtTarget(AOccupant_BaseClass* Target);
 
 	public:
 		UPROPERTY(VisibleAnywhere, Category = "DEBUG")
-
 		bool animatingAction = false;
 
 		UPROPERTY(BlueprintAssignable, Category = "Events")
@@ -97,8 +94,6 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 		void SetInteractingTroop(AOccupant_BaseClass* NewTarget) { InteractingTroop = NewTarget; }
 		void SetOwningTile(ABG_Tile* NewTile) { OwningTile = NewTile; }
 		void SetSoundEffects();
-		void SetMeshVisibility(bool bVisible);
-		void SetIsTeleporting(bool bTeleporting) { bIsTeleporting = bTeleporting; }
 
 		UFUNCTION(BlueprintCallable, Category = "Troop|Animation")
 		void NotifyActionAnimationStarted();
@@ -117,14 +112,13 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 
 		virtual bool CanMoveTo(const FIntPoint& Target, TArray<FIntPoint> Neighbors) const;
 		virtual void MoveToTile(class ABG_Tile* Tile);
+		virtual void TeleportToTile(class ABG_Tile* Tile);
 
 		void TroopDeath();
-
 		void TroopAttack();
-
 		void TroopDamage();
 
-		bool		 IsTroop() const override { return true; }
+		bool IsTroop() const override { return true; }
 
 		virtual void Tick(float DeltaTime) override;
 
@@ -139,10 +133,13 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 	protected:
 		UPROPERTY()
 		USoundBase* CachedDeathSound = nullptr;
-	UPROPERTY()
+
+		UPROPERTY()
 		USoundBase* CachedAttackSound = nullptr;
-	UPROPERTY()
+
+		UPROPERTY()
 		USoundBase* CachedSpawnSound = nullptr;
-	UPROPERTY()
+
+		UPROPERTY()
 		USoundBase* CachedMoveSound = nullptr;
 };

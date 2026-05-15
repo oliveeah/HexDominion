@@ -124,14 +124,6 @@ void AOccupant_Troop_BaseClass::SetOwningPlayer(EActivePlayerSide NewPlayer)
 	SetSoundEffects();
 }
 
-void AOccupant_Troop_BaseClass::SetMeshVisibility(bool bVisible)
-{
-	if (SkeletalMesh)
-	{
-		SkeletalMesh->SetVisibility(bVisible);
-	}
-}
-
 void AOccupant_Troop_BaseClass::TroopAttack()
 {
 	if (InteractingTroop)
@@ -152,12 +144,9 @@ void AOccupant_Troop_BaseClass::Tick(float DeltaTime)
 
 	if (CurrentState == ETroopState::Moving)
 	{
-		FVector TargetLocation = MoveTarget;
-		FVector CurrentLocation = GetActorLocation();
-
 		FVector NewLocation = FMath::VInterpTo(
-			CurrentLocation,
-			TargetLocation,
+			GetActorLocation(),
+			MoveTarget,
 			DeltaTime,
 			MoveInterpSpeed);
 
@@ -179,12 +168,6 @@ void AOccupant_Troop_BaseClass::Tick(float DeltaTime)
 			SetOwningTile(TargetTile);
 			SetActorTickEnabled(false);
 			TargetTile = nullptr;
-
-			if (bIsTeleporting)
-			{
-				SetMeshVisibility(true);
-				bIsTeleporting = false;
-			}
 		}
 	}
 }
@@ -205,7 +188,7 @@ void AOccupant_Troop_BaseClass::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SetTroopState(ETroopState::Idle);	
+	SetTroopState(ETroopState::Idle);
 }
 
 bool AOccupant_Troop_BaseClass::CanMoveTo(const FIntPoint& Target, TArray<FIntPoint> Neighbors) const
@@ -222,7 +205,6 @@ bool AOccupant_Troop_BaseClass::CanMoveTo(const FIntPoint& Target, TArray<FIntPo
 
 void AOccupant_Troop_BaseClass::MoveToTile(ABG_Tile* Tile)
 {
-
 	if (!Tile || !Tile->tileMesh)
 		return;
 
@@ -230,31 +212,55 @@ void AOccupant_Troop_BaseClass::MoveToTile(ABG_Tile* Tile)
 	this->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 
 	EActivePlayerSide OwnerSide = GetOwningPlayer();
-
 	MoveSocketName = TEXT("TroopSpawnSocket");
 
 	if (OwnerSide == EActivePlayerSide::PlayerA)
-	{
 		MoveSocketName = TEXT("TroopSpawnSocket_PlayerA");
-	}
 	else if (OwnerSide == EActivePlayerSide::PlayerB)
-	{
 		MoveSocketName = TEXT("TroopSpawnSocket_PlayerB");
-	}
 	else if (OwnerSide == EActivePlayerSide::PlayerC)
-	{
 		MoveSocketName = TEXT("TroopSpawnSocket_PlayerC");
-	}
 	else if (OwnerSide == EActivePlayerSide::PlayerD)
-	{
 		MoveSocketName = TEXT("TroopSpawnSocket_PlayerD");
-	}
 
 	MoveTarget = Tile->tileMesh->GetSocketLocation(MoveSocketName);
 
 	LookAtTarget(MoveTarget);
 	SetTroopState(ETroopState::Moving);
 	SetActorTickEnabled(true);
+}
+
+void AOccupant_Troop_BaseClass::TeleportToTile(ABG_Tile* Tile)
+{
+	if (!Tile || !Tile->tileMesh)
+		return;
+
+	this->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+
+	EActivePlayerSide OwnerSide = GetOwningPlayer();
+	FName SocketName = TEXT("TroopSpawnSocket");
+
+	if (OwnerSide == EActivePlayerSide::PlayerA)
+		SocketName = TEXT("TroopSpawnSocket_PlayerA");
+	else if (OwnerSide == EActivePlayerSide::PlayerB)
+		SocketName = TEXT("TroopSpawnSocket_PlayerB");
+	else if (OwnerSide == EActivePlayerSide::PlayerC)
+		SocketName = TEXT("TroopSpawnSocket_PlayerC");
+	else if (OwnerSide == EActivePlayerSide::PlayerD)
+		SocketName = TEXT("TroopSpawnSocket_PlayerD");
+
+	const FVector DestLocation = Tile->tileMesh->GetSocketLocation(SocketName);
+
+	SetActorLocation(DestLocation);
+	AttachToComponent(
+		Tile->tileMesh,
+		FAttachmentTransformRules::KeepWorldTransform,
+		SocketName);
+
+	SetGridPosition(Tile->GetGridCoordinates());
+	SetOwningTile(Tile);
+	SetTroopState(ETroopState::Idle);
+	SetActorTickEnabled(false);
 }
 
 void AOccupant_Troop_BaseClass::TroopDeath()
@@ -306,25 +312,10 @@ void AOccupant_Troop_BaseClass::SetSoundEffects()
 	CachedMoveSound = SFX->MoveSound;
 }
 
-USoundBase* AOccupant_Troop_BaseClass::GetMoveSound() const
-{
-	return CachedMoveSound;
-}
-
-USoundBase* AOccupant_Troop_BaseClass::GetAttackSound() const
-{
-	return CachedAttackSound;
-}
-
-USoundBase* AOccupant_Troop_BaseClass::GetDamageSound() const
-{
-	return CachedDeathSound;
-}
-
-USoundBase* AOccupant_Troop_BaseClass::GetDeathSound() const
-{
-	return CachedDeathSound;
-}
+	USoundBase* AOccupant_Troop_BaseClass::GetMoveSound() const  { return CachedMoveSound; }
+USoundBase* AOccupant_Troop_BaseClass::GetAttackSound() const { return CachedAttackSound; }
+USoundBase* AOccupant_Troop_BaseClass::GetDamageSound() const { return CachedDeathSound; }
+USoundBase* AOccupant_Troop_BaseClass::GetDeathSound() const  { return CachedDeathSound; }
 
 void AOccupant_Troop_BaseClass::NotifyActionAnimationStarted()
 {
