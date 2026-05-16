@@ -50,7 +50,7 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 		int Damage = 1;
 
 		FName MoveSocketName = TEXT("TroopSpawnSocket");
-		
+
 		UPROPERTY(EditDefaultsOnly, Category = "Stats | Debug")
 		float MoveInterpSpeed = 6.f;
 
@@ -73,12 +73,18 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 		UPROPERTY()
 		ABG_Tile* OwningTile = nullptr;
 
+		int32 MovesRemaining = 2;
+
 		void LookAtTarget(const FVector& TargetLocation);
 		void LookAtTarget(AOccupant_BaseClass* Target);
 
 	public:
 		UPROPERTY(VisibleAnywhere, Category = "DEBUG")
 		bool animatingAction = false;
+
+		// How many moves this troop gets per turn — set per troop Blueprint
+		UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Stats")
+		int32 MovesPerTurn = 2;
 
 		UPROPERTY(BlueprintAssignable, Category = "Events")
 		FOnStateChanged OnStateChanged;
@@ -94,6 +100,10 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 		void SetInteractingTroop(AOccupant_BaseClass* NewTarget) { InteractingTroop = NewTarget; }
 		void SetOwningTile(ABG_Tile* NewTile) { OwningTile = NewTile; }
 		void SetSoundEffects();
+
+		void  ResetMoves()          { MovesRemaining = MovesPerTurn; }
+		bool  HasMovesRemaining()   const { return MovesRemaining > 0; }
+		int32 GetMovesRemaining()   const { return MovesRemaining; }
 
 		UFUNCTION(BlueprintCallable, Category = "Troop|Animation")
 		void NotifyActionAnimationStarted();

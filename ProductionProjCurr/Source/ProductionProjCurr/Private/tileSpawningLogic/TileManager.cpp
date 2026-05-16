@@ -93,6 +93,19 @@ void ATileManager::OnTroopDeath()
 
 void ATileManager::HandleTurnChanged(EActivePlayerSide NewActivePlayer)
 {
+	for (auto& Pair : TileMap)
+	{
+		ABG_Tile* Tile = Pair.Value;
+		if (!Tile || !Tile->GetIsOccupied())
+			continue;
+
+		AOccupant_Troop_BaseClass* Troop = Tile->getOccupyingTroop();
+		if (Troop && Troop->GetOwningPlayer() == NewActivePlayer)
+		{
+			Troop->ResetMoves();
+		}
+	}
+
 	if (InteractionHandler)
 		InteractionHandler->OnTurnChanged(NewActivePlayer);
 }

@@ -208,6 +208,9 @@ void AOccupant_Troop_BaseClass::MoveToTile(ABG_Tile* Tile)
 	if (!Tile || !Tile->tileMesh)
 		return;
 
+	if (MovesRemaining <= 0)
+		return;
+
 	TargetTile = Tile;
 	this->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 
@@ -224,6 +227,8 @@ void AOccupant_Troop_BaseClass::MoveToTile(ABG_Tile* Tile)
 		MoveSocketName = TEXT("TroopSpawnSocket_PlayerD");
 
 	MoveTarget = Tile->tileMesh->GetSocketLocation(MoveSocketName);
+
+	--MovesRemaining;
 
 	LookAtTarget(MoveTarget);
 	SetTroopState(ETroopState::Moving);
