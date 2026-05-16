@@ -216,6 +216,10 @@ void UTileInteractionHandler::Handle_MoveTroop(ABG_Tile* PreviousTile, ABG_Tile*
 		return;
 	}
 
+	if (OccupyingTroop->GetMovesRemaining() <= 0) 
+		return;
+
+
 	if (OccupyingTroop->GetHealth() > 0)
 	{
 		TArray<FIntPoint> AdjacentTiles = GetAdjacentTiles(true, 1, PreviousTile);
