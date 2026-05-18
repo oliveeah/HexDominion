@@ -15,6 +15,7 @@ class AOccupant_BaseClass;
 class AResourceManager;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDevTurnChanged, EActivePlayerSide, NewActivePlayer);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnBuildingPlaced, AOccupant_Building_BaseClass*, PlacedBuilding);
 
 UCLASS()
 class PRODUCTIONPROJCURR_API UDevMode_Widget : public UUserWidget
@@ -50,6 +51,10 @@ protected:
 public:
 	UPROPERTY(BlueprintAssignable, Category = "TurnManager")
 	FOnDevTurnChanged OnDevTurnChanged;
+
+	// Fired after a building is successfully placed — bind in Blueprint to show the production picker UI
+	UPROPERTY(BlueprintAssignable, Category = "Building")
+	FOnBuildingPlaced OnBuildingPlaced;
 
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	TObjectPtr<UButton> SpawnBuildingAtSelectedTile_Button;
@@ -122,6 +127,11 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Animation")
 	bool GetIsAnimating() const { return bIsAnimating; }
+
+	// Returns true if the active player can afford a building AND has a troop on the selected tile.
+	// Call this in Blueprint before showing the production type picker — if false, skip the UI.
+	UFUNCTION(BlueprintPure, Category = "Building")
+	bool CanAffordBuilding() const;
 
 private:
 	bool bIsAnimating = false;

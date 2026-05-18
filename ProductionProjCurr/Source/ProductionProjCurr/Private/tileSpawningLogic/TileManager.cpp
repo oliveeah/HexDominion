@@ -108,30 +108,45 @@ void ATileManager::HandleTurnChanged(EActivePlayerSide NewActivePlayer)
 		}
 	}
 
-	// Spawn a troop on every building tile owned by the new active player that is unoccupied
-	if (TroopSpawner && TroopSpawner->BuildingProductionTroopClass)
+	if (TroopSpawner)
 	{
 		for (auto& Pair : TileMap)
 		{
 			ABG_Tile* Tile = Pair.Value;
-			if (!Tile)
+			if (!Tile || !Tile->getHasBuilding() || Tile->GetIsOccupied())
 				continue;
 
-			if (!Tile->getHasBuilding())
-				continue;
-
-			if (Tile->GetIsOccupied())
-				continue;
-
-			// Check the building's owner directly — tile ownership is cleared when troops move off
 			AOccupant_Building_BaseClass* Building = Tile->getOccupyingBuilding();
 			if (!Building || Building->GetOwningPlayer() != NewActivePlayer)
 				continue;
 
-			TroopSpawner->SpawnTroop(TroopSpawner->BuildingProductionTroopClass, Tile, NewActivePlayer);
+			// Pick the troop class based on what the player chose when they built
+			TSubclassOf<AOccupant_BaseClass> TroopClass = nullptr;
 
-			UE_LOG(LogTemp, Display, TEXT("Building produced a troop at (%d, %d) for player %d."),
-				Tile->GetGridCoordinates().X, Tile->GetGridCoordinates().Y, (int32)NewActivePlayer);
+			switch (Building->ProductionType)
+			{
+				case EBuildingProductionType::MeleeTroop:
+					TroopClass = TroopSpawner->ProductionTroopClass_Melee;
+					break;
+				case EBuildingProductionType::RangedTroop:
+					TroopClass = TroopSpawner->ProductionTroopClass_Ranged;
+					break;
+				case EBuildingProductionType::SupportTroop:
+					TroopClass = TroopSpawner->ProductionTroopClass_Support;
+					break;
+				default:
+					TroopClass = TroopSpawner->BuildingProductionTroopClass;
+					break;
+			}
+
+			if (!TroopClass)
+				continue;
+
+			TroopSpawner->SpawnTroop(TroopClass, Tile, NewActivePlayer);
+
+			UE_LOG(LogTemp, Display, TEXT("Building at (%d,%d) produced option %d for player %d."),
+				Tile->GetGridCoordinates().X, Tile->GetGridCoordinates().Y,
+				(int32)Building->ProductionType, (int32)NewActivePlayer);
 		}
 	}
 

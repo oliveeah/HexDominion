@@ -33,8 +33,18 @@ public:
 	float TroopSpawnHeight = 20.0f;
 
 	// Troop spawned each turn on tiles that have a building but no occupying troop
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Troop | Spawning")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Troop | Spawning | Building Production")
 	TSubclassOf<AOccupant_BaseClass> BuildingProductionTroopClass;
+
+	// The three selectable production options
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Troop | Spawning | Building Production")
+	TSubclassOf<AOccupant_BaseClass> ProductionTroopClass_Melee;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Troop | Spawning | Building Production")
+	TSubclassOf<AOccupant_BaseClass> ProductionTroopClass_Ranged;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Troop | Spawning | Building Production")
+	TSubclassOf<AOccupant_BaseClass> ProductionTroopClass_Support;
 
 private:
 	UPROPERTY()

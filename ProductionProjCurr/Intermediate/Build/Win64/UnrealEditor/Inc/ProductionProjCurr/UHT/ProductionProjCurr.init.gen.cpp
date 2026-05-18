@@ -8,6 +8,7 @@
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
 void EmptyLinkFunctionForGeneratedCodeProductionProjCurr_init() {}
 	PRODUCTIONPROJCURR_API UFunction* Z_Construct_UDelegateFunction_ProductionProjCurr_OnAllPlayersTakenTurn__DelegateSignature();
+	PRODUCTIONPROJCURR_API UFunction* Z_Construct_UDelegateFunction_ProductionProjCurr_OnBuildingPlaced__DelegateSignature();
 	PRODUCTIONPROJCURR_API UFunction* Z_Construct_UDelegateFunction_ProductionProjCurr_OnDevTurnChanged__DelegateSignature();
 	PRODUCTIONPROJCURR_API UFunction* Z_Construct_UDelegateFunction_ProductionProjCurr_OnEndPhaseStarted__DelegateSignature();
 	PRODUCTIONPROJCURR_API UFunction* Z_Construct_UDelegateFunction_ProductionProjCurr_OnEndPhaseTurn__DelegateSignature();
@@ -25,6 +26,7 @@ void EmptyLinkFunctionForGeneratedCodeProductionProjCurr_init() {}
 		{
 			static UObject* (*const SingletonFuncArray[])() = {
 				(UObject* (*)())Z_Construct_UDelegateFunction_ProductionProjCurr_OnAllPlayersTakenTurn__DelegateSignature,
+				(UObject* (*)())Z_Construct_UDelegateFunction_ProductionProjCurr_OnBuildingPlaced__DelegateSignature,
 				(UObject* (*)())Z_Construct_UDelegateFunction_ProductionProjCurr_OnDevTurnChanged__DelegateSignature,
 				(UObject* (*)())Z_Construct_UDelegateFunction_ProductionProjCurr_OnEndPhaseStarted__DelegateSignature,
 				(UObject* (*)())Z_Construct_UDelegateFunction_ProductionProjCurr_OnEndPhaseTurn__DelegateSignature,
@@ -41,13 +43,13 @@ void EmptyLinkFunctionForGeneratedCodeProductionProjCurr_init() {}
 				SingletonFuncArray,
 				UE_ARRAY_COUNT(SingletonFuncArray),
 				PKG_CompiledIn | 0x00000000,
-				0x94EA837F,
-				0x2FFA02ED,
+				0x4F11E291,
+				0x553234BC,
 				METADATA_PARAMS(0, nullptr)
 			};
 			UECodeGen_Private::ConstructUPackage(Z_Registration_Info_UPackage__Script_ProductionProjCurr.OuterSingleton, PackageParams);
 		}
 		return Z_Registration_Info_UPackage__Script_ProductionProjCurr.OuterSingleton;
 	}
-	static FRegisterCompiledInInfo Z_CompiledInDeferPackage_UPackage__Script_ProductionProjCurr(Z_Construct_UPackage__Script_ProductionProjCurr, TEXT("/Script/ProductionProjCurr"), Z_Registration_Info_UPackage__Script_ProductionProjCurr, CONSTRUCT_RELOAD_VERSION_INFO(FPackageReloadVersionInfo, 0x94EA837F, 0x2FFA02ED));
+	static FRegisterCompiledInInfo Z_CompiledInDeferPackage_UPackage__Script_ProductionProjCurr(Z_Construct_UPackage__Script_ProductionProjCurr, TEXT("/Script/ProductionProjCurr"), Z_Registration_Info_UPackage__Script_ProductionProjCurr, CONSTRUCT_RELOAD_VERSION_INFO(FPackageReloadVersionInfo, 0x4F11E291, 0x553234BC));
 PRAGMA_ENABLE_DEPRECATION_WARNINGS

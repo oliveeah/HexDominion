@@ -258,6 +258,13 @@ void UDevMode_Widget::SpawnBuildingAtSelectedTile_ButtonClicked()
 
 	Spawner->SpawnTroop(BuildingToSpawn, SelectedTile);
 
+	// Notify Blueprint to show the production type picker
+	AOccupant_Building_BaseClass* PlacedBuilding = SelectedTile->getOccupyingBuilding();
+	if (PlacedBuilding)
+	{
+		OnBuildingPlaced.Broadcast(PlacedBuilding);
+	}
+
 	UE_LOG(LogTemp, Display, TEXT("Spawned building for player %d. Cost was %d, next cost will be %d."),
 		(int32)ActivePlayer, CurrentCost, PlayerBuildCosts[ActivePlayer]);
 }
@@ -317,4 +324,28 @@ void UDevMode_Widget::OpenSkillTree_ButtonClicked()
 	{
 		SkillTreeWidgetInstance->AddToViewport();
 	}
+}
+
+bool UDevMode_Widget::CanAffordBuilding() const
+{
+	if (!turnManager || !ResourceManager || !DevTileManager)
+		return false;
+
+	// Must have a tile with a troop selected
+	UTileInteractionHandler* Interaction = DevTileManager->GetInteractionHandler();
+	if (!Interaction)
+		return false;
+
+	ABG_Tile* SelectedTile = Interaction->GetSelectedTile();
+	if (!SelectedTile || !SelectedTile->GetIsOccupied())
+		return false;
+
+	const EActivePlayerSide ActivePlayer = turnManager->GetActivePlayer();
+
+	// Look up what this player's next build would cost
+	const int32* CostPtr = PlayerBuildCosts.Find(ActivePlayer);
+	const int32  Cost    = CostPtr ? *CostPtr : BaseBuildingCost;
+
+	const FPlayerResources Resources = ResourceManager->GetResources(ActivePlayer);
+	return Resources.BuildingMaterials >= Cost;
 }
