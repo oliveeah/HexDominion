@@ -121,6 +121,13 @@ void AOccupant_Troop_BaseClass::SetOwningPlayer(EActivePlayerSide NewPlayer)
 	}
 	SkeletalMesh->SetWorldScale3D(FVector(TeamData->Scale));
 
+	// Create a fresh DMI so parameter changes don't affect shared material instances
+	if (SkeletalMesh->GetMaterial(0))
+	{
+		TroopMeshMID = UMaterialInstanceDynamic::Create(SkeletalMesh->GetMaterial(0), this);
+		SkeletalMesh->SetMaterial(0, TroopMeshMID);
+	}
+
 	SetSoundEffects();
 }
 
@@ -229,6 +236,7 @@ void AOccupant_Troop_BaseClass::MoveToTile(ABG_Tile* Tile)
 	MoveTarget = Tile->tileMesh->GetSocketLocation(MoveSocketName);
 
 	--MovesRemaining;
+	UpdateExhaustedVisual();
 
 	LookAtTarget(MoveTarget);
 	SetTroopState(ETroopState::Moving);
@@ -340,4 +348,13 @@ void AOccupant_Troop_BaseClass::PlaySoundEffect(USoundBase* Sound)
 		return;
 
 	UGameplayStatics::PlaySoundAtLocation(this, Sound, GetActorLocation());
+}
+
+void AOccupant_Troop_BaseClass::UpdateExhaustedVisual()
+{
+	if (!TroopMeshMID)
+		return;
+
+	const float Desaturation = (MovesRemaining <= 0) ? 0.2f : 0.0f;
+	TroopMeshMID->SetScalarParameterValue(ExhaustedDesaturationParam, Desaturation);
 }

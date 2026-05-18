@@ -5,12 +5,14 @@
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
 #include "gameMode/TurnManager.h"
+#include "gameMode/Enum_PlayerSide.h"
 #include "DevMode_Widget.generated.h"
 
 class ATileManager;
 class AOccupant_Troop_BaseClass;
 class AOccupant_Building_BaseClass;
 class AOccupant_BaseClass;
+class AResourceManager;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDevTurnChanged, EActivePlayerSide, NewActivePlayer);
 
@@ -95,6 +97,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TurnManager")
 	ATurnManager* turnManager;
 
+	// Assign this in the level or via Blueprint
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	AResourceManager* ResourceManager;
+
+	// Base cost for the first building — increases by 1 per build per player
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	int32 BaseBuildingCost = 1;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerData")
 	TMap<EActivePlayerSide, FString> PlayerNames;
 
@@ -115,4 +125,7 @@ public:
 
 private:
 	bool bIsAnimating = false;
+
+	// Tracks the current building cost per player — starts at BaseBuildingCost, +1 each build
+	TMap<EActivePlayerSide, int32> PlayerBuildCosts;
 };

@@ -18,6 +18,7 @@ enum class EPlayerIntent : uint8
 	SelectTile,
 	MoveTroop,
 	AttackTroop,
+	HealTroop,
 	ReselectTile,
 	UseContextAction,
 	Cancel
@@ -43,6 +44,7 @@ public:
 	void      SetTeleportSFX(USoundBase* InSFX) { TeleportSFX = InSFX; }
 
 	TArray<FIntPoint> GetAdjacentTiles(bool bIncludeDiagonals, int32 AdjRange, ABG_Tile* Tile) const;
+	TArray<FIntPoint> GetTilesInRange(ABG_Tile* Tile, int32 Range) const;
 	bool              HasTile(const FIntPoint& Coords) const;
 
 	void BeginTeleportSelection(ABG_Tile* SourceTile, const TArray<FIntPoint>& TeleporterCoords, const TMap<FIntPoint, ABG_Tile*>& TileMap);
@@ -53,6 +55,7 @@ private:
 	void Handle_SelectTile();
 	void Handle_MoveTroop(ABG_Tile* PreviousTile, ABG_Tile* Tile);
 	void Handle_AttackTroop(ABG_Tile* PreviousTile, ABG_Tile* Tile);
+	void Handle_HealTroop(ABG_Tile* PreviousTile, ABG_Tile* Tile);
 	void Handle_TeleportTroop(ABG_Tile* SourceTile, ABG_Tile* DestinationTile);
 	void PlaySoundEffect(USoundBase* Sound);
 

@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "Occupant/Occupant_BaseClass.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Materials/MaterialInstanceDynamic.h"
 #include "Sound/SoundBase.h"
 #include "Occupant_Troop_BaseClass.generated.h"
 
@@ -75,8 +76,15 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 
 		int32 MovesRemaining = 2;
 
+		// Cached DMI for driving material effects (e.g. desaturation when exhausted)
+		UPROPERTY()
+		UMaterialInstanceDynamic* TroopMeshMID = nullptr;
+
 		void LookAtTarget(const FVector& TargetLocation);
 		void LookAtTarget(AOccupant_BaseClass* Target);
+
+		// Sets the Desaturation parameter: 0 = full colour, 1 = greyscale
+		void UpdateExhaustedVisual();
 
 	public:
 		UPROPERTY(VisibleAnywhere, Category = "DEBUG")
@@ -85,6 +93,14 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 		// How many moves this troop gets per turn — set per troop Blueprint
 		UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Stats")
 		int32 MovesPerTurn = 2;
+
+		// How many hex rings away this troop can attack (1 = adjacent only)
+		UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Stats")
+		int32 AttackRange = 1;
+
+		// Material scalar parameter name used to drive the exhausted desaturation effect
+		UPROPERTY(EditDefaultsOnly, Category = "Visual")
+		FName ExhaustedDesaturationParam = TEXT("Desaturation");
 
 		UPROPERTY(BlueprintAssignable, Category = "Events")
 		FOnStateChanged OnStateChanged;
@@ -101,9 +117,10 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 		void SetOwningTile(ABG_Tile* NewTile) { OwningTile = NewTile; }
 		void SetSoundEffects();
 
-		void  ResetMoves()          { MovesRemaining = MovesPerTurn; }
+		void  ResetMoves()        { MovesRemaining = MovesPerTurn; UpdateExhaustedVisual(); }
 		bool  HasMovesRemaining()   const { return MovesRemaining > 0; }
 		int32 GetMovesRemaining()   const { return MovesRemaining; }
+		int32 GetAttackRange()      const { return AttackRange; }
 
 		UFUNCTION(BlueprintCallable, Category = "Troop|Animation")
 		void NotifyActionAnimationStarted();

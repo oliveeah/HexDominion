@@ -4,6 +4,7 @@
 #include "tileSpawningLogic/BG_Tile.h"
 #include "Occupant/Occupant_BaseClass.h"
 #include "Occupant/Occupant_Troop_BaseClass.h"
+#include "Occupant/MyOccupant_Troop_HealerClass.h"
 #include "gameMode/TurnManager.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -40,6 +41,9 @@ void UTileInteractionHandler::OnTileClicked(ABG_Tile* Tile, bool bIsOccupied)
 			break;
 		case EPlayerIntent::AttackTroop:
 			Handle_AttackTroop(PreviousTile, Tile);
+			break;
+		case EPlayerIntent::HealTroop:
+			Handle_HealTroop(PreviousTile, Tile);
 			break;
 		case EPlayerIntent::UseContextAction:
 			Handle_TeleportTroop(PendingTeleportSource, Tile);
@@ -81,6 +85,8 @@ EPlayerIntent UTileInteractionHandler::DeterminePlayerIntent(ABG_Tile* ClickedTi
 			return EPlayerIntent::MoveTroop;
 		case ETileHighlightState::Attack:
 			return EPlayerIntent::AttackTroop;
+		case ETileHighlightState::Heal:
+			return EPlayerIntent::HealTroop;
 		case ETileHighlightState::Standard:
 			return EPlayerIntent::ReselectTile;
 		case ETileHighlightState::Teleporter:
@@ -330,4 +336,84 @@ void UTileInteractionHandler::PlaySoundEffect(USoundBase* Sound)
 		return;
 
 	UGameplayStatics::PlaySound2D(this, Sound);
+}
+
+TArray<FIntPoint> UTileInteractionHandler::GetTilesInRange(ABG_Tile* Tile, int32 Range) const
+{
+	TArray<FIntPoint> Result;
+
+	if (!Tile || Range <= 0)
+		return Result;
+
+	TSet<FIntPoint>   Visited;
+	TArray<FIntPoint> Current;
+
+	const FIntPoint Origin = Tile->GetGridCoordinates();
+	Visited.Add(Origin);
+	Current.Add(Origin);
+
+	for (int32 Ring = 0; Ring < Range; ++Ring)
+	{
+		TArray<FIntPoint> Next;
+
+		for (const FIntPoint& Coord : Current)
+		{
+			static const FIntPoint EvenRowDirs[6] = {
+				{ -1, 0 }, { 1, 0 },
+				{ -1, -1 }, { 0, -1 },
+				{ -1, 1 }, { 0, 1 }
+			};
+			static const FIntPoint OddRowDirs[6] = {
+				{ -1, 0 }, { 1, 0 },
+				{ 0, -1 }, { 1, -1 },
+				{ 0, 1 }, { 1, 1 }
+			};
+
+			const FIntPoint* Dirs = (Coord.Y % 2 == 0) ? EvenRowDirs : OddRowDirs;
+
+			for (int32 i = 0; i < 6; ++i)
+			{
+				const FIntPoint Neighbor = Coord + Dirs[i];
+				if (!Visited.Contains(Neighbor) && HasTile(Neighbor))
+				{
+					Visited.Add(Neighbor);
+					Next.Add(Neighbor);
+					Result.Add(Neighbor);
+				}
+			}
+		}
+
+		Current = Next;
+	}
+
+	return Result;
+}
+
+void UTileInteractionHandler::Handle_HealTroop(ABG_Tile* PreviousTile, ABG_Tile* Tile)
+{
+	if (!PreviousTile || !Tile || !HighlightSystem)
+		return;
+
+	AOccupant_Troop_BaseClass* Healer = PreviousTile->getOccupyingTroop();
+	if (!Healer || !Cast<AMyOccupant_Troop_HealerClass>(Healer))
+		return;
+
+	if (Healer->TroopAnimatingAction())
+	{
+		HighlightSystem->RemoveOutlineFromAllTiles();
+		return;
+	}
+
+	AOccupant_Troop_BaseClass* Target = Tile->getOccupyingTroop();
+	if (!Target)
+		return;
+
+	// Heal the target by 1
+	const int32 NewHealth = Target->GetHealth() + 1;
+	Target->SetHealth(FMath::Min(NewHealth, Target->GetTroopHealth() + 1));
+
+	PlaySoundEffect(Healer->GetAttackSound());
+
+	HighlightSystem->RemoveOutlineFromAllTiles();
+	SelectedTile = nullptr;
 }

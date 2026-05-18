@@ -4,6 +4,8 @@
 #include "tileSpawningLogic/BG_TileSpawner.h"
 #include "tileSpawningLogic/BG_Tile.h"
 #include "Occupant/TroopSpawner.h"
+#include "Occupant/Occupant_Troop_BaseClass.h"
+#include "Occupant/Occupant_Building_BaseClass.h"
 #include "gameMode/TurnManager.h"
 #include "gameMode/EndGameLogic.h"
 #include "Kismet/GameplayStatics.h"
@@ -103,6 +105,33 @@ void ATileManager::HandleTurnChanged(EActivePlayerSide NewActivePlayer)
 		if (Troop && Troop->GetOwningPlayer() == NewActivePlayer)
 		{
 			Troop->ResetMoves();
+		}
+	}
+
+	// Spawn a troop on every building tile owned by the new active player that is unoccupied
+	if (TroopSpawner && TroopSpawner->BuildingProductionTroopClass)
+	{
+		for (auto& Pair : TileMap)
+		{
+			ABG_Tile* Tile = Pair.Value;
+			if (!Tile)
+				continue;
+
+			if (!Tile->getHasBuilding())
+				continue;
+
+			if (Tile->GetIsOccupied())
+				continue;
+
+			// Check the building's owner directly — tile ownership is cleared when troops move off
+			AOccupant_Building_BaseClass* Building = Tile->getOccupyingBuilding();
+			if (!Building || Building->GetOwningPlayer() != NewActivePlayer)
+				continue;
+
+			TroopSpawner->SpawnTroop(TroopSpawner->BuildingProductionTroopClass, Tile, NewActivePlayer);
+
+			UE_LOG(LogTemp, Display, TEXT("Building produced a troop at (%d, %d) for player %d."),
+				Tile->GetGridCoordinates().X, Tile->GetGridCoordinates().Y, (int32)NewActivePlayer);
 		}
 	}
 

@@ -10,5 +10,6 @@ enum class ETileHighlightState : uint8
 	Adjacency UMETA(DisplayName = "Adjacency"),
 	Attack	  UMETA(DisplayName = "Attack"),
 	Blocked	  UMETA(DisplayName = "Blocked"),
-	Teleporter UMETA(DisplayName = "Teleporter")
+	Teleporter UMETA(DisplayName = "Teleporter"),
+	Heal	  UMETA(DisplayName = "Heal")
 };

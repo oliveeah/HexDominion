@@ -14,7 +14,6 @@
     <None Include="..\..\.clang-format" />
     <None Include="..\..\.gitignore" />
     <None Include="..\..\.vsconfig" />
-    <ClInclude Include="..\..\BG_TileSpawner.h" />
     <Filter Include="Config">
       <UniqueIdentifier>{FA535FFB-25E1-3D20-B416-52F9BE21E06E}</UniqueIdentifier>
     </Filter>
@@ -72,6 +71,9 @@
     <ClCompile Include="..\..\Source\ProductionProjCurr\Private\Troop.cpp">
       <Filter>Source\ProductionProjCurr\Private</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ProductionProjCurr\Private\UBuildingData.cpp">
+      <Filter>Source\ProductionProjCurr\Private</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\ProductionProjCurr\Private\UPlayerProfile.cpp">
       <Filter>Source\ProductionProjCurr\Private</Filter>
     </ClCompile>
@@ -99,6 +101,12 @@
     <Filter Include="Source\ProductionProjCurr\Private\Occupant">
       <UniqueIdentifier>{6653A731-D686-39C7-B4FA-914F4E6AAD2B}</UniqueIdentifier>
     </Filter>
+    <ClCompile Include="..\..\Source\ProductionProjCurr\Private\Occupant\MyOccupant_Troop_HealerClass.cpp">
+      <Filter>Source\ProductionProjCurr\Private\Occupant</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ProductionProjCurr\Private\Occupant\MyOccupant_Troop_RangedClass.cpp">
+      <Filter>Source\ProductionProjCurr\Private\Occupant</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\ProductionProjCurr\Private\Occupant\Occupant_BaseClass.cpp">
       <Filter>Source\ProductionProjCurr\Private\Occupant</Filter>
     </ClCompile>
@@ -177,6 +185,9 @@
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\Troop.h">
       <Filter>Source\ProductionProjCurr\Public</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\UBuildingData.h">
+      <Filter>Source\ProductionProjCurr\Public</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\Widget_TitleScreen.h">
       <Filter>Source\ProductionProjCurr\Public</Filter>
     </ClInclude>
@@ -240,10 +251,19 @@
     <Filter Include="Source\ProductionProjCurr\Public\Occupant">
       <UniqueIdentifier>{611608D6-1042-3130-B1E3-67127D9F5E0F}</UniqueIdentifier>
     </Filter>
+    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\Occupant\MyOccupant_Troop_HealerClass.h">
+      <Filter>Source\ProductionProjCurr\Public\Occupant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\Occupant\MyOccupant_Troop_RangedClass.h">
+      <Filter>Source\ProductionProjCurr\Public\Occupant</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\Occupant\Occupant_BaseClass.h">
       <Filter>Source\ProductionProjCurr\Public\Occupant</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\Occupant\Occupant_Building_BaseClass.h">
+      <Filter>Source\ProductionProjCurr\Public\Occupant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ProductionProjCurr\Public\Occupant\Occupant_Ranged_Troop.h">
       <Filter>Source\ProductionProjCurr\Public\Occupant</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ProductionProjCurr\Public\Occupant\Occupant_Troop_BaseClass.h">

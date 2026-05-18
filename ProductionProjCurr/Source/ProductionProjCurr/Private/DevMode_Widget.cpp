@@ -7,6 +7,7 @@
 #include "Occupant/Occupant_BaseClass.h"
 #include "Occupant/Occupant_Troop_BaseClass.h"
 #include "Occupant/Occupant_Building_BaseClass.h"
+#include "playerData/ResourceManager.h"
 #include "Data_PlayerSetUp.h"
 #include "Engine/World.h"
 #include "EngineUtils.h"
@@ -75,6 +76,21 @@ void UDevMode_Widget::NativeConstruct()
 		turnManager->OnAllPlayersTakenTurn.AddUniqueDynamic(this, &UDevMode_Widget::HandleAllPlayersTakenTurn);
 		turnManager->OnEndPhaseTurn.AddUniqueDynamic(this, &UDevMode_Widget::HandleAllPlayersTakenTurn);
 	}
+
+	if (!ResourceManager)
+	{
+		for (TActorIterator<AResourceManager> It(GetWorld()); It; ++It)
+		{
+			ResourceManager = *It;
+			UE_LOG(LogTemp, Display, TEXT("ResourceManager found and assigned!"));
+			break;
+		}
+	}
+
+	if (!ResourceManager)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("ResourceManager not found in level!"));
+	}
 }
 
 void UDevMode_Widget::CachePlayerNames()
@@ -93,7 +109,6 @@ void UDevMode_Widget::CachePlayerNames()
 	}
 	else
 	{
-		
 		PlayerNames.Add(EActivePlayerSide::PlayerA, TEXT("Player A"));
 		PlayerNames.Add(EActivePlayerSide::PlayerB, TEXT("Player B"));
 		PlayerNames.Add(EActivePlayerSide::PlayerC, TEXT("Player C"));
@@ -196,15 +211,55 @@ void UDevMode_Widget::SpawnBuildingAtSelectedTile_ButtonClicked()
 		return;
 
 	ABG_Tile* SelectedTile = Interaction->GetSelectedTile();
-	if (SelectedTile)
-	{
-		Spawner->SpawnTroop(BuildingToSpawn, SelectedTile);
-		UE_LOG(LogTemp, Display, TEXT("Spawned building at selected tile"));
-	}
-	else
+
+	if (!SelectedTile)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("No tile selected to spawn building on!"));
+		return;
 	}
+
+	if (!SelectedTile->GetIsOccupied())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Cannot spawn building: selected tile has no troop on it!"));
+		return;
+	}
+
+	if (!turnManager)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Cannot spawn building: no TurnManager!"));
+		return;
+	}
+
+	if (!ResourceManager)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Cannot spawn building: no ResourceManager!"));
+		return;
+	}
+
+	const EActivePlayerSide ActivePlayer = turnManager->GetActivePlayer();
+
+	// Get or initialise this player's current build cost
+	if (!PlayerBuildCosts.Contains(ActivePlayer))
+	{
+		PlayerBuildCosts.Add(ActivePlayer, BaseBuildingCost);
+	}
+
+	const int32 CurrentCost = PlayerBuildCosts[ActivePlayer];
+
+	if (!ResourceManager->SpendBuildingMaterial(ActivePlayer, CurrentCost))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Cannot spawn building: player %d needs %d building materials but cannot afford it."),
+			(int32)ActivePlayer, CurrentCost);
+		return;
+	}
+
+	// Cost paid — increment for next build
+	PlayerBuildCosts[ActivePlayer] = CurrentCost + 1;
+
+	Spawner->SpawnTroop(BuildingToSpawn, SelectedTile);
+
+	UE_LOG(LogTemp, Display, TEXT("Spawned building for player %d. Cost was %d, next cost will be %d."),
+		(int32)ActivePlayer, CurrentCost, PlayerBuildCosts[ActivePlayer]);
 }
 
 void UDevMode_Widget::generateButtonLabelText(UTextBlock* buttonLabel, const FString& labelText)

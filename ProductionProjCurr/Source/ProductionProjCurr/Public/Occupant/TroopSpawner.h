@@ -32,6 +32,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Troop | Spawning")
 	float TroopSpawnHeight = 20.0f;
 
+	// Troop spawned each turn on tiles that have a building but no occupying troop
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Troop | Spawning")
+	TSubclassOf<AOccupant_BaseClass> BuildingProductionTroopClass;
+
 private:
 	UPROPERTY()
 	ATurnManager* TurnManager = nullptr;
