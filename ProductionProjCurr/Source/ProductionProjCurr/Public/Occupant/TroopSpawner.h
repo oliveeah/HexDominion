@@ -24,6 +24,7 @@ public:
 
 	void SpawnTroop(TSubclassOf<AOccupant_BaseClass> Occupant, ABG_Tile* Tile);
 	void SpawnTroop(TSubclassOf<AOccupant_BaseClass> Occupant, ABG_Tile* Tile, EActivePlayerSide OwningPlayer);
+	void SpawnTroopFromBuilding(TSubclassOf<AOccupant_BaseClass> Occupant, ABG_Tile* Tile, EActivePlayerSide OwningPlayer);
 	void SpawnStartingTroops(const TArray<TArray<ABG_Tile*>>& TileGrid, int32 Cols, int32 Rows);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Troop | Spawning")

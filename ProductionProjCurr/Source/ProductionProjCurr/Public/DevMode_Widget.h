@@ -6,6 +6,7 @@
 #include "Components/TextBlock.h"
 #include "gameMode/TurnManager.h"
 #include "gameMode/Enum_PlayerSide.h"
+#include "Occupant/Occupant_Building_BaseClass.h"
 #include "DevMode_Widget.generated.h"
 
 class ATileManager;
@@ -27,7 +28,6 @@ protected:
 
 	void generateButtonLabelText(UTextBlock* buttonLabel, const FString& labelText);
 	void initializeButtonLabels();
-
 	void CachePlayerNames();
 
 	UFUNCTION()
@@ -52,7 +52,7 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "TurnManager")
 	FOnDevTurnChanged OnDevTurnChanged;
 
-	// Fired after a building is successfully placed — bind in Blueprint to show the production picker UI
+	// Fired after resources are spent — Blueprint shows the picker, then calls ConfirmBuildingSpawn
 	UPROPERTY(BlueprintAssignable, Category = "Building")
 	FOnBuildingPlaced OnBuildingPlaced;
 
@@ -102,11 +102,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TurnManager")
 	ATurnManager* turnManager;
 
-	// Assign this in the level or via Blueprint
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
 	AResourceManager* ResourceManager;
 
-	// Base cost for the first building — increases by 1 per build per player
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
 	int32 BaseBuildingCost = 1;
 
@@ -128,14 +126,22 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Animation")
 	bool GetIsAnimating() const { return bIsAnimating; }
 
-	// Returns true if the active player can afford a building AND has a troop on the selected tile.
-	// Call this in Blueprint before showing the production type picker — if false, skip the UI.
+	// Spawns the building and sets its production type — call from Blueprint picker buttons
+	UFUNCTION(BlueprintCallable, Category = "Building")
+	void ConfirmBuildingSpawn(EBuildingProductionType ChosenType);
+
+	// Returns true if the active player can afford a building AND has a troop on the selected tile
 	UFUNCTION(BlueprintPure, Category = "Building")
 	bool CanAffordBuilding() const;
 
 private:
 	bool bIsAnimating = false;
 
-	// Tracks the current building cost per player — starts at BaseBuildingCost, +1 each build
 	TMap<EActivePlayerSide, int32> PlayerBuildCosts;
+
+	// Held between button click and production type confirmation
+	UPROPERTY()
+	ABG_Tile* PendingBuildTile = nullptr;
+
+	EActivePlayerSide PendingBuildPlayer = EActivePlayerSide::None;
 };

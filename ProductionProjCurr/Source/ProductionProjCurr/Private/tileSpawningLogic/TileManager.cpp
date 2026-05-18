@@ -142,7 +142,7 @@ void ATileManager::HandleTurnChanged(EActivePlayerSide NewActivePlayer)
 			if (!TroopClass)
 				continue;
 
-			TroopSpawner->SpawnTroop(TroopClass, Tile, NewActivePlayer);
+			TroopSpawner->SpawnTroopFromBuilding(TroopClass, Tile, NewActivePlayer);
 
 			UE_LOG(LogTemp, Display, TEXT("Building at (%d,%d) produced option %d for player %d."),
 				Tile->GetGridCoordinates().X, Tile->GetGridCoordinates().Y,

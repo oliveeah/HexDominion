@@ -238,7 +238,6 @@ void UDevMode_Widget::SpawnBuildingAtSelectedTile_ButtonClicked()
 
 	const EActivePlayerSide ActivePlayer = turnManager->GetActivePlayer();
 
-	// Get or initialise this player's current build cost
 	if (!PlayerBuildCosts.Contains(ActivePlayer))
 	{
 		PlayerBuildCosts.Add(ActivePlayer, BaseBuildingCost);
@@ -256,17 +255,15 @@ void UDevMode_Widget::SpawnBuildingAtSelectedTile_ButtonClicked()
 	// Cost paid — increment for next build
 	PlayerBuildCosts[ActivePlayer] = CurrentCost + 1;
 
-	Spawner->SpawnTroop(BuildingToSpawn, SelectedTile);
+	// Store pending context and wait for the player to pick a production type
+	PendingBuildTile   = SelectedTile;
+	PendingBuildPlayer = ActivePlayer;
 
-	// Notify Blueprint to show the production type picker
-	AOccupant_Building_BaseClass* PlacedBuilding = SelectedTile->getOccupyingBuilding();
-	if (PlacedBuilding)
-	{
-		OnBuildingPlaced.Broadcast(PlacedBuilding);
-	}
+	// Broadcast so Blueprint shows the picker — nothing spawns yet
+	OnBuildingPlaced.Broadcast(nullptr);
 
-	UE_LOG(LogTemp, Display, TEXT("Spawned building for player %d. Cost was %d, next cost will be %d."),
-		(int32)ActivePlayer, CurrentCost, PlayerBuildCosts[ActivePlayer]);
+	UE_LOG(LogTemp, Display, TEXT("Resources spent for player %d (cost %d). Waiting for production type selection."),
+		(int32)ActivePlayer, CurrentCost);
 }
 
 void UDevMode_Widget::generateButtonLabelText(UTextBlock* buttonLabel, const FString& labelText)
@@ -324,6 +321,34 @@ void UDevMode_Widget::OpenSkillTree_ButtonClicked()
 	{
 		SkillTreeWidgetInstance->AddToViewport();
 	}
+}
+
+void UDevMode_Widget::ConfirmBuildingSpawn(EBuildingProductionType ChosenType)
+{
+	if (!PendingBuildTile || !DevTileManager)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("ConfirmBuildingSpawn: no pending build tile!"));
+		return;
+	}
+
+	ATroopSpawner* Spawner = DevTileManager->TroopSpawner;
+	if (!Spawner)
+		return;
+
+	Spawner->SpawnTroop(BuildingToSpawn, PendingBuildTile, PendingBuildPlayer);
+
+	AOccupant_Building_BaseClass* PlacedBuilding = PendingBuildTile->getOccupyingBuilding();
+	if (PlacedBuilding)
+	{
+		PlacedBuilding->SetProductionType(ChosenType);
+	}
+
+	UE_LOG(LogTemp, Display, TEXT("Building confirmed at tile for player %d with production type %d."),
+		(int32)PendingBuildPlayer, (int32)ChosenType);
+
+	// Clear pending state
+	PendingBuildTile   = nullptr;
+	PendingBuildPlayer = EActivePlayerSide::None;
 }
 
 bool UDevMode_Widget::CanAffordBuilding() const

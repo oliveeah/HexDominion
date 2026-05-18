@@ -45,7 +45,7 @@ void ATroopSpawner::SpawnTroop(TSubclassOf<AOccupant_BaseClass> Occupant, ABG_Ti
 	if (OccupantCDO->IsBuilding() && (!Tile->getBuildingCanBePlacedOnTile() || Tile->getHasBuilding()))
 		return;
 
-	if (OccupantCDO->IsTroop() && (!Tile->getCanSpawnTroopOnTile() || Tile->GetIsOccupied()))
+if (OccupantCDO->IsTroop() && (!Tile->getCanSpawnTroopOnTile() || Tile->GetIsOccupied()))
 		return;
 
 	const FName SpawnSocketName = OccupantCDO->IsBuilding()
@@ -219,4 +219,48 @@ void ATroopSpawner::SpawnStartingTroops(const TArray<TArray<ABG_Tile*>>& TileGri
 			UE_LOG(LogTemp, Warning, TEXT("No valid edge tile found for player %d."), i);
 		}
 	}
+}
+
+void ATroopSpawner::SpawnTroopFromBuilding(TSubclassOf<AOccupant_BaseClass> Occupant, ABG_Tile* Tile, EActivePlayerSide OwningPlayer)
+{
+	if (!Occupant || !Tile)
+		return;
+
+	UWorld* World = GetWorld();
+	if (!World)
+		return;
+
+	// Skip bCanSpawnTroopOnTile — building tiles intentionally block normal spawning
+	// but must still allow building production troops
+	if (Tile->GetIsOccupied())
+		return;
+
+	const FName SpawnSocketName =
+		OwningPlayer == EActivePlayerSide::PlayerA ? TEXT("TroopSpawnSocket_PlayerA") :
+		OwningPlayer == EActivePlayerSide::PlayerB ? TEXT("TroopSpawnSocket_PlayerB") :
+		OwningPlayer == EActivePlayerSide::PlayerC ? TEXT("TroopSpawnSocket_PlayerC") :
+		OwningPlayer == EActivePlayerSide::PlayerD ? TEXT("TroopSpawnSocket_PlayerD") :
+		TEXT("TroopSpawnSocket");
+
+	FTransform SpawnTransform(FRotator::ZeroRotator, Tile->GetActorLocation());
+	AOccupant_BaseClass* SpawnedOccupant = World->SpawnActor<AOccupant_BaseClass>(Occupant, SpawnTransform);
+	if (!SpawnedOccupant)
+		return;
+
+	SpawnedOccupant->AttachToComponent(
+		Tile->tileMesh,
+		FAttachmentTransformRules::SnapToTargetNotIncludingScale,
+		SpawnSocketName);
+
+	SpawnedOccupant->SetGridPosition(Tile->GetGridCoordinates());
+	SpawnedOccupant->SetOwningPlayer(OwningPlayer);
+
+	if (AOccupant_Troop_BaseClass* Troop = Cast<AOccupant_Troop_BaseClass>(SpawnedOccupant))
+	{
+		Tile->SetOccupyingTroop(Troop);
+		Tile->SetIsOccupied(true);
+		Troop->SetOwningTile(Tile);
+	}
+
+	Tile->SetOwningPlayer(OwningPlayer);
 }
