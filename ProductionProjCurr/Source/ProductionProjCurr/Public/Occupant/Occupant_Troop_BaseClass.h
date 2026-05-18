@@ -118,6 +118,7 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 		void SetSoundEffects();
 
 		void  ResetMoves()        { MovesRemaining = MovesPerTurn; UpdateExhaustedVisual(); }
+		void  ConsumeMove()       { if (MovesRemaining > 0) { --MovesRemaining; UpdateExhaustedVisual(); } }
 		bool  HasMovesRemaining()   const { return MovesRemaining > 0; }
 		int32 GetMovesRemaining()   const { return MovesRemaining; }
 		int32 GetAttackRange()      const { return AttackRange; }

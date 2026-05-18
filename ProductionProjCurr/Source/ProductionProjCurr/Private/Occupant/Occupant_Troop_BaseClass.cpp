@@ -138,6 +138,8 @@ void AOccupant_Troop_BaseClass::TroopAttack()
 		LookAtTarget(InteractingTroop);
 		InteractingTroop->SetHealth(InteractingTroop->GetHealth() - Damage);
 	}
+
+	ConsumeMove();
 }
 
 void AOccupant_Troop_BaseClass::TroopDamage()

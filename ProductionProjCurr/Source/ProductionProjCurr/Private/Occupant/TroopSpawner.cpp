@@ -242,7 +242,7 @@ void ATroopSpawner::SpawnTroopFromBuilding(TSubclassOf<AOccupant_BaseClass> Occu
 		OwningPlayer == EActivePlayerSide::PlayerD ? TEXT("TroopSpawnSocket_PlayerD") :
 		TEXT("TroopSpawnSocket");
 
-	FTransform SpawnTransform(FRotator::ZeroRotator, Tile->GetActorLocation());
+	FTransform SpawnTransform(Tile->GetActorRotation(), Tile->GetActorLocation());
 	AOccupant_BaseClass* SpawnedOccupant = World->SpawnActor<AOccupant_BaseClass>(Occupant, SpawnTransform);
 	if (!SpawnedOccupant)
 		return;

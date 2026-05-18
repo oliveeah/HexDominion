@@ -166,9 +166,12 @@ void UTileInteractionHandler::Handle_SelectTile()
 	}
 	else if (SelectedTile && SelectedTile->GetIsOccupied())
 	{
-		TArray<FIntPoint> AdjacentTiles = GetAdjacentTiles(true, 1, SelectedTile);
+		AOccupant_Troop_BaseClass* SelectedTroop = SelectedTile->getOccupyingTroop();
+		const int32 AttackRange  = SelectedTroop ? SelectedTroop->GetAttackRange() : 1;
+		const bool  bIsHealer    = SelectedTroop && Cast<AMyOccupant_Troop_HealerClass>(SelectedTroop) != nullptr;
 
-		for (const FIntPoint& Coord : AdjacentTiles)
+		TArray<FIntPoint> MoveTiles = GetAdjacentTiles(true, 1, SelectedTile);
+		for (const FIntPoint& Coord : MoveTiles)
 		{
 			ABG_Tile** FoundTile = TileMapPtr->Find(Coord);
 			if (!FoundTile || !(*FoundTile))
@@ -185,13 +188,24 @@ void UTileInteractionHandler::Handle_SelectTile()
 					continue;
 				}
 
-				if (TurnManager && TileManagerHelper_Functions::IsEnemyOccupant(OccupyingTroop->GetOwningPlayer(), TurnManager->GetActivePlayer()))
+				const bool bIsEnemy = TurnManager &&
+					TileManagerHelper_Functions::IsEnemyOccupant(OccupyingTroop->GetOwningPlayer(), TurnManager->GetActivePlayer());
+
+				if (bIsEnemy)
 				{
-					HighlightSystem->ApplyHighlightState(ETileHighlightState::Attack, AdjTile);
+					// Healers cannot attack
+					if (!bIsHealer)
+						HighlightSystem->ApplyHighlightState(ETileHighlightState::Attack, AdjTile);
+					else
+						HighlightSystem->ApplyHighlightState(ETileHighlightState::Blocked, AdjTile);
 				}
 				else
 				{
-					HighlightSystem->ApplyHighlightState(ETileHighlightState::Blocked, AdjTile);
+					// Friendly — healers show Heal, others show Blocked
+					if (bIsHealer && OccupyingTroop != SelectedTroop)
+						HighlightSystem->ApplyHighlightState(ETileHighlightState::Heal, AdjTile);
+					else
+						HighlightSystem->ApplyHighlightState(ETileHighlightState::Blocked, AdjTile);
 				}
 			}
 			else if (AdjTile->getCanSpawnTroopOnTile())
@@ -201,6 +215,32 @@ void UTileInteractionHandler::Handle_SelectTile()
 			else
 			{
 				HighlightSystem->ApplyHighlightState(ETileHighlightState::Blocked, AdjTile);
+			}
+		}
+
+		// Extended attack range for non-healers
+		if (AttackRange > 1 && !bIsHealer)
+		{
+			TArray<FIntPoint> RangeTiles = GetTilesInRange(SelectedTile, AttackRange);
+			for (const FIntPoint& Coord : RangeTiles)
+			{
+				ABG_Tile** FoundTile = TileMapPtr->Find(Coord);
+				if (!FoundTile || !(*FoundTile))
+					continue;
+
+				ABG_Tile* RangeTile = *FoundTile;
+				if (RangeTile->getIsPlayingEffect())
+					continue;
+
+				if (RangeTile->GetIsOccupied())
+				{
+					AOccupant_Troop_BaseClass* OccupyingTroop = RangeTile->getOccupyingTroop();
+					if (OccupyingTroop && TurnManager &&
+						TileManagerHelper_Functions::IsEnemyOccupant(OccupyingTroop->GetOwningPlayer(), TurnManager->GetActivePlayer()))
+					{
+						HighlightSystem->ApplyHighlightState(ETileHighlightState::Attack, RangeTile);
+					}
+				}
 			}
 		}
 	}
@@ -263,6 +303,9 @@ void UTileInteractionHandler::Handle_AttackTroop(ABG_Tile* PreviousTile, ABG_Til
 		HighlightSystem->RemoveOutlineFromAllTiles();
 		return;
 	}
+
+	if (AttackingTroop->GetMovesRemaining() <= 0)
+		return;
 
 	AOccupant_Troop_BaseClass* DefendingTroop = Tile->getOccupyingTroop();
 	if (!DefendingTroop)
