@@ -137,6 +137,9 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 		UFUNCTION(BlueprintCallable, Category = "Troop|Animation")
 		void NotifyActionAnimationFinished();
 
+		UFUNCTION(BlueprintPure, Category = "Troop|Components")
+		USkeletalMeshComponent* GetSkeletalMeshComponent() const { return SkeletalMesh; }
+
 		int  GetTroopHealth() const { return Health; }
 		int  GetTroopDamage() const { return Damage; }
 		ETroopState GetTroopState() const { return CurrentState; }
