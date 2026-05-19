@@ -73,6 +73,16 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 		UPROPERTY(EditDefaultsOnly, Category = "Components")
 		USkeletalMeshComponent* SkeletalMesh;
 
+		// Optional hat to attach to HatSocketName on spawn
+		UPROPERTY(EditDefaultsOnly, Category = "Visual")
+		UStaticMesh* HatMesh = nullptr;
+
+		UPROPERTY(EditDefaultsOnly, Category = "Visual")
+		FName HatSocketName = TEXT("head_socket");
+
+		UPROPERTY()
+		UStaticMeshComponent* HatComponent = nullptr;
+
 		UPROPERTY(EditDefaultsOnly, Category = "Team")
 		UOccupant_Troop_Data* TroopData;
 

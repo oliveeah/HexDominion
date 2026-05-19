@@ -128,6 +128,22 @@ void AOccupant_Troop_BaseClass::SetOwningPlayer(EActivePlayerSide NewPlayer)
 		SkeletalMesh->SetMaterial(0, TroopMeshMID);
 	}
 
+	// Attach hat now that the mesh (and its sockets) are loaded
+	if (HatMesh)
+	{
+		if (HatComponent)
+		{
+			HatComponent->DestroyComponent();
+			HatComponent = nullptr;
+		}
+
+		HatComponent = NewObject<UStaticMeshComponent>(this, UStaticMeshComponent::StaticClass(), NAME_None);
+		HatComponent->SetStaticMesh(HatMesh);
+		HatComponent->SetupAttachment(SkeletalMesh, HatSocketName);
+		HatComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		HatComponent->RegisterComponent();
+	}
+
 	SetSoundEffects();
 }
 
