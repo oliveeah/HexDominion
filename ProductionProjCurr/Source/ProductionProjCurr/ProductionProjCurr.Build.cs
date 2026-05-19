@@ -12,9 +12,6 @@ public class ProductionProjCurr : ModuleRules
             "Engine",
             "InputCore",
             "EnhancedInput",
-            "AIModule",
-            "StateTreeModule",
-            "GameplayStateTreeModule",
             "UMG",
             "Slate",
             "SlateCore"
@@ -26,10 +23,8 @@ public class ProductionProjCurr : ModuleRules
 			"ProductionProjCurr",
 			"ProductionProjCurr/Variant_Platforming",
 			"ProductionProjCurr/Variant_Combat",
-			"ProductionProjCurr/Variant_Combat/AI",
 			"ProductionProjCurr/Variant_SideScrolling",
-			"ProductionProjCurr/Variant_SideScrolling/Gameplay",
-			"ProductionProjCurr/Variant_SideScrolling/AI"
+			"ProductionProjCurr/Variant_SideScrolling/Gameplay"
 		});
 
 	}
