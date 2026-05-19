@@ -111,14 +111,25 @@ void AOccupant_Troop_BaseClass::SetOwningPlayer(EActivePlayerSide NewPlayer)
 			return;
 	}
 
-	if (TeamData->Mesh)
+	// Pull mesh and anim class from the assigned Blueprint's CDO
+	if (TeamData->TroopBlueprint)
 	{
-		SkeletalMesh->SetSkeletalMesh(TeamData->Mesh);
+		if (AOccupant_Troop_BaseClass* CDO = TeamData->TroopBlueprint->GetDefaultObject<AOccupant_Troop_BaseClass>())
+		{
+			if (USkeletalMeshComponent* CDOMesh = CDO->FindComponentByClass<USkeletalMeshComponent>())
+			{
+				if (USkeletalMesh* Mesh = CDOMesh->GetSkeletalMeshAsset())
+				{
+					SkeletalMesh->SetSkeletalMesh(Mesh);
+				}
+				if (TSubclassOf<UAnimInstance> AnimClass = CDOMesh->GetAnimClass())
+				{
+					SkeletalMesh->SetAnimInstanceClass(AnimClass);
+				}
+			}
+		}
 	}
-	if (TeamData->AnimClass)
-	{
-		SkeletalMesh->SetAnimInstanceClass(TeamData->AnimClass);
-	}
+
 	SkeletalMesh->SetWorldScale3D(FVector(TeamData->Scale));
 
 	// Create a fresh DMI so parameter changes don't affect shared material instances

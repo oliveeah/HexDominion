@@ -13,4 +13,6 @@ class PRODUCTIONPROJCURR_API AMyOccupant_Troop_RangedClass : public AOccupant_Tr
 
 public:
 	AMyOccupant_Troop_RangedClass();
+
+	virtual ETroopType GetTroopType() const override { return ETroopType::Ranged; }
 };

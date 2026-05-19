@@ -12,6 +12,10 @@ class ATroopSpawner;
 class UTileHighlightSystem;
 class UTileInteractionHandler;
 class UEndGameLogic;
+class AOccupant_Troop_BaseClass;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnTroopSelected, AOccupant_Troop_BaseClass*, SelectedTroop, int32, Health, int32, MovesRemaining);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnTroopDeselected);
 
 UCLASS()
 class PRODUCTIONPROJCURR_API ATileManager : public AActor
@@ -37,6 +41,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Troop | Spawning")
 	ATroopSpawner* TroopSpawner;
+
+	UPROPERTY(BlueprintAssignable, Category = "Troop")
+	FOnTroopSelected OnTroopSelected;
+
+	UPROPERTY(BlueprintAssignable, Category = "Troop")
+	FOnTroopDeselected OnTroopDeselected;
 
 	void RegisterTile(const FIntPoint& Coords, ABG_Tile* Tile);
 	bool HasTile(const FIntPoint& Coords) const;
@@ -78,7 +88,7 @@ private:
 	UPROPERTY(EditAnywhere, Category = "SFX")
 	USoundBase* ClickSFX = nullptr;
 
-		UPROPERTY(EditAnywhere, Category = "SFX")
+	UPROPERTY(EditAnywhere, Category = "SFX")
 	USoundBase* DeathSFX = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = "SFX")
@@ -88,4 +98,7 @@ private:
 
 	UPROPERTY()
 	UEndGameLogic* EndGameLogic;
+
+	// True while a troop stat panel is showing — prevents spurious deselect broadcasts
+	bool bTroopCurrentlySelected = false;
 };

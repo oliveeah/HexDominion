@@ -24,6 +24,14 @@ enum class ETroopState : uint8
 	Dead
 };
 
+UENUM(BlueprintType)
+enum class ETroopType : uint8
+{
+	Melee   UMETA(DisplayName = "Melee"),
+	Ranged  UMETA(DisplayName = "Ranged"),
+	Support UMETA(DisplayName = "Support")
+};
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
 	FOnStateChanged,
 	ETroopState,
@@ -157,6 +165,8 @@ class PRODUCTIONPROJCURR_API AOccupant_Troop_BaseClass : public AOccupant_BaseCl
 		bool TroopAnimatingAction() const { return animatingAction; }
 
 		void PlaySoundEffect(USoundBase* Sound);
+
+		virtual ETroopType GetTroopType() const { return ETroopType::Melee; }
 
 	protected:
 		UPROPERTY()

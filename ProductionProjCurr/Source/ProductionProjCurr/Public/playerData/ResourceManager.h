@@ -18,6 +18,8 @@ struct FPlayerResources
 	int32 BuildingMaterials = 0;
 };
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnResourcesChanged, EActivePlayerSide, Player, FPlayerResources, NewResources);
+
 UCLASS()
 class PRODUCTIONPROJCURR_API AResourceManager : public AActor
 {
@@ -28,6 +30,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
 	TMap<EActivePlayerSide, FPlayerResources> PlayerResources;
+
+	// Fires every time any player's resources change
+	UPROPERTY(BlueprintAssignable, Category = "Resources")
+	FOnResourcesChanged OnResourcesChanged;
 
 	UFUNCTION(BlueprintCallable, Category = "Resources")
 	void AddBuildingMaterial(EActivePlayerSide Player, int32 BuildingMaterials);

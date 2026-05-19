@@ -40,6 +40,7 @@ public:
 	void OnTurnChanged(EActivePlayerSide NewActivePlayer);
 
 	ABG_Tile* GetSelectedTile() const { return SelectedTile; }
+	EPlayerIntent GetLastIntent() const { return LastIntent; }
 	void      SetDeathSFX(USoundBase* InSFX)    { DeathSFX = InSFX; }
 	void      SetTeleportSFX(USoundBase* InSFX) { TeleportSFX = InSFX; }
 
@@ -64,6 +65,8 @@ private:
 
 	UPROPERTY()
 	ABG_Tile* PendingTeleportSource = nullptr;
+
+	EPlayerIntent LastIntent = EPlayerIntent::Cancel;
 
 	UPROPERTY()
 	ATurnManager* TurnManager = nullptr;

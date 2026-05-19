@@ -38,10 +38,11 @@ void AResourceManager::AddBuildingMaterial(EActivePlayerSide Player, int32 Build
 	if (FPlayerResources* Resources = PlayerResources.Find(Player))
 	{
 		Resources->BuildingMaterials += BuildingMaterials;
+		OnResourcesChanged.Broadcast(Player, *Resources);
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("AddBuildingMaterial: No entry found for player %d � was BeginPlay called?"), (int32)Player);
+		UE_LOG(LogTemp, Warning, TEXT("AddBuildingMaterial: No entry found for player %d — was BeginPlay called?"), (int32)Player);
 	}
 }
 
@@ -52,6 +53,7 @@ bool AResourceManager::SpendBuildingMaterial(EActivePlayerSide Player, int32 Bui
 		if (Resources->BuildingMaterials >= BuildingMaterials)
 		{
 			Resources->BuildingMaterials -= BuildingMaterials;
+			OnResourcesChanged.Broadcast(Player, *Resources);
 			return true;
 		}
 	}
@@ -63,10 +65,11 @@ void AResourceManager::AddSkillTreeCurrency(EActivePlayerSide Player, int32 Skil
 	if (FPlayerResources* Resources = PlayerResources.Find(Player))
 	{
 		Resources->SkillTreeCurrency += SkillTreeCurrency;
+		OnResourcesChanged.Broadcast(Player, *Resources);
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("AddSkillTreeCurrency: No entry found for player %d � was BeginPlay called?"), (int32)Player);
+		UE_LOG(LogTemp, Warning, TEXT("AddSkillTreeCurrency: No entry found for player %d — was BeginPlay called?"), (int32)Player);
 	}
 }
 
@@ -77,6 +80,7 @@ bool AResourceManager::SpendSkillTreeCurrency(EActivePlayerSide Player, int32 Sk
 		if (Resources->SkillTreeCurrency >= SkillTreeCurrency)
 		{
 			Resources->SkillTreeCurrency -= SkillTreeCurrency;
+			OnResourcesChanged.Broadcast(Player, *Resources);
 			return true;
 		}
 	}

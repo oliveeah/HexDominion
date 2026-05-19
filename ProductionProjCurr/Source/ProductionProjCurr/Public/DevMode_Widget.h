@@ -7,6 +7,9 @@
 #include "gameMode/TurnManager.h"
 #include "gameMode/Enum_PlayerSide.h"
 #include "Occupant/Occupant_Building_BaseClass.h"
+#include "Occupant/Occupant_Troop_BaseClass.h"
+#include "playerData/ResourceManager.h"
+#include "tileSpawningLogic/TileManager.h"
 #include "DevMode_Widget.generated.h"
 
 class ATileManager;
@@ -47,6 +50,16 @@ protected:
 
 	UFUNCTION()
 	void OpenSkillTree_ButtonClicked();
+
+	// Resource / troop info handlers
+	UFUNCTION()
+	void HandleResourcesChanged(EActivePlayerSide Player, FPlayerResources NewResources);
+
+	UFUNCTION()
+	void HandleTroopSelected(AOccupant_Troop_BaseClass* SelectedTroop, int32 Health, int32 MovesRemaining);
+
+	UFUNCTION()
+	void HandleTroopDeselected_Internal();
 
 public:
 	UPROPERTY(BlueprintAssignable, Category = "TurnManager")
@@ -126,20 +139,29 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Animation")
 	bool GetIsAnimating() const { return bIsAnimating; }
 
-	// Spawns the building and sets its production type — call from Blueprint picker buttons
 	UFUNCTION(BlueprintCallable, Category = "Building")
 	void ConfirmBuildingSpawn(EBuildingProductionType ChosenType);
 
-	// Returns true if the active player can afford a building AND has a troop on the selected tile
 	UFUNCTION(BlueprintPure, Category = "Building")
 	bool CanAffordBuilding() const;
+
+	// Implement in Blueprint to update resource HUD
+	UFUNCTION(BlueprintImplementableEvent, Category = "HUD")
+	void OnResourcesUpdated(EActivePlayerSide Player, const FPlayerResources& NewResources);
+
+	// Implement in Blueprint to show the troop stat panel
+	UFUNCTION(BlueprintImplementableEvent, Category = "HUD")
+	void OnTroopInfoUpdated(int32 Health, int32 ActionsRemaining, ETroopType TroopType);
+
+	// Implement in Blueprint to hide the troop stat panel
+	UFUNCTION(BlueprintImplementableEvent, Category = "HUD")
+	void OnTroopDeselected();
 
 private:
 	bool bIsAnimating = false;
 
 	TMap<EActivePlayerSide, int32> PlayerBuildCosts;
 
-	// Held between button click and production type confirmation
 	UPROPERTY()
 	ABG_Tile* PendingBuildTile = nullptr;
 

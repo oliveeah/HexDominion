@@ -91,6 +91,16 @@ void UDevMode_Widget::NativeConstruct()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("ResourceManager not found in level!"));
 	}
+	else
+	{
+		ResourceManager->OnResourcesChanged.AddDynamic(this, &UDevMode_Widget::HandleResourcesChanged);
+	}
+
+	if (DevTileManager)
+	{
+		DevTileManager->OnTroopSelected.AddDynamic(this, &UDevMode_Widget::HandleTroopSelected);
+		DevTileManager->OnTroopDeselected.AddDynamic(this, &UDevMode_Widget::HandleTroopDeselected_Internal);
+	}
 }
 
 void UDevMode_Widget::CachePlayerNames()
@@ -373,4 +383,22 @@ bool UDevMode_Widget::CanAffordBuilding() const
 
 	const FPlayerResources Resources = ResourceManager->GetResources(ActivePlayer);
 	return Resources.BuildingMaterials >= Cost;
+}
+
+void UDevMode_Widget::HandleResourcesChanged(EActivePlayerSide Player, FPlayerResources NewResources)
+{
+	OnResourcesUpdated(Player, NewResources);
+}
+
+void UDevMode_Widget::HandleTroopSelected(AOccupant_Troop_BaseClass* SelectedTroop, int32 Health, int32 MovesRemaining)
+{
+	if (!SelectedTroop)
+		return;
+
+	OnTroopInfoUpdated(Health, MovesRemaining, SelectedTroop->GetTroopType());
+}
+
+void UDevMode_Widget::HandleTroopDeselected_Internal()
+{
+	OnTroopDeselected();
 }

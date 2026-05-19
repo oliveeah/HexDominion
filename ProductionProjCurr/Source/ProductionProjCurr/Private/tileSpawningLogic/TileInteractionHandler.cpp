@@ -26,6 +26,8 @@ void UTileInteractionHandler::OnTileClicked(ABG_Tile* Tile, bool bIsOccupied)
 	ABG_Tile*	  PreviousTile = SelectedTile;
 	EPlayerIntent PlayerIntent = DeterminePlayerIntent(Tile);
 
+	LastIntent = PlayerIntent;
+
 	if (SelectedTile && HighlightSystem)
 		HighlightSystem->RemoveOutlineFromAllTiles();
 

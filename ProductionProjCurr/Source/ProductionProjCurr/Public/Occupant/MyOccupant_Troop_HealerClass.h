@@ -13,4 +13,6 @@ class PRODUCTIONPROJCURR_API AMyOccupant_Troop_HealerClass : public AOccupant_Tr
 
 public:
 	AMyOccupant_Troop_HealerClass();
+
+	virtual ETroopType GetTroopType() const override { return ETroopType::Support; }
 };

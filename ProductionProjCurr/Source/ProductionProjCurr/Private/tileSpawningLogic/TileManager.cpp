@@ -83,14 +83,43 @@ void ATileManager::HandleGridBuilt()
 
 void ATileManager::OnTileClicked(ABG_Tile* Tile, bool bIsOccupied)
 {
-	if (InteractionHandler)
-		InteractionHandler->OnTileClicked(Tile, bIsOccupied);
+	if (!InteractionHandler)
+		return;
+
+	InteractionHandler->OnTileClicked(Tile, bIsOccupied);
+
+	if (InteractionHandler->GetLastIntent() == EPlayerIntent::SelectTile)
+	{
+		if (Tile && Tile->GetIsOccupied())
+		{
+			AOccupant_Troop_BaseClass* Troop = Tile->getOccupyingTroop();
+			if (Troop)
+			{
+				bTroopCurrentlySelected = true;
+				OnTroopSelected.Broadcast(Troop, Troop->GetTroopHealth(), Troop->GetMovesRemaining());
+				return;
+			}
+		}
+	}
+
+	// Only broadcast deselect if the panel was actually shown
+	if (bTroopCurrentlySelected)
+	{
+		bTroopCurrentlySelected = false;
+		OnTroopDeselected.Broadcast();
+	}
 }
 
 void ATileManager::OnTroopDeath()
 {
 	if (InteractionHandler)
 		InteractionHandler->OnTroopDeath();
+
+	if (bTroopCurrentlySelected)
+	{
+		bTroopCurrentlySelected = false;
+		OnTroopDeselected.Broadcast();
+	}
 }
 
 void ATileManager::HandleTurnChanged(EActivePlayerSide NewActivePlayer)
@@ -152,6 +181,12 @@ void ATileManager::HandleTurnChanged(EActivePlayerSide NewActivePlayer)
 
 	if (InteractionHandler)
 		InteractionHandler->OnTurnChanged(NewActivePlayer);
+
+	if (bTroopCurrentlySelected)
+	{
+		bTroopCurrentlySelected = false;
+		OnTroopDeselected.Broadcast();
+	}
 }
 
 void ATileManager::RegisterTile(const FIntPoint& Coords, ABG_Tile* Tile)
